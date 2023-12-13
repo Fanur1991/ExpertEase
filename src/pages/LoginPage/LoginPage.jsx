@@ -3,12 +3,14 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkIsAuth, loginUser } from '../../redux/slices/authSlice';
 import { toast } from 'react-toastify';
-import { Button, Checkbox, Form, Input, Typography, Space } from 'antd';
+import { Button, Checkbox, Form, Input, Typography, Flex } from 'antd';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import './LoginPage.less';
 
 const { Title } = Typography;
 
 const LoginPage = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { status } = useSelector((state) => state.auth);
   const isAuth = useSelector(checkIsAuth);
@@ -26,124 +28,79 @@ const LoginPage = () => {
 
   const handleSubmit = () => {
     try {
-      dispatch(loginUser({ username, password }));
+      dispatch(loginUser({ email, password }));
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <Form
-      name="basic"
-      labelCol={{
-        span: 8,
-      }}
-      wrapperCol={{
-        span: 16,
-      }}
-      style={{
-        maxWidth: 600,
-        margin: 'auto',
-        marginTop: '100px',
-      }}
-      initialValues={{
-        remember: true,
-      }}
-      autoComplete="off"
-      onSubmit={(e) => e.preventDefault()}
-    >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+    <Flex justify="center" align="center">
+      <Form
+        name="normal_login"
+        className="login-form"
+        initialValues={{
+          remember: true,
         }}
+        autoComplete="off"
+        onFinish={handleSubmit}
       >
-        <Title level={2} type="success">
-          Авторизация
-        </Title>
-      </div>
-      <Form.Item
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        label="Username"
-        name="username"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your username!',
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        label="Password"
-        name="password"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your password!',
-          },
-        ]}
-      >
-        <Input.Password />
-      </Form.Item>
-      <Form.Item
-        name="remember"
-        valuePropName="checked"
-        wrapperCol={{
-          offset: 8,
-          span: 16,
-        }}
-      >
-        <Checkbox>Запомнить меня</Checkbox>
-      </Form.Item>
-      <Form.Item
-        wrapperCol={{
-          offset: 8,
-          span: 16,
-        }}
-      >
-        <Space size={'middle'}>
-          <Button onClick={handleSubmit} type="primary" htmlType="submit">
-            Войти
-          </Button>
-          <Link to="/register">
-            <Button type="link">Нет аккаунта?</Button>
-          </Link>
-        </Space>
-      </Form.Item>
-    </Form>
-    // <form onSubmit={(e) => e.preventDefault()}>
-    //   <h1>Авторизация</h1>
-    //   <label>
-    //     Username:
-    //     <input
-    //       value={username}
-    //       onChange={(e) => setUsername(e.target.value)}
-    //       type="text"
-    //       placeholder="Username"
-    //     />
-    //   </label>
-    //   <label>
-    //     Password:
-    //     <input
-    //       value={password}
-    //       onChange={(e) => setPassword(e.target.value)}
-    //       type="password"
-    //       placeholder="Password"
-    //     />
-    //   </label>
-    //   <div>
-    //     <button onClick={handleSubmit} type="submit">
-    //       Войти
-    //     </button>
-    //     <Link to="/register">Нет аккаунта?</Link>
-    //   </div>
-    // </form>
+        <Form.Item className="login-title">
+          <Title level={1}>Авторизация</Title>
+        </Form.Item>
+        <Form.Item
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          name="email"
+          rules={[
+            {
+              required: true,
+              message: 'Пожалуйста введите ваш email!',
+            },
+          ]}
+        >
+          <Input
+            prefix={<UserOutlined className="site-form-item-icon" />}
+            placeholder="Email"
+          />
+        </Form.Item>
+        <Form.Item
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: 'Пожалуйста введите ваш пароль!',
+            },
+          ]}
+        >
+          <Input
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            type="password"
+            placeholder="Password"
+          />
+        </Form.Item>
+        <Form.Item>
+          <Form.Item name="remember" valuePropName="checked" noStyle>
+            <Checkbox>Запомнить меня</Checkbox>
+          </Form.Item>
+          <a className="login-form-forgot" href="">
+            Забыл пароль?
+          </a>
+        </Form.Item>
+        <Form.Item>
+          <Flex justify="space-around">
+            <Button shape="round" type="primary" htmlType="submit">
+              Войти
+            </Button>
+            <Link to="/register">
+              <Button type="link">Нет аккаунта?</Button>
+            </Link>
+          </Flex>
+        </Form.Item>
+      </Form>
+    </Flex>
   );
 };
 

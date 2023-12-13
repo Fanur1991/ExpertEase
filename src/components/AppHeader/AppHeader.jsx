@@ -1,25 +1,19 @@
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Header } from 'antd/lib/layout/layout';
 import { checkIsAuth, logout } from '../../redux/slices/authSlice';
-import { Col, Row, Space } from 'antd';
-import {
-  LoginOutlined,
-  UserOutlined,
-  TeamOutlined,
-  LogoutOutlined,
-} from '@ant-design/icons';
-
+import { Button, Flex, Space } from 'antd';
+import { LoginOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
+import { Container } from '../Container/Container';
 import './AppHeader.less';
+import logo from '../../img/logo/logo.png';
 
 const AppHeader = () => {
+  const [size, setSize] = useState('middle');
   const isAuth = useSelector(checkIsAuth);
   const dispatch = useDispatch();
-
-  const activeStyles = {
-    color: 'white',
-  };
 
   const logoutHandler = () => {
     dispatch(logout());
@@ -28,46 +22,45 @@ const AppHeader = () => {
   };
 
   return (
-    <Header
-      style={{
-        backgroundColor: '#1677ff',
-      }}
-    >
-      <Row>
-        <Col span={2} offset={2}>
-          <Space size={'small'}>
-            <TeamOutlined style={{ fontSize: '25px', color: '#fa8c16' }} />
-            <div className="logo">Logo</div>
-          </Space>
-        </Col>
-        {isAuth ? (
-          <Col span={2} offset={18}>
-            <Link style={{ color: 'white' }} onClick={logoutHandler}>
-              <Space size={'small'}>
-                <LogoutOutlined style={{ color: 'white' }} />
-                Выйти
-              </Space>
-            </Link>
-          </Col>
-        ) : (
-          <Col span={5} offset={15}>
-            <Space size={'large'}>
-              <Link style={{ color: 'white' }} to={'/register'}>
-                <Space size={'small'}>
-                  <UserOutlined style={{ color: 'white' }} />
-                  Зарегистрироваться
+    <Header className="app-header">
+      <Container>
+        <Flex justify="space-between" align="center">
+          <Link to="/">
+            <Flex align="center" justify="center">
+              <img style={{ padding: '0 auto' }} height={40} src={logo} />
+            </Flex>
+          </Link>
+          {isAuth ? (
+            <Flex>
+              <Link style={{ color: 'white' }} onClick={logoutHandler}>
+                <Space size="small">
+                  <LogoutOutlined style={{ color: 'white' }} />
+                  Выйти
                 </Space>
               </Link>
+            </Flex>
+          ) : (
+            <Flex gap="large" align="center" wrap>
               <Link style={{ color: 'white' }} to={'/login'}>
-                <Space size={'small'}>
+                <Space size="small">
                   <LoginOutlined style={{ color: 'white' }} />
                   Войти
                 </Space>
               </Link>
-            </Space>
-          </Col>
-        )}
-      </Row>
+              <Button
+                type="primary"
+                shape="round"
+                icon={<UserOutlined />}
+                size={size}
+              >
+                <Link style={{ color: 'white' }} to={'/register'}>
+                  Зарегистрироваться
+                </Link>
+              </Button>
+            </Flex>
+          )}
+        </Flex>
+      </Container>
     </Header>
   );
 };

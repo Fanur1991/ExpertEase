@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import axios from '../../utils/axios';
 import { setError } from './errorSlice';
 
 const initialState = {
@@ -35,6 +35,7 @@ const stackSlice = createSlice({
         desc: stack.desc,
         categories: stack.categories,
         _id: stack._id,
+        url: stack.url,
       }));
     });
     builder.addCase(fetchStack.rejected, (state) => {
@@ -46,4 +47,3 @@ const stackSlice = createSlice({
 export default stackSlice.reducer;
 
 export const selectStacks = (state) => state.stacks;
-

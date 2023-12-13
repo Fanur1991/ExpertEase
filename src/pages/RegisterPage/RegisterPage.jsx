@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { Button, Checkbox, Form, Input, Typography, Space } from 'antd';
+import { Button, Form, Input, Typography, Flex } from 'antd';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { checkIsAuth, registerUser } from '../../redux/slices/authSlice';
+import './RegisterPage.less';
 
 const { Title } = Typography;
 
 const RegisterPage = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { status } = useSelector((state) => state.auth);
   const isAuth = useSelector(checkIsAuth);
@@ -26,117 +28,73 @@ const RegisterPage = () => {
 
   const handleSubmit = () => {
     try {
-      dispatch(registerUser({ username, password }));
+      dispatch(registerUser({ email, password }));
       setPassword('');
-      setUsername('');
+      setEmail('');
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <Form
-      name="basic"
-      labelCol={{
-        span: 8,
-      }}
-      wrapperCol={{
-        span: 16,
-      }}
-      style={{
-        maxWidth: 600,
-        margin: 'auto',
-        marginTop: '100px',
-      }}
-      initialValues={{
-        remember: true,
-      }}
-      autoComplete="off"
-      onSubmit={(e) => e.preventDefault()}
-    >
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+    <Flex justify="center" align="center">
+      <Form
+        name="register"
+        className="register-form"
+        initialValues={{
+          remember: true,
         }}
+        autoComplete="off"
+        onFinish={handleSubmit}
       >
-        <Title level={2} type="success">
-          Регистрация
-        </Title>
-      </div>
-      <Form.Item
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        label="Username"
-        name="username"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your username!',
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        label="Password"
-        name="password"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your password!',
-          },
-        ]}
-      >
-        <Input.Password />
-      </Form.Item>
-      <Form.Item
-        wrapperCol={{
-          offset: 8,
-          span: 16,
-        }}
-      >
-        <Space size={'middle'}>
-          <Button onClick={handleSubmit} type="primary" htmlType="submit">
-            Подтвердить
-          </Button>
-          <Link to="/login">
-            <Button type="link">Уже зарегистрированы?</Button>
-          </Link>
-        </Space>
-      </Form.Item>
-    </Form>
-
-    // <form onSubmit={(e) => e.preventDefault()}>
-    //   <h1>Регистрация</h1>
-    //   <label>
-    //     Username:
-    //     <input
-    //       value={username}
-    //       onChange={(e) => setUsername(e.target.value)}
-    //       type="text"
-    //       placeholder="Username"
-    //     />
-    //   </label>
-    //   <label>
-    //     Password:
-    //     <input
-    //       value={password}
-    //       onChange={(e) => setPassword(e.target.value)}
-    //       type="password"
-    //       placeholder="Password"
-    //     />
-    //   </label>
-    //   <div>
-    //     <button onClick={handleSubmit} type="submit">
-    //       Подтвердить
-    //     </button>
-    //     <Link to="/login">Уже зарегистрированы?</Link>
-    //   </div>
-    // </form>
+        <Form.Item className="register-title">
+          <Title level={1}>Регистрация</Title>
+        </Form.Item>
+        <Form.Item
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          name="email"
+          rules={[
+            {
+              required: true,
+              message: 'Пожалуйста введите ваш email!',
+            },
+          ]}
+        >
+          <Input
+            prefix={<UserOutlined className="site-form-item-icon" />}
+            placeholder="Email"
+          />
+        </Form.Item>
+        <Form.Item
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: 'Пожалуйста введите ваш пароль!',
+            },
+          ]}
+        >
+          <Input
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            type="password"
+            placeholder="Password"
+          />
+        </Form.Item>
+        <Form.Item>
+          <Flex justify="space-around">
+            <Button shape="round" type="primary" htmlType="submit">
+              Подтвердить
+            </Button>
+            <Link to="/login">
+              <Button type="link">Уже зарегистрированы?</Button>
+            </Link>
+          </Flex>
+        </Form.Item>
+      </Form>
+    </Flex>
   );
 };
 
