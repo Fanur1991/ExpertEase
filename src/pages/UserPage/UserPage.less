@@ -1,0 +1,32 @@
+@import '../../styles/main.less';
+
+.userpage {
+  display: flex;
+  flex-direction: column;
+  // min-height: calc(100vh - @header-height);
+  min-height: 900px;
+  background: #f5f5f5;
+
+  &-layout {
+    // min-height: calc(100vh - @header-height);
+    min-height: 900px;
+    overflow: auto;
+
+    &__sider {
+      background-color: #d9d9d9 !important;
+    }
+
+    &__menu {
+      background-color: #d9d9d9;
+    }
+
+    &__content {
+      padding: 24px;
+      // min-height: calc(100vh - @header-height);
+      min-height: 900px;
+      background-color: #ffffff;
+      border-radius: 5px;
+      overflow: auto;
+    }
+  }
+}

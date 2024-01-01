@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { selectStacks } from '../../../redux/slices/stacksSlice';
 import { selectCategories } from '../../../redux/slices/categoriesSlice';
 import { selectSkills } from '../../../redux/slices/skillsSlice';
+import { Container } from '../../../components/Container/Container';
 
 const { Title, Paragraph } = Typography;
 
@@ -37,7 +38,7 @@ const StackPage = () => {
       </Title>
     </Flex>
   ) : (
-    <div>
+    <Container>
       <Title type="success" level={2}>
         {currentStack.name.ru}
       </Title>
@@ -75,7 +76,7 @@ const StackPage = () => {
           </List.Item>
         )}
       />
-    </div>
+    </Container>
   );
 };
 

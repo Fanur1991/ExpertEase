@@ -60,6 +60,7 @@ const LoginPage = () => {
           ]}
         >
           <Input
+            autoFocus
             prefix={<UserOutlined className="site-form-item-icon" />}
             placeholder="Email"
           />
@@ -78,7 +79,7 @@ const LoginPage = () => {
           <Input
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
-            placeholder="Password"
+            placeholder="Пароль"
           />
         </Form.Item>
         <Form.Item>

@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
@@ -15,14 +15,23 @@ import NotFound from './pages/NotFoundPage/NotFoundPage';
 import StackPage from './pages/StacksPage/StackPage/StackPage';
 import UserPage from './pages/UserPage/UserPage';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import SkillsPage from './pages/SkillsPage/SkillsPage';
+import ProjectsPage from './pages/ProjectsPage/ProjectsPage';
+import ProfilePage from './pages/ProfilePage/ProfilePage';
+import SettingsPage from './pages/SettingsPage/SettingsPage';
+import FeedbackPage from './pages/FeedbackPage/FeedbackPage';
 
 import './App.less';
 
 function App() {
+  const location = useLocation();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getMe());
+    const token = window.localStorage.getItem('token');
+    if (token) {
+      dispatch(getMe());
+    }
   }, [dispatch]);
 
   return (
@@ -36,18 +45,24 @@ function App() {
           <Route path="register" element={<RegisterPage />} />
           <Route path="login" element={<LoginPage />} />
           <Route
-            path="user"
+            path="/user"
             element={
               <ProtectedRoute>
                 <UserPage />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route path="skills" element={<SkillsPage />} />
+            <Route path="projects" element={<ProjectsPage />} />
+            <Route path="profile" element={<ProfilePage />} />
+            <Route path="settings" element={<SettingsPage />} />
+            <Route path="feedback" element={<FeedbackPage />} />
+          </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
         <ToastContainer position="bottom-right" autoClose={1500} />
       </Content>
-      <AppFooter />
+      {!location.pathname.startsWith('/user') && <AppFooter />}
     </Layout>
   );
 }

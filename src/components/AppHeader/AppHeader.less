@@ -3,4 +3,36 @@
 .app-header {
   background-color: @header-backgroundColor;
   height: 64px;
+
+  &__logo {
+    display: block;
+    height: 40px;
+  }
+
+  &__menu {
+    background-color: @menu-backgroundColor;
+    border: @menu-backgroundColor;
+    color: @font-color-button;
+
+    &:hover {
+      color: @font-color-button-hover !important;
+    }
+  }
+
+  &__link {
+    color: @font-color-button;
+
+    &:hover {
+      color: @font-color-button-hover;
+    }
+
+    &-icon {
+      color: @font-color-button;
+    }
+  }
+}
+
+.ant-dropdown .ant-dropdown-menu {
+  background-color: @menu-backgroundColor;
+  margin-top: -10px;
 }

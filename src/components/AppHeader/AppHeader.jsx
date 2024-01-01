@@ -4,8 +4,14 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Header } from 'antd/lib/layout/layout';
 import { checkIsAuth, logout } from '../../redux/slices/authSlice';
-import { Button, Flex, Space } from 'antd';
-import { LoginOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
+import second, { logoutUserData } from '../../redux/slices/userDataSlice';
+import { Button, Flex, Space, Dropdown } from 'antd';
+import {
+  LoginOutlined,
+  UserOutlined,
+  LogoutOutlined,
+  DownOutlined,
+} from '@ant-design/icons';
 import { Container } from '../Container/Container';
 import './AppHeader.less';
 import logo from '../../img/logo/logo.png';
@@ -17,33 +23,84 @@ const AppHeader = () => {
 
   const logoutHandler = () => {
     dispatch(logout());
+    dispatch(logoutUserData());
     window.localStorage.removeItem('token');
     toast('Вы вышли из системы.');
   };
 
+  const items = [
+    {
+      label: (
+        <Flex align="center" justify="center">
+          <Link style={{ color: 'white' }} to="/user">
+            <Space size="small">
+              <UserOutlined style={{ color: 'white' }} />
+              Профиль
+            </Space>
+          </Link>
+        </Flex>
+      ),
+      key: '0',
+    },
+    {
+      label: (
+        <Flex align="center" justify="center">
+          <Link style={{ color: 'white' }} to="/">
+            Резерв
+          </Link>
+        </Flex>
+      ),
+      key: '1',
+    },
+    {
+      type: 'divider',
+    },
+    {
+      label: (
+        <Flex align="center" justify="center">
+          <Link style={{ color: 'white' }} onClick={logoutHandler}>
+            <Space size="small">
+              <LogoutOutlined style={{ color: 'white' }} />
+              Выйти
+            </Space>
+          </Link>
+        </Flex>
+      ),
+      key: '3',
+    },
+  ];
+
   return (
     <Header className="app-header">
-      <Container>
+      <Container className="app-header__content">
         <Flex justify="space-between" align="center">
-          <Link to="/">
-            <Flex align="center" justify="center">
-              <img style={{ padding: '0 auto' }} height={40} src={logo} />
-            </Flex>
-          </Link>
+          <Flex justify="flex-start" align="center">
+            <Link to="/">
+              <img className="app-header__logo" src={logo} alt="logo" />
+            </Link>
+          </Flex>
           {isAuth ? (
-            <Flex>
-              <Link style={{ color: 'white' }} onClick={logoutHandler}>
-                <Space size="small">
-                  <LogoutOutlined style={{ color: 'white' }} />
-                  Выйти
-                </Space>
-              </Link>
-            </Flex>
+            <Dropdown
+              menu={{
+                items,
+              }}
+              trigger={['click']}
+              placement="bottomRight"
+            >
+              <a onClick={(e) => e.preventDefault()}>
+                <Button shape="round" className="app-header__menu">
+                  <Space>
+                    Меню
+                    <DownOutlined />
+                  </Space>
+                </Button>
+              </a>
+            </Dropdown>
           ) : (
             <Flex gap="large" align="center" wrap>
-              <Link style={{ color: 'white' }} to={'/login'}>
+              <Link className="app-header__link" to={'/login'}>
                 <Space size="small">
-                  <LoginOutlined style={{ color: 'white' }} />
+                  <LoginOutlined className="app-header__link-icon" />
                   Войти
                 </Space>
               </Link>
@@ -53,7 +110,7 @@ const AppHeader = () => {
                 icon={<UserOutlined />}
                 size={size}
               >
-                <Link style={{ color: 'white' }} to={'/register'}>
+                <Link className="app-header__link" to={'/register'}>
                   Зарегистрироваться
                 </Link>
               </Button>

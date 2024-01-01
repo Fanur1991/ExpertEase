@@ -8,7 +8,6 @@ const MainPage = () => {
 
   return (
     <div className="site-layout-content">
-      {' '}
       {isAuth ? <AppContent /> : <UnauthContent />}
     </div>
   );

@@ -10,7 +10,7 @@ const initialState = {
 
 export const registerUser = createAsyncThunk(
   'auth/registerUser',
-  async ({ email, password }) => {
+  async ({ email, password }, { rejectWithValue }) => {
     try {
       const { data } = await axios.post('/auth/register', {
         email,
@@ -21,14 +21,15 @@ export const registerUser = createAsyncThunk(
       }
       return data;
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.errors[0].msg);
+      return rejectWithValue(error.response.data.errors[0].msg);
     }
   }
 );
 
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
-  async ({ email, password }) => {
+  async ({ email, password }, { rejectWithValue }) => {
     try {
       const { data } = await axios.post('/auth/login', {
         email,
@@ -39,17 +40,37 @@ export const loginUser = createAsyncThunk(
       }
       return data;
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.errors[0].msg);
+      return rejectWithValue(error.response.data.errors[0].msg);
     }
   }
 );
 
-export const getMe = createAsyncThunk('auth/getMe', async () => {
+// export const getMe = createAsyncThunk('auth/getMe', async () => {
+//   try {
+//     const { data } = await axios.get('/auth/me');
+//     return data;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
+
+export const getMe = createAsyncThunk('auth/getMe', async (_, thunkAPI) => {
   try {
-    const { data } = await axios.get('/auth/me');
-    return data;
+    const token = window.localStorage.getItem('token');
+    if (!token) {
+      throw new Error('Токен отсутствует');
+    }
+    const response = await axios.get('/auth/me', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    return thunkAPI.rejectWithValue({
+      message: 'Failed to fetch user data',
+      error: error?.response?.data || 'Неизвестная ошибка',
+    });
   }
 });
 
@@ -77,8 +98,9 @@ export const authSlice = createSlice({
       state.token = action.payload.token;
     });
     builder.addCase(registerUser.rejected, (state, action) => {
-      state.status = action.payload.message;
       state.isLoading = false;
+      state.status =
+        action.payload || 'Ошибка при регистрации. Неккоректные данные';
     });
     // Login user
     builder.addCase(loginUser.pending, (state) => {
@@ -92,8 +114,9 @@ export const authSlice = createSlice({
       state.token = action.payload.token;
     });
     builder.addCase(loginUser.rejected, (state, action) => {
-      state.status = action.payload.message;
       state.isLoading = false;
+      state.status =
+        action.payload || 'Ошибка при авторизации. Неккоректные данные';
     });
     // Проверка авторизации
     builder.addCase(getMe.pending, (state) => {
@@ -104,16 +127,21 @@ export const authSlice = createSlice({
       state.isLoading = false;
       state.status = null;
       state.user = action.payload?.user;
-      state.token = action.payload?.token;
+      state.token = window.localStorage.getItem('token');
     });
     builder.addCase(getMe.rejected, (state, action) => {
       state.status = action.payload.message;
       state.isLoading = false;
+      state.user = null;
+      state.token = null;
+      window.localStorage.removeItem('token');
     });
   },
 });
 
 export const checkIsAuth = (state) => Boolean(state.auth.token);
+
+export const selectAuth = (state) => state.auth;
 
 export const { logout } = authSlice.actions;
 

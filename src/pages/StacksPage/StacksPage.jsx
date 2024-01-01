@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Avatar, Card, Flex, List, Typography, Spin } from 'antd';
+import { Avatar, Card, Flex, List, Typography, Spin, Divider } from 'antd';
 import { fetchStack, selectStacks } from '../../redux/slices/stacksSlice';
 import { fetchCategory } from '../../redux/slices/categoriesSlice';
 import { fetchSkill } from '../../redux/slices/skillsSlice';
@@ -48,9 +48,13 @@ const StacksPage = () => {
         <List.Item className="list-item">
           <Link className="card-link" to={`/stacks/${item._id}`}>
             <Card className="card">
-              <Flex gap="middle" justify="flex-start" align="center">
+              <Flex gap="middle" justify="center" align="center">
                 <Avatar
                   src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`}
+                />
+                <Divider
+                  style={{ borderInlineColor: '#8c8c8c', fontSize: '20px' }}
+                  type="vertical"
                 />
                 <span>{item.name.ru}</span>
               </Flex>
