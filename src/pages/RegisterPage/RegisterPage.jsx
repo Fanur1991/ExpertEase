@@ -51,6 +51,7 @@ const RegisterPage = () => {
           <Title level={1}>Регистрация</Title>
         </Form.Item>
         <Form.Item
+          hasFeedback
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           name="email"
@@ -58,6 +59,10 @@ const RegisterPage = () => {
             {
               required: true,
               message: 'Пожалуйста введите ваш email!',
+            },
+            {
+              type: 'email',
+              message: 'Введен некорректный email!',
             },
           ]}
         >
@@ -68,6 +73,7 @@ const RegisterPage = () => {
           />
         </Form.Item>
         <Form.Item
+          hasFeedback
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           name="password"
@@ -76,12 +82,16 @@ const RegisterPage = () => {
               required: true,
               message: 'Пожалуйста введите ваш пароль!',
             },
+            {
+              min: 5,
+              message: 'Пароль должен содержать минимум 5 символов',
+            },
           ]}
         >
-          <Input
+          <Input.Password
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
-            placeholder="Пароль (минимум 5 символов)"
+            placeholder="Пароль"
           />
         </Form.Item>
         <Form.Item>

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from '../../utils/axios';
+import { authSlice } from './authSlice';
 
 const initialState = {
   user: null,
@@ -9,15 +10,35 @@ const initialState = {
 
 export const updateProfile = createAsyncThunk(
   'userData/updateProfile',
-  async (userData, { getState, rejectWithValue }) => {
+  async (userData, { dispatch, getState, rejectWithValue }) => {
     try {
       const { auth } = getState();
-      const response = await axios.post('/auth/user/update', {
-        userId: auth.user._id,
-        ...userData,
-      });
-      return response.data.user;
+      const token = auth.token;
+
+      const response = await axios.post(
+        '/auth/user/update',
+        {
+          userId: auth.user._id,
+          ...userData,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      // return response.data.user;
+
+      // Обновляем пользователя в userDataSlice
+      const updatedUserData = response.data.user;
+      dispatch(userDataSlice.actions.setUserData(updatedUserData));
+
+      // Также обновляем пользователя в authSlice, если это необходимо
+      if (auth.user._id === updatedUserData._id) {
+        dispatch(authSlice.actions.setUser(updatedUserData));
+      }
+
+      return updatedUserData;
     } catch (error) {
+      console.error('Ошибка при загрузке:', error);
       return rejectWithValue(error.response.data);
     }
   }
@@ -35,7 +56,7 @@ export const updateAvatarProfile = createAsyncThunk(
       });
 
       if (response.status !== 200 && response.status !== 201) {
-        throw new Error(`Error: ${response.statusText}`);
+        throw new Error(`Ошибка: ${response.statusText}`);
       }
 
       return response.data.user.avatarUrl;
@@ -71,6 +92,54 @@ export const deleteAvatarProfile = createAsyncThunk(
   }
 );
 
+export const changePassword = createAsyncThunk(
+  'userData/changePassword',
+  async ({ userId, newPassword }, { getState, rejectWithValue }) => {
+    try {
+      const { auth } = getState();
+      const token = auth.token;
+
+      const response = await axios.post(
+        '/auth/user/change-password',
+        {
+          userId,
+          newPassword,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      return response.data;
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || 'Ошибка при изменении пароля';
+      return rejectWithValue(errorMessage);
+    }
+  }
+);
+
+export const deleteUserAccount = createAsyncThunk(
+  'userData/deleteUserAccount',
+  async (userId, { dispatch, getState, rejectWithValue }) => {
+    try {
+      const { auth } = getState();
+      const { token } = auth.token;
+
+      const response = await axios.delete(`/auth/user/delete/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.status === 200) {
+        dispatch(logoutUserData());
+        dispatch(authSlice.actions.logout());
+      }
+
+      return userId;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const fetchProfile = createAsyncThunk(
   'userData/fetchProfile',
   async (_, { getState, rejectWithValue }) => {
@@ -101,6 +170,9 @@ const userDataSlice = createSlice({
     logoutUserData: () => {
       return initialState;
     },
+    setUserData: (state, action) => {
+      state.user = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(updateProfile.pending, (state) => {
@@ -129,6 +201,18 @@ const userDataSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     });
+    builder.addCase(changePassword.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(changePassword.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.user = action.payload;
+    });
+    builder.addCase(changePassword.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
     builder.addCase(deleteAvatarProfile.pending, (state) => {
       state.isLoading = true;
       state.error = null;
@@ -142,6 +226,10 @@ const userDataSlice = createSlice({
     builder.addCase(deleteAvatarProfile.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
+    });
+    builder.addCase(deleteUserAccount.fulfilled, (state) => {
+      state.user = null;
+      window.localStorage.removeItem('token');
     });
     builder.addCase(fetchProfile.pending, (state) => {
       state.isLoading = true;

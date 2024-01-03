@@ -29,6 +29,8 @@ const LoginPage = () => {
   const handleSubmit = () => {
     try {
       dispatch(loginUser({ email, password }));
+      setPassword('');
+      setEmail('');
     } catch (error) {
       console.log(error);
     }
@@ -37,7 +39,7 @@ const LoginPage = () => {
   return (
     <Flex justify="center" align="center">
       <Form
-        name="normal_login"
+        name="login"
         className="login-form"
         initialValues={{
           remember: true,
@@ -49,6 +51,7 @@ const LoginPage = () => {
           <Title level={1}>Авторизация</Title>
         </Form.Item>
         <Form.Item
+          hasFeedback
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           name="email"
@@ -56,6 +59,10 @@ const LoginPage = () => {
             {
               required: true,
               message: 'Пожалуйста введите ваш email!',
+            },
+            {
+              type: 'email',
+              message: 'Введен некорректный email!',
             },
           ]}
         >
@@ -66,6 +73,7 @@ const LoginPage = () => {
           />
         </Form.Item>
         <Form.Item
+          hasFeedback
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           name="password"
@@ -74,9 +82,13 @@ const LoginPage = () => {
               required: true,
               message: 'Пожалуйста введите ваш пароль!',
             },
+            {
+              min: 5,
+              message: 'Пароль должен содержать минимум 5 символов',
+            },
           ]}
         >
-          <Input
+          <Input.Password
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
             placeholder="Пароль"

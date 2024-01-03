@@ -21,8 +21,23 @@ export const registerUser = createAsyncThunk(
       }
       return data;
     } catch (error) {
-      console.log(error.response.data.errors[0].msg);
-      return rejectWithValue(error.response.data.errors[0].msg);
+      // console.log(error.response.data.errors[0].msg);
+      // return rejectWithValue(error.response.data.errors[0].msg);
+      if (error.response) {
+        // Запрос был сделан, и сервер ответил статусом ошибки, который не в диапазоне 2xx
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        return rejectWithValue(error.response.data.errors[0].msg);
+      } else if (error.request) {
+        // Запрос был сделан, но ответа не последовало
+        console.log(error.request);
+        return rejectWithValue('Проблема соединения с сервером');
+      } else {
+        // Произошло что-то во время создания запроса
+        console.log('Error', error.message);
+        return rejectWithValue(error.message);
+      }
     }
   }
 );
@@ -40,8 +55,23 @@ export const loginUser = createAsyncThunk(
       }
       return data;
     } catch (error) {
-      console.log(error.response.data.errors[0].msg);
-      return rejectWithValue(error.response.data.errors[0].msg);
+      // console.log(error.response.data.errors[0].msg);
+      // return rejectWithValue(error.response.data.errors[0].msg);
+      if (error.response) {
+        // Запрос был сделан, и сервер ответил статусом ошибки, который не в диапазоне 2xx
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        return rejectWithValue(error.response.data.errors[0].msg);
+      } else if (error.request) {
+        // Запрос был сделан, но ответа не последовало
+        console.log(error.request);
+        return rejectWithValue('Проблема соединения с сервером');
+      } else {
+        // Произошло что-то во время создания запроса
+        console.log('Error', error.message);
+        return rejectWithValue(error.message);
+      }
     }
   }
 );
@@ -58,19 +88,33 @@ export const loginUser = createAsyncThunk(
 export const getMe = createAsyncThunk('auth/getMe', async (_, thunkAPI) => {
   try {
     const token = window.localStorage.getItem('token');
+
     if (!token) {
       throw new Error('Токен отсутствует');
     }
     const response = await axios.get('/auth/me', {
       headers: { Authorization: `Bearer ${token}` },
     });
+
+    if (!response.data || !response.data.user) {
+      throw new Error('Токен невалиден');
+    }
+
     return response.data;
   } catch (error) {
     console.error(error);
-    return thunkAPI.rejectWithValue({
-      message: 'Failed to fetch user data',
-      error: error?.response?.data || 'Неизвестная ошибка',
-    });
+    // return thunkAPI.rejectWithValue({
+    //   message: 'Failed to fetch user data',
+    //   error: error?.response?.data || 'Неизвестная ошибка',
+    // });
+    if (error.response && error.response.status === 401) {
+      window.localStorage.removeItem('token');
+      return thunkAPI.rejectWithValue('Пожалуйста, войдите заново.');
+    } else {
+      return thunkAPI.rejectWithValue(
+        'Произошла ошибка при получении данных пользователя'
+      );
+    }
   }
 });
 
@@ -83,6 +127,9 @@ export const authSlice = createSlice({
       state.token = null;
       state.isLoading = false;
       state.status = null;
+    },
+    setUser: (state, action) => {
+      state.user = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -143,6 +190,6 @@ export const checkIsAuth = (state) => Boolean(state.auth.token);
 
 export const selectAuth = (state) => state.auth;
 
-export const { logout } = authSlice.actions;
+export const { logout, setUser } = authSlice.actions;
 
 export default authSlice.reducer;

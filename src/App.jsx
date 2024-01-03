@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { Layout } from 'antd';
 import { Content } from 'antd/lib/layout/layout';
 import 'react-toastify/dist/ReactToastify.css';
+import PageTitle from './components/PageTitle/PageTitle';
 import MainPage from './pages/MainPage/MainPage';
 import RegisterPage from './pages/RegisterPage/RegisterPage';
 import LoginPage from './pages/LoginPage/LoginPage';
@@ -39,26 +40,108 @@ function App() {
       <AppHeader />
       <Content>
         <Routes>
-          <Route path="/" element={<MainPage />} />
-          {/* <Route path="stacks" element={<StacksPage />} /> */}
-          <Route path="stacks/:id" element={<StackPage />} />
-          <Route path="register" element={<RegisterPage />} />
-          <Route path="login" element={<LoginPage />} />
+          <Route
+            path="/"
+            element={
+              <>
+                <PageTitle title="Главная" />
+                <MainPage />
+              </>
+            }
+          />
+          {/* <Route path="stacks" element={<>
+                <PageTitle title="Стеки" /><StacksPage /></>} /> */}
+          <Route
+            path="stacks/:id"
+            element={
+              <>
+                <PageTitle title="Стек" />
+                <StackPage />
+              </>
+            }
+          />
+          <Route
+            path="register"
+            element={
+              <>
+                <PageTitle title="Регистрация" />
+                <RegisterPage />
+              </>
+            }
+          />
+          <Route
+            path="login"
+            element={
+              <>
+                <PageTitle title="Авторизация" />
+                <LoginPage />
+              </>
+            }
+          />
           <Route
             path="/user"
             element={
               <ProtectedRoute>
+                <PageTitle title="Аккаунт" />
                 <UserPage />
               </ProtectedRoute>
             }
           >
-            <Route path="skills" element={<SkillsPage />} />
-            <Route path="projects" element={<ProjectsPage />} />
-            <Route path="profile" element={<ProfilePage />} />
-            <Route path="settings" element={<SettingsPage />} />
-            <Route path="feedback" element={<FeedbackPage />} />
+            <Route
+              path="skills"
+              element={
+                <>
+                  <PageTitle title="Мои навыки" />
+                  <SkillsPage />
+                </>
+              }
+            />
+            <Route
+              path="projects"
+              element={
+                <>
+                  <PageTitle title="Мои проекты" />
+                  <ProjectsPage />
+                </>
+              }
+            />
+            <Route
+              path="profile"
+              element={
+                <>
+                  <PageTitle title="Мой профиль" />
+                  <ProfilePage />
+                </>
+              }
+            />
+            <Route
+              path="settings"
+              element={
+                <>
+                  <PageTitle title="Настройки" />
+                  <SettingsPage />
+                </>
+              }
+            />
+            <Route
+              path="feedback"
+              element={
+                <>
+                  <PageTitle title="Обратная связь" />
+                  <FeedbackPage />
+                </>
+              }
+            />
           </Route>
-          <Route path="*" element={<NotFound />} />
+          <Route
+            path="*"
+            element={
+              <>
+                <PageTitle title="Страница не найдена" />
+                <NotFound />
+              </>
+            }
+          />
         </Routes>
         <ToastContainer position="bottom-right" autoClose={1500} />
       </Content>

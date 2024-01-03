@@ -1,6 +1,15 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, Input, Button, Avatar, message, Upload, Space } from 'antd';
+import {
+  Form,
+  Input,
+  Button,
+  Avatar,
+  message,
+  Upload,
+  Space,
+  Typography,
+} from 'antd';
 import {
   LoadingOutlined,
   PlusOutlined,
@@ -18,6 +27,8 @@ import { API_URL as baseUrl } from '../../config';
 import { getBase64, beforeUpload } from '../../utils/utils';
 import './ProfilePage.less';
 
+const { Title } = Typography;
+
 const ProfilePage = () => {
   const [loading, setLoading] = useState(false);
   const [isImageSelected, setIsImageSelected] = useState(false);
@@ -29,8 +40,8 @@ const ProfilePage = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
 
-  console.log(useSelector(selectUserData), 'userDataslice');
-  console.log(useSelector(selectAuth), 'authSlice');
+  // console.log(useSelector(selectUserData), 'userDataslice');
+  // console.log(useSelector(selectAuth), 'authSlice');
 
   useEffect(() => {
     form.setFieldsValue({
@@ -73,8 +84,13 @@ const ProfilePage = () => {
 
   const onFinish = (formData) => {
     const { email, ...updateData } = formData;
-    dispatch(updateProfile(updateData));
-    message.success('Данные профиля успешно обновлены');
+    dispatch(updateProfile(updateData)).then((result) => {
+      if (updateProfile.fulfilled.match(result)) {
+        message.success('Данные профиля успешно добавлены');
+      } else {
+        message.error('Ошибка при загрузке данных');
+      }
+    });
   };
 
   // const handleCancel = () => {
@@ -244,13 +260,6 @@ const ProfilePage = () => {
     }
     return (
       <Avatar className="profilepage__avatar-blind" alt="avatar">
-        {/* <span className="profilepage__avatar-character">
-          {userData.user && userData.user.firstname
-            ? userData.user.firstname[0].toUpperCase()
-            : firstname && firstname.length > 0
-            ? firstname[0].toUpperCase()
-            : 'А'}
-        </span> */}
         <span className="profilepage__avatar-character">{avatarCharacter}</span>
       </Avatar>
     );
@@ -267,7 +276,9 @@ const ProfilePage = () => {
       size="middle"
     >
       <Form.Item>
-        <h2 className="profilepage__title">Данные профиля</h2>
+        <Title level={3} className="profilepage__title">
+          Данные профиля
+        </Title>
       </Form.Item>
 
       <Form.Item
@@ -300,7 +311,12 @@ const ProfilePage = () => {
               <Button size="small" danger onClick={handleCancel}>
                 Отменить
               </Button>
-              <Button size="small" type="primary" onClick={handleUpload}>
+              <Button
+                autoFocus
+                size="small"
+                type="primary"
+                onClick={handleUpload}
+              >
                 Загрузить
               </Button>
             </Space>
@@ -309,10 +325,12 @@ const ProfilePage = () => {
       </Form.Item>
 
       <Form.Item
+        hasFeedback
         label="Имя"
         name="firstname"
         rules={[
-          { required: false, message: 'Пожалуйста, введите ваше имя!', min: 2 },
+          { required: false, message: 'Пожалуйста, введите ваше имя!' },
+          { min: 2, message: 'Имя должно содержать минимум 2 буквы' },
         ]}
       >
         <Input
@@ -322,14 +340,15 @@ const ProfilePage = () => {
       </Form.Item>
 
       <Form.Item
+        hasFeedback
         label="Фамилия"
         name="surname"
         rules={[
           {
             required: false,
             message: 'Пожалуйста, введите вашу фамилию!',
-            min: 2,
           },
+          { min: 2, message: 'Фамилия должна содержать минимум 2 буквы' },
         ]}
       >
         <Input placeholder="Иванов" />
@@ -340,6 +359,7 @@ const ProfilePage = () => {
       </Form.Item>
 
       <Form.Item
+        hasFeedback
         label="Github"
         name="githubUrl"
         rules={[
@@ -356,6 +376,7 @@ const ProfilePage = () => {
       </Form.Item>
 
       <Form.Item
+        hasFeedback
         label="LinkedIn"
         name="linkedinUrl"
         rules={[
@@ -372,6 +393,7 @@ const ProfilePage = () => {
       </Form.Item>
 
       <Form.Item
+        hasFeedback
         label="Website"
         name="websiteUrl"
         rules={[
