@@ -7,7 +7,7 @@ import { Button, Checkbox, Form, Input, Typography, Flex } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import './LoginPage.less';
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -48,7 +48,10 @@ const LoginPage = () => {
         onFinish={handleSubmit}
       >
         <Form.Item className="login-title">
-          <Title level={1}>Авторизация</Title>
+          <Title level={1}>Login</Title>
+          <Text type="secondary">
+            Glad to see you back! Let's get you to your account.
+          </Text>
         </Form.Item>
         <Form.Item
           hasFeedback
@@ -91,24 +94,24 @@ const LoginPage = () => {
           <Input.Password
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
-            placeholder="Пароль"
+            placeholder="Password"
           />
         </Form.Item>
         <Form.Item>
           <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>Запомнить меня</Checkbox>
+            <Checkbox>Remember me</Checkbox>
           </Form.Item>
           <a className="login-form-forgot" href="">
-            Забыл пароль?
+            Forgot your password?
           </a>
         </Form.Item>
         <Form.Item>
           <Flex justify="space-around">
             <Button shape="round" type="primary" htmlType="submit">
-              Войти
+              Log in
             </Button>
             <Link to="/register">
-              <Button type="link">Нет аккаунта?</Button>
+              <Button type="link">Don't have an account?</Button>
             </Link>
           </Flex>
         </Form.Item>

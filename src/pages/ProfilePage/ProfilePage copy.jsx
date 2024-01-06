@@ -220,7 +220,7 @@ const ProfilePage = () => {
       style={{ maxWidth: '500px' }}
     >
       <Form.Item>
-        <h2 style={{ fontFamily: 'Poppins, sans-serif' }}>Данные профиля</h2>
+        <Title level={3} style={{ fontFamily: 'Poppins, sans-serif' }}>Данные профиля</Title>
       </Form.Item>
 
       <Form.Item

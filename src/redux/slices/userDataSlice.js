@@ -163,18 +163,103 @@ export const fetchProfile = createAsyncThunk(
   }
 );
 
+export const addProjects = createAsyncThunk(
+  'userData/addProjects',
+  async (newProject, { getState, rejectWithValue }) => {
+    try {
+      const { auth } = getState();
+      const token = auth.token;
+      const userId = auth.user._id;
+
+      if (!token) {
+        throw new Error('Токен отсутствует');
+      }
+
+      const response = await axios.post(
+        '/auth/projects/add',
+        {
+          userId,
+          projectData: newProject,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const fetchProjects = createAsyncThunk(
+  'userData/fetchProjects',
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const { auth } = getState();
+      const token = auth.token;
+      const userId = auth.user._id;
+
+      if (!token) {
+        throw new Error('Токен отсутствует');
+      }
+
+      const response = await axios.get(`/auth/projects?userId=${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || 'Ошибка при запросе данных пользователя'
+      );
+    }
+  }
+);
+
+export const deleteProjects = createAsyncThunk(
+  'userData/deleteProjects',
+  async (projectId, { getState, rejectWithValue }) => {
+    try {
+      const { auth } = getState();
+      const token = auth.token;
+      const userId = auth.user._id;
+
+      if (!token) {
+        throw new Error('Токен отсутствует');
+      }
+
+      const response = await axios.delete(
+        `/auth/projects/delete/${projectId}?userId=${userId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const userDataSlice = createSlice({
   name: 'userData',
   initialState,
   reducers: {
-    logoutUserData: () => {
-      return initialState;
+    logoutUserData: (state) => {
+      state.user = null;
+      state.isLoading = false;
+      state.error = null;
     },
     setUserData: (state, action) => {
       state.user = action.payload;
     },
   },
   extraReducers: (builder) => {
+    // --------------------------------------------------------------------------------------------
+    // updateProfile
+    // --------------------------------------------------------------------------------------------
     builder.addCase(updateProfile.pending, (state) => {
       state.isLoading = true;
       state.error = null;
@@ -187,6 +272,9 @@ const userDataSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     });
+    // --------------------------------------------------------------------------------------------
+    // updateAvatarProfile
+    // --------------------------------------------------------------------------------------------
     builder.addCase(updateAvatarProfile.pending, (state) => {
       state.isLoading = true;
       state.error = null;
@@ -201,6 +289,9 @@ const userDataSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     });
+    // --------------------------------------------------------------------------------------------
+    // changePassword
+    // --------------------------------------------------------------------------------------------
     builder.addCase(changePassword.pending, (state) => {
       state.isLoading = true;
       state.error = null;
@@ -213,6 +304,9 @@ const userDataSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     });
+    // --------------------------------------------------------------------------------------------
+    // deleteAvatarProfile
+    // --------------------------------------------------------------------------------------------
     builder.addCase(deleteAvatarProfile.pending, (state) => {
       state.isLoading = true;
       state.error = null;
@@ -227,10 +321,24 @@ const userDataSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     });
+    // --------------------------------------------------------------------------------------------
+    // deleteUserAccount
+    // --------------------------------------------------------------------------------------------
+    builder.addCase(deleteUserAccount.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
     builder.addCase(deleteUserAccount.fulfilled, (state) => {
       state.user = null;
       window.localStorage.removeItem('token');
     });
+    builder.addCase(deleteUserAccount.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
+    // --------------------------------------------------------------------------------------------
+    // fetchProfile
+    // --------------------------------------------------------------------------------------------
     builder.addCase(fetchProfile.pending, (state) => {
       state.isLoading = true;
       state.error = null;
@@ -240,6 +348,52 @@ const userDataSlice = createSlice({
       state.user = action.payload;
     });
     builder.addCase(fetchProfile.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
+    // --------------------------------------------------------------------------------------------
+    // addProjects
+    // --------------------------------------------------------------------------------------------
+    builder.addCase(addProjects.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(addProjects.fulfilled, (state, action) => {
+      state.isLoading = false;
+      // state.user.projects.push(action.payload);
+      state.user = action.payload;
+    });
+    builder.addCase(addProjects.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
+    // --------------------------------------------------------------------------------------------
+    // fetchProjects
+    // --------------------------------------------------------------------------------------------
+    builder.addCase(fetchProjects.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(fetchProjects.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.user = action.payload;
+    });
+    builder.addCase(fetchProjects.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
+    // --------------------------------------------------------------------------------------------
+    // deleteProjects
+    // --------------------------------------------------------------------------------------------
+    builder.addCase(deleteProjects.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(deleteProjects.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.user = action.payload;
+    });
+    builder.addCase(deleteProjects.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     });

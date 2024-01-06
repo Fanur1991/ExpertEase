@@ -1,15 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  Form,
-  Input,
-  Button,
-  Avatar,
-  message,
-  Upload,
-  Space,
-  Typography,
-} from 'antd';
+import { Form, Input, Button, Avatar, Upload, Space, Typography } from 'antd';
 import {
   LoadingOutlined,
   PlusOutlined,
@@ -25,9 +16,10 @@ import {
 import { selectAuth } from '../../redux/slices/authSlice';
 import { API_URL as baseUrl } from '../../config';
 import { getBase64, beforeUpload } from '../../utils/utils';
+import { openMessage } from '../../utils/openMessage';
 import './ProfilePage.less';
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 const ProfilePage = () => {
   const [loading, setLoading] = useState(false);
@@ -40,8 +32,8 @@ const ProfilePage = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
 
-  // console.log(useSelector(selectUserData), 'userDataslice');
-  // console.log(useSelector(selectAuth), 'authSlice');
+  console.log(useSelector(selectUserData), 'userDataslice');
+  console.log(useSelector(selectAuth), 'authSlice');
 
   useEffect(() => {
     form.setFieldsValue({
@@ -86,9 +78,9 @@ const ProfilePage = () => {
     const { email, ...updateData } = formData;
     dispatch(updateProfile(updateData)).then((result) => {
       if (updateProfile.fulfilled.match(result)) {
-        message.success('Данные профиля успешно добавлены');
+        openMessage('success', 'Profile details added successfully');
       } else {
-        message.error('Ошибка при загрузке данных');
+        openMessage('error', 'Error loading data');
       }
     });
   };
@@ -132,14 +124,14 @@ const ProfilePage = () => {
 
       dispatch(updateAvatarProfile(formData)).then((result) => {
         if (updateAvatarProfile.fulfilled.match(result)) {
-          message.success('Фотография успешно загружена');
+          openMessage('success', 'Photo uploaded successfully');
           setIsImageSelected(false);
         } else {
-          message.error('Ошибка при загрузке фотографии');
+          openMessage('error', 'Error uploading photo');
         }
       });
     } else {
-      message.error('Файл для загрузки не выбран');
+      openMessage('error', 'No file selected for upload');
     }
   }, [selectedImage, userAuth.user?._id, dispatch]);
 
@@ -174,9 +166,9 @@ const ProfilePage = () => {
       dispatch(deleteAvatarProfile()).then((result) => {
         if (deleteAvatarProfile.fulfilled.match(result)) {
           setImageUrl(null);
-          message.success('Фотография успешно удалена');
+          openMessage('success', 'Photo deleted successfully');
         } else {
-          message.error('Ошибка при удалении фотографии');
+          openMessage('error', 'Error while deleting photo');
         }
       });
     },
@@ -199,17 +191,17 @@ const ProfilePage = () => {
           setSelectedImage(info.file.originFileObj);
         },
         (error) => {
-          console.error('Ошибка в getBase64:', error);
+          console.error('Error getBase64:', error);
           setLoading(false);
-          message.error('Ошибка при конвертации файла.');
+          openMessage('error', 'Error converting file');
           setSelectedImage(null);
         }
       );
     }
     if (info.file.status === 'error') {
-      console.error('Ошибка во время загрузки файла:', info.file.error);
+      console.error('Error while downloading file:', info.file.error);
       setLoading(false);
-      message.error('Ошибка загрузки файла.');
+      openMessage('error', 'Error loading file.');
       setSelectedImage(null);
     }
   };
@@ -266,155 +258,160 @@ const ProfilePage = () => {
   };
 
   return (
-    <Form
-      className="profilepage"
-      name="personalDetails"
-      form={form}
-      onFinish={onFinish}
-      layout="vertical"
-      initialValues={{ remember: true }}
-      size="middle"
-    >
-      <Form.Item>
-        <Title level={3} className="profilepage__title">
-          Данные профиля
-        </Title>
-      </Form.Item>
-
-      <Form.Item
-        name="avatarUrl"
-        valuePropName="fileList"
-        getValueFromEvent={normFile}
+    <div style={{ padding: '20px' }}>
+      <Form
+        className="profilepage"
+        name="personalDetails"
+        form={form}
+        onFinish={onFinish}
+        layout="vertical"
+        initialValues={{ remember: true }}
+        size="middle"
       >
-        <div className="profilepage__avatar-container">
-          <Upload
-            className="profilepage__avatar-uploader"
-            name="avatarUrl"
-            listType="picture-circle"
-            showUploadList={false}
-            action="http://localhost:3002/api/auth/upload"
-            beforeUpload={beforeUpload}
-            customRequest={dummyRequest}
-            onChange={handleChange}
-          >
-            {renderAvatar()}
-            {uploadButton}
-            <div
-              className="profilepage__avatar-delete"
-              onClick={handleDeleteAvatar}
+        <Form.Item>
+          <Title level={3} className="profilepage__title">
+            Profile
+          </Title>
+          <Text type="secondary">
+            Update your profile details the form below
+          </Text>
+        </Form.Item>
+
+        <Form.Item
+          name="avatarUrl"
+          valuePropName="fileList"
+          getValueFromEvent={normFile}
+        >
+          <div className="profilepage__avatar-container">
+            <Upload
+              className="profilepage__avatar-uploader"
+              name="avatarUrl"
+              listType="picture-circle"
+              showUploadList={false}
+              action="http://localhost:3002/api/auth/upload"
+              beforeUpload={beforeUpload}
+              customRequest={dummyRequest}
+              onChange={handleChange}
             >
-              <CloseOutlined />
-            </div>
-          </Upload>
-          {isImageSelected && (
-            <Space size="large">
-              <Button size="small" danger onClick={handleCancel}>
-                Отменить
-              </Button>
-              <Button
-                autoFocus
-                size="small"
-                type="primary"
-                onClick={handleUpload}
+              {renderAvatar()}
+              {uploadButton}
+              <div
+                className="profilepage__avatar-delete"
+                onClick={handleDeleteAvatar}
               >
-                Загрузить
-              </Button>
-            </Space>
-          )}
-        </div>
-      </Form.Item>
+                <CloseOutlined />
+              </div>
+            </Upload>
+            {isImageSelected && (
+              <Space size="large">
+                <Button size="small" danger onClick={handleCancel}>
+                  Cancel
+                </Button>
+                <Button
+                  autoFocus
+                  size="small"
+                  type="primary"
+                  onClick={handleUpload}
+                >
+                  Upload
+                </Button>
+              </Space>
+            )}
+          </div>
+        </Form.Item>
 
-      <Form.Item
-        hasFeedback
-        label="Имя"
-        name="firstname"
-        rules={[
-          { required: false, message: 'Пожалуйста, введите ваше имя!' },
-          { min: 2, message: 'Имя должно содержать минимум 2 буквы' },
-        ]}
-      >
-        <Input
-          placeholder="Иван"
-          onChange={(e) => setFirstname(e.target.value)}
-        />
-      </Form.Item>
+        <Form.Item
+          hasFeedback
+          label="First Name"
+          name="firstname"
+          rules={[
+            { required: false, message: 'Please enter your name!' },
+            { min: 2, message: 'The name must contain at least 2 letters' },
+          ]}
+        >
+          <Input
+            placeholder="First Name"
+            onChange={(e) => setFirstname(e.target.value)}
+          />
+        </Form.Item>
 
-      <Form.Item
-        hasFeedback
-        label="Фамилия"
-        name="surname"
-        rules={[
-          {
-            required: false,
-            message: 'Пожалуйста, введите вашу фамилию!',
-          },
-          { min: 2, message: 'Фамилия должна содержать минимум 2 буквы' },
-        ]}
-      >
-        <Input placeholder="Иванов" />
-      </Form.Item>
+        <Form.Item
+          hasFeedback
+          label="Last Name"
+          name="surname"
+          rules={[
+            {
+              required: false,
+              message: 'Please enter your last name!',
+            },
+            { min: 2, message: 'Last name must contain at least 2 letters' },
+          ]}
+        >
+          <Input placeholder="Last Name" />
+        </Form.Item>
 
-      <Form.Item label="Электронная почта" name="email">
-        <Input disabled type="email" />
-      </Form.Item>
+        <Form.Item label="Email" name="email">
+          <Input disabled type="email" />
+        </Form.Item>
 
-      <Form.Item
-        hasFeedback
-        label="Github"
-        name="githubUrl"
-        rules={[
-          {
-            type: 'url',
-            message: 'Ваша ссылка не является URL адресом',
-          },
-          {
-            required: false,
-          },
-        ]}
-      >
-        <Input placeholder="https://github.com/username" />
-      </Form.Item>
+        <Form.Item
+          hasFeedback
+          label="Github"
+          name="githubUrl"
+          rules={[
+            {
+              type: 'url',
+              message: 'Your link is not a URL',
+            },
+            {
+              required: false,
+            },
+          ]}
+        >
+          <Input placeholder="https://github.com/username" />
+        </Form.Item>
 
-      <Form.Item
-        hasFeedback
-        label="LinkedIn"
-        name="linkedinUrl"
-        rules={[
-          {
-            type: 'url',
-            message: 'Ваша ссылка не является URL адресом',
-          },
-          {
-            required: false,
-          },
-        ]}
-      >
-        <Input placeholder="https://www.linkedin.com/in/username" />
-      </Form.Item>
+        <Form.Item
+          hasFeedback
+          label="LinkedIn"
+          name="linkedinUrl"
+          rules={[
+            {
+              type: 'url',
+              message: 'Your link is not a URL',
+            },
+            {
+              required: false,
+            },
+          ]}
+        >
+          <Input placeholder="https://www.linkedin.com/in/username" />
+        </Form.Item>
 
-      <Form.Item
-        hasFeedback
-        label="Website"
-        name="websiteUrl"
-        rules={[
-          {
-            type: 'url',
-            message: 'Ваша ссылка не является URL адресом',
-          },
-          {
-            required: false,
-          },
-        ]}
-      >
-        <Input placeholder="https://example.com" />
-      </Form.Item>
+        <Form.Item
+          hasFeedback
+          label="Website"
+          name="websiteUrl"
+          rules={[
+            {
+              type: 'url',
+              message: 'Your link is not a URL',
+            },
+            {
+              required: false,
+            },
+          ]}
+        >
+          <Input placeholder="https://example.com" />
+        </Form.Item>
 
-      <Form.Item>
-        <Button type="primary" htmlType="submit">
-          Подтвердить
-        </Button>
-      </Form.Item>
-    </Form>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Confirm
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   );
 };
 

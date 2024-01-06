@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { notification } from 'antd';
 import axios from '../../utils/axios';
 
 const initialState = {
@@ -50,23 +51,41 @@ export const loginUser = createAsyncThunk(
         email,
         password,
       });
+
       if (data.token) {
         window.localStorage.setItem('token', data.token);
       }
+
+      notification.success({
+        message: 'Successful login',
+        description: 'You are logged in',
+        placement: 'bottomRight',
+        duration: 3,
+      });
+
       return data;
     } catch (error) {
-      // console.log(error.response.data.errors[0].msg);
-      // return rejectWithValue(error.response.data.errors[0].msg);
       if (error.response) {
-        // Запрос был сделан, и сервер ответил статусом ошибки, который не в диапазоне 2xx
         console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
+
+        notification.error({
+          message: error.response.data.message,
+          description: "You couldn't log in to the system",
+          placement: 'bottomRight',
+          duration: 3,
+        });
         return rejectWithValue(error.response.data.errors[0].msg);
       } else if (error.request) {
         // Запрос был сделан, но ответа не последовало
         console.log(error.request);
-        return rejectWithValue('Проблема соединения с сервером');
+
+        notification.error({
+          message: error.request,
+          description: "You couldn't log in to the system",
+          placement: 'bottomRight',
+          duration: 3,
+        });
+        return rejectWithValue('Connection problem with the server');
       } else {
         // Произошло что-то во время создания запроса
         console.log('Error', error.message);
@@ -75,15 +94,6 @@ export const loginUser = createAsyncThunk(
     }
   }
 );
-
-// export const getMe = createAsyncThunk('auth/getMe', async () => {
-//   try {
-//     const { data } = await axios.get('/auth/me');
-//     return data;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
 
 export const getMe = createAsyncThunk('auth/getMe', async (_, thunkAPI) => {
   try {

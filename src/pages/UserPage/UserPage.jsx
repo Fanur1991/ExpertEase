@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Typography, Form, Modal } from 'antd';
 import {
   ProjectOutlined,
   IdcardOutlined,
@@ -8,21 +9,23 @@ import {
   MessageOutlined,
   SettingOutlined,
   LogoutOutlined,
-  FundProjectionScreenOutlined,
+  DashboardOutlined,
 } from '@ant-design/icons';
 import { toast } from 'react-toastify';
 import { logout } from '../../redux/slices/authSlice';
 import { Container } from '../../components/Container/Container';
-import { selectStacks } from '../../redux/slices/stacksSlice';
+// import { selectStacks } from '../../redux/slices/stacksSlice';
 
 import './UserPage.less';
 
+const { Title, Text } = Typography;
 const { Content, Sider } = Layout;
 
 const UserPage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useDispatch();
   const location = useLocation();
-  const stacks = useSelector(selectStacks);
+  // const stacks = useSelector(selectStacks);
 
   const selectedKeys = location.pathname;
 
@@ -42,60 +45,63 @@ const UserPage = () => {
     toast('Вы вышли из системы.');
   };
 
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   const items = [
+    getItem('Overview', '/user', <DashboardOutlined />, null, '/user'),
+    getItem('Skills', '/user/skills', <RocketOutlined />, null, '/user/skills'),
     getItem(
-      'Текущее состояние',
-      '/user',
-      <FundProjectionScreenOutlined />,
-      null,
-      '/user'
-    ),
-    getItem(
-      'Мои навыки',
-      '/user/skills',
-      <RocketOutlined />,
-      null,
-      '/user/skills'
-    ),
-    getItem(
-      'Мои проекты',
+      'Projects',
       '/user/projects',
-      <ProjectOutlined />,
+      <ProjectOutlined rotate={270} />,
       null,
       '/user/projects'
     ),
     getItem(
-      'Мой профиль',
+      'Profile',
       '/user/profile',
       <IdcardOutlined />,
       null,
       '/user/profile'
     ),
     getItem(
-      'Настройки аккаунта',
+      'Settings',
       '/user/settings',
       <SettingOutlined />,
       null,
       '/user/settings'
     ),
     getItem(
-      'Обратная связь',
+      'Feedback',
       '/user/feedback',
       <MessageOutlined />,
       null,
       '/user/feedback'
     ),
-    getItem('Выйти', 'logout', <LogoutOutlined />, null, '', logoutHandler),
+    getItem('Logout', 'logout', <LogoutOutlined />, null, '', showModal),
   ];
 
   const renderContent = () => {
     if (location.pathname === '/user') {
       return (
-        <div>
-          <h3>
-            Здесь будет текущий прогресс по заполненным стекам и ссылка на него
-            для HR
-          </h3>
+        <div style={{ padding: '20px' }}>
+          <Form className="skillspage" layout="vertical">
+            <Form.Item className="skillspage__form-item">
+              <Title level={3} className="skills__title">
+                Profile Overview
+              </Title>
+              <Text type="secondary">
+                Здесь будет текущий прогресс по заполненным стекам и ссылка на
+                него для HR
+              </Text>
+            </Form.Item>
+          </Form>
         </div>
       );
     }
@@ -128,6 +134,20 @@ const UserPage = () => {
           </Sider>
           <Content>
             <div className="userpage-layout__content">{renderContent()}</div>
+            <Modal
+              open={isModalOpen}
+              onOk={logoutHandler}
+              onCancel={closeModal}
+              okButtonProps={{
+                type: 'primary',
+                danger: true,
+              }}
+              centered
+              okText="Yes"
+              cancelText="No"
+            >
+              <Title level={3}>Are you sure you want to logout?</Title>
+            </Modal>
           </Content>
         </Layout>
       </Container>

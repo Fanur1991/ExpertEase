@@ -44,7 +44,7 @@ function App() {
             path="/"
             element={
               <>
-                <PageTitle title="Главная" />
+                <PageTitle title="Home" />
                 <MainPage />
               </>
             }
@@ -55,7 +55,7 @@ function App() {
             path="stacks/:id"
             element={
               <>
-                <PageTitle title="Стек" />
+                <PageTitle title="Stacks" />
                 <StackPage />
               </>
             }
@@ -64,7 +64,7 @@ function App() {
             path="register"
             element={
               <>
-                <PageTitle title="Регистрация" />
+                <PageTitle title="SignUp" />
                 <RegisterPage />
               </>
             }
@@ -73,7 +73,7 @@ function App() {
             path="login"
             element={
               <>
-                <PageTitle title="Авторизация" />
+                <PageTitle title="Login" />
                 <LoginPage />
               </>
             }
@@ -82,7 +82,7 @@ function App() {
             path="/user"
             element={
               <ProtectedRoute>
-                <PageTitle title="Аккаунт" />
+                <PageTitle title="Account" />
                 <UserPage />
               </ProtectedRoute>
             }
@@ -91,7 +91,7 @@ function App() {
               path="skills"
               element={
                 <>
-                  <PageTitle title="Мои навыки" />
+                  <PageTitle title="Skills" />
                   <SkillsPage />
                 </>
               }
@@ -100,7 +100,7 @@ function App() {
               path="projects"
               element={
                 <>
-                  <PageTitle title="Мои проекты" />
+                  <PageTitle title="Projects" />
                   <ProjectsPage />
                 </>
               }
@@ -109,7 +109,7 @@ function App() {
               path="profile"
               element={
                 <>
-                  <PageTitle title="Мой профиль" />
+                  <PageTitle title="Profile" />
                   <ProfilePage />
                 </>
               }
@@ -118,7 +118,7 @@ function App() {
               path="settings"
               element={
                 <>
-                  <PageTitle title="Настройки" />
+                  <PageTitle title="Settings" />
                   <SettingsPage />
                 </>
               }
@@ -127,7 +127,7 @@ function App() {
               path="feedback"
               element={
                 <>
-                  <PageTitle title="Обратная связь" />
+                  <PageTitle title="Feedback" />
                   <FeedbackPage />
                 </>
               }
@@ -137,13 +137,13 @@ function App() {
             path="*"
             element={
               <>
-                <PageTitle title="Страница не найдена" />
+                <PageTitle title="NotFound" />
                 <NotFound />
               </>
             }
           />
         </Routes>
-        <ToastContainer position="bottom-right" autoClose={1500} />
+        {/* <ToastContainer position="bottom-right" autoClose={1500} /> */}
       </Content>
       {!location.pathname.startsWith('/user') && <AppFooter />}
     </Layout>

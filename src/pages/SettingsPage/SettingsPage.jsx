@@ -8,6 +8,7 @@ import {
   deleteUserAccount,
 } from '../../redux/slices/userDataSlice';
 import { selectAuth } from '../../redux/slices/authSlice';
+import { openMessage } from '../../utils/openMessage';
 import './SettingsPage.less';
 
 const { Title, Text } = Typography;
@@ -26,7 +27,7 @@ const SettingsPage = () => {
     const { newPassword, confirmPassword } = values;
 
     if (newPassword !== confirmPassword) {
-      message.error('Пароли не совпадают!');
+      openMessage('error', 'Password mismatch!');
       return;
     }
 
@@ -34,10 +35,10 @@ const SettingsPage = () => {
       await dispatch(
         changePassword({ userId: userAuth.user._id, newPassword })
       ).unwrap();
-      message.success('Пароль успешно изменен');
+      openMessage('success', 'Password updated successfully');
       form.resetFields();
     } catch (error) {
-      message.error(error.message || 'Ошибка при изменении пароля');
+      openMessage('error', error.message || 'Error while changing password');
     }
   };
 
@@ -52,17 +53,17 @@ const SettingsPage = () => {
   const handleDeleteAccount = () => {
     dispatch(deleteUserAccount(userAuth.user._id)).then((result) => {
       if (deleteUserAccount.fulfilled.match(result)) {
-        message.success('Аккаунт удален');
+        openMessage('success', 'Account deleted');
         closeModal();
         navigate('/');
       } else {
-        message.error('Ошибка при удалении аккаунта');
+        openMessage('error', 'Error while deleting account');
       }
     });
   };
 
   return (
-    <>
+    <div style={{ padding: '20px' }}>
       <Form
         className="settingspage"
         name="settings"
@@ -74,74 +75,76 @@ const SettingsPage = () => {
       >
         <Form.Item>
           <Title level={3} className="settingspage__title">
-            Пароль
+            Password
           </Title>
-          <Text type="secondary">Здесь вы можете изменить свой пароль</Text>
+          <Text type="secondary">
+            You can update your password in the form below
+          </Text>
         </Form.Item>
 
         <Form.Item
           hasFeedback
-          label="Новый пароль"
+          label="New Password"
           name="newPassword"
           rules={[
             {
-              required: false,
-              message: 'Пожалуйста введите ваш пароль!',
+              required: true,
+              message: 'Please enter your password!',
             },
             {
               min: 5,
-              message: 'Пароль должен содержать минимум 5 символов',
+              message: 'Password must contain at least 5 characters',
             },
           ]}
         >
           <Input.Password
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
-            placeholder="Новый пароль"
+            placeholder="New Password"
           />
         </Form.Item>
 
         <Form.Item
           hasFeedback
-          label="Подтвердить новый пароль"
+          label="Confirm New Password"
           name="confirmPassword"
           rules={[
             {
-              required: false,
-              message: 'Пожалуйста введите ваш пароль!',
+              required: true,
+              message: 'Please enter your password!',
             },
             {
               min: 5,
-              message: 'Пароль должен содержать минимум 5 символов',
+              message: 'Password must contain at least 5 characters',
             },
           ]}
         >
           <Input.Password
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
-            placeholder="Подтвердить новый пароль"
+            placeholder="Confirm New Password"
           />
         </Form.Item>
 
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Изменить пароль
+            Update Password
           </Button>
         </Form.Item>
       </Form>
       <Form>
         <Form.Item>
           <Title level={3} className="settings__title">
-            Удаление аккаунта
+            Delete Account
           </Title>
           <Text type="secondary">
-            Здесь вы можете удалить свой аккаунт навсегда
+            Here you can delete your account permanently
           </Text>
         </Form.Item>
 
         <Form.Item>
           <Button type="primary" danger onClick={showModal}>
-            Удалить аккаунт
+            Delete Account
           </Button>
           <Modal
             open={isModalOpen}
@@ -155,12 +158,12 @@ const SettingsPage = () => {
             okText="Delete"
             cancelText="Cancel"
           >
-            <Title level={3}>Удаление аккаунта</Title>
-            <Text>Вы уверены, что хотите удалить свой аккаунт?</Text>
+            <Title level={3}>Delete Account</Title>
+            <Text>Are you sure you want to delete your account?</Text>
           </Modal>
         </Form.Item>
       </Form>
-    </>
+    </div>
   );
 };
 

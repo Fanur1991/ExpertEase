@@ -7,7 +7,7 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { checkIsAuth, registerUser } from '../../redux/slices/authSlice';
 import './RegisterPage.less';
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 const RegisterPage = () => {
   const [email, setEmail] = useState('');
@@ -48,7 +48,10 @@ const RegisterPage = () => {
         onFinish={handleSubmit}
       >
         <Form.Item className="register-title">
-          <Title level={1}>Регистрация</Title>
+          <Title level={1}>Sign Up</Title>
+          <Text type="secondary">
+            Create your account to build a rating of your skills for HR.
+          </Text>
         </Form.Item>
         <Form.Item
           hasFeedback
@@ -91,16 +94,16 @@ const RegisterPage = () => {
           <Input.Password
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
-            placeholder="Пароль"
+            placeholder="Password"
           />
         </Form.Item>
         <Form.Item>
           <Flex justify="space-around">
             <Button shape="round" type="primary" htmlType="submit">
-              Подтвердить
+              Sign up
             </Button>
             <Link to="/login">
-              <Button type="link">Уже зарегистрированы?</Button>
+              <Button type="link">Already have an account?</Button>
             </Link>
           </Flex>
         </Form.Item>

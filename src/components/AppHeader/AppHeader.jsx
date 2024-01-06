@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Header } from 'antd/lib/layout/layout';
 import { checkIsAuth, logout } from '../../redux/slices/authSlice';
-import second, { logoutUserData } from '../../redux/slices/userDataSlice';
+import { logoutUserData } from '../../redux/slices/userDataSlice';
 import { Button, Flex, Space, Dropdown } from 'antd';
 import {
   LoginOutlined,
@@ -13,6 +13,7 @@ import {
   DownOutlined,
 } from '@ant-design/icons';
 import { Container } from '../Container/Container';
+import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import './AppHeader.less';
 import logo from '../../img/logo/logo.png';
 
@@ -35,7 +36,7 @@ const AppHeader = () => {
           <Link style={{ color: 'white' }} to="/user">
             <Space size="small">
               <UserOutlined style={{ color: 'white' }} />
-              Профиль
+              Profile
             </Space>
           </Link>
         </Flex>
@@ -46,7 +47,7 @@ const AppHeader = () => {
       label: (
         <Flex align="center" justify="center">
           <Link style={{ color: 'white' }} to="/">
-            Резерв
+            Reserved
           </Link>
         </Flex>
       ),
@@ -61,12 +62,12 @@ const AppHeader = () => {
           <Link style={{ color: 'white' }} onClick={logoutHandler}>
             <Space size="small">
               <LogoutOutlined style={{ color: 'white' }} />
-              Выйти
+              Logout
             </Space>
           </Link>
         </Flex>
       ),
-      key: '3',
+      key: '2',
     },
   ];
 
@@ -80,28 +81,32 @@ const AppHeader = () => {
             </Link>
           </Flex>
           {isAuth ? (
-            <Dropdown
-              menu={{
-                items,
-              }}
-              trigger={['click']}
-              placement="bottomRight"
-            >
-              <a onClick={(e) => e.preventDefault()}>
-                <Button shape="round" className="app-header__menu">
-                  <Space>
-                    Меню
-                    <DownOutlined />
-                  </Space>
-                </Button>
-              </a>
-            </Dropdown>
+            <Flex align="center" gap="large">
+              <LanguageSwitcher />
+              <Dropdown
+                menu={{
+                  items,
+                }}
+                trigger={['hover']}
+                placement="bottom"
+              >
+                <a onClick={(e) => e.preventDefault()}>
+                  <Button
+                    className="app-header__menu"
+                    shape="round"
+                    icon={<DownOutlined />}
+                  >
+                    Account
+                  </Button>
+                </a>
+              </Dropdown>
+            </Flex>
           ) : (
             <Flex gap="large" align="center" wrap>
               <Link className="app-header__link" to={'/login'}>
                 <Space size="small">
                   <LoginOutlined className="app-header__link-icon" />
-                  Войти
+                  Login
                 </Space>
               </Link>
               <Button
@@ -111,7 +116,7 @@ const AppHeader = () => {
                 size={size}
               >
                 <Link className="app-header__link" to={'/register'}>
-                  Зарегистрироваться
+                  Sign up
                 </Link>
               </Button>
             </Flex>
