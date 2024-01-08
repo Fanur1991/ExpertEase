@@ -103,6 +103,7 @@ const AppHeader = () => {
             </Flex>
           ) : (
             <Flex gap="large" align="center" wrap>
+              <LanguageSwitcher />
               <Link className="app-header__link" to={'/login'}>
                 <Space size="small">
                   <LoginOutlined className="app-header__link-icon" />

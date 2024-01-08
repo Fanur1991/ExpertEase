@@ -18,6 +18,10 @@ const StackPage = () => {
   const [currentStack, setCurrentStack] = useState(null);
   const [currentCategories, setCurrentCategories] = useState([]);
 
+  // console.log(stacks, 'stacks');
+  console.log(categories, 'categories');
+  console.log(skills, 'skills');
+
   useEffect(() => {
     const stack = stacks.data.find((stack) => stack._id === id);
     if (stack) {
@@ -40,16 +44,16 @@ const StackPage = () => {
   ) : (
     <Container>
       <Title type="success" level={2}>
-        {currentStack.name.ru}
+        {currentStack.name}
       </Title>
-      <Paragraph>{currentStack.desc.ru}</Paragraph>
+      <Paragraph>{currentStack.desc}</Paragraph>
       <Title level={3}>Категории и навыки</Title>
       <List
         grid={{ gutter: 16, column: 4 }}
         dataSource={currentCategories}
         renderItem={(category) => (
           <List.Item key={category._id}>
-            <Card title={category.name.ru}>
+            <Card title={category.name}>
               <List
                 dataSource={category.skills
                   .map((skillId) =>
@@ -59,7 +63,7 @@ const StackPage = () => {
                 renderItem={(skill) => {
                   return skill ? (
                     <List.Item key={skill._id}>
-                      <strong>{skill.name.ru}</strong>: {skill.desc.ru}
+                      <strong>{skill.name}</strong>: {skill.desc}
                       <Space align="center" wrap>
                         {skill.details &&
                           skill.details.map((detail) => (

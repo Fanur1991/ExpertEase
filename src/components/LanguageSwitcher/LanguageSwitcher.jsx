@@ -1,15 +1,39 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dropdown, Button } from 'antd';
 import { GlobalOutlined } from '@ant-design/icons';
 import './LanguageSwitcher.less';
 
 const LanguageSwitcher = () => {
-  const [shortLangName, setShortLangName] = useState('EN');
+  const { i18n } = useTranslation();
+  const currentLang = localStorage.getItem('lang') || 'en';
+  const [shortLngName, setShortLngName] = useState(currentLang.toUpperCase());
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+    localStorage.setItem('lang', lng);
+    setShortLngName(lng.toUpperCase());
+  };
 
   const items = [
-    { key: 'en', label: 'English', style: { color: '#ffffff' } },
-    { key: 'ru', label: 'Русский', style: { color: '#ffffff' } },
-    { key: 'es', label: 'Español', style: { color: '#ffffff' } },
+    {
+      key: 'en',
+      label: 'English',
+      style: { color: '#ffffff' },
+      onClick: () => changeLanguage('en'),
+    },
+    {
+      key: 'ru',
+      label: 'Русский',
+      style: { color: '#ffffff' },
+      onClick: () => changeLanguage('ru'),
+    },
+    {
+      key: 'es',
+      label: 'Español',
+      style: { color: '#ffffff' },
+      onClick: () => changeLanguage('es'),
+    },
   ];
   return (
     <Dropdown
@@ -23,7 +47,7 @@ const LanguageSwitcher = () => {
           shape="round"
           icon={<GlobalOutlined />}
         >
-          {shortLangName}
+          {shortLngName}
         </Button>
       </a>
     </Dropdown>

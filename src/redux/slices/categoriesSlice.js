@@ -36,6 +36,7 @@ const categorySlice = createSlice({
           desc: category.desc,
           skills: category.skills,
           _id: category._id,
+          categoryId: category.categoryId,
         };
       });
     });

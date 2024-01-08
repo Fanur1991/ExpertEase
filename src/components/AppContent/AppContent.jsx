@@ -1,11 +1,14 @@
 import { Typography, Flex } from 'antd';
 import { Container } from '../Container/Container';
 import StacksPage from '../../pages/StacksPage/StacksPage';
+import { useTranslation } from 'react-i18next';
 // import './AppContent.less';
 
 const { Title } = Typography;
 
 const AppContent = () => {
+  const { t } = useTranslation();
+
   return (
     <Container>
       <Flex justify="center" align="center" vertical>
@@ -18,7 +21,7 @@ const AppContent = () => {
             marginTop: '50px',
           }}
         >
-          Начать заполнение стека
+          {t('startFillingStack')}
         </Title>
         <Title
           type="secondary"
@@ -29,7 +32,7 @@ const AppContent = () => {
             marginBottom: '50px',
           }}
         >
-          Ваш стек будет показан здесь
+          {t('yourStackWillBeShownHere')}
         </Title>
       </Flex>
       <StacksPage />

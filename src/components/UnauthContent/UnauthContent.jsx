@@ -1,11 +1,14 @@
 import { Typography, Flex } from 'antd';
 import { Container } from '../Container/Container';
 import StacksPage from '../../pages/StacksPage/StacksPage';
+import { useTranslation } from 'react-i18next';
 // import './UnauthContent.less';
 
 const { Title } = Typography;
 
 const UnauthContent = () => {
+  const { t } = useTranslation();
+
   return (
     <Container>
       <Flex justify="center" align="center" gap="middle" vertical>
@@ -27,10 +30,10 @@ const UnauthContent = () => {
             textAlign: 'center',
             color: '#8c8c8c',
             marginBottom: '50px',
+            maxWidth: 800,
           }}
         >
-          Создайте свой уникальный профиль навыков, оцените свои знания <br /> и
-          поделитесь ими с потенциальными работодателями
+          {t('createUniqueProfile')}
         </Title>
       </Flex>
       <StacksPage />

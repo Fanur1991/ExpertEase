@@ -36,6 +36,7 @@ const skillSlice = createSlice({
           desc: skill.desc,
           _id: skill._id,
           details: skill.details,
+          skillId: skill.skillId,
         };
       });
     });
