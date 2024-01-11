@@ -5,6 +5,7 @@ import { checkIsAuth, loginUser } from '../../redux/slices/authSlice';
 import { toast } from 'react-toastify';
 import { Button, Checkbox, Form, Input, Typography, Flex } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 import './LoginPage.less';
 
 const { Title, Text } = Typography;
@@ -16,6 +17,7 @@ const LoginPage = () => {
   const isAuth = useSelector(checkIsAuth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (status) {
@@ -48,10 +50,8 @@ const LoginPage = () => {
         onFinish={handleSubmit}
       >
         <Form.Item className="login-title">
-          <Title level={1}>Login</Title>
-          <Text type="secondary">
-            Glad to see you back! Let's get you to your account.
-          </Text>
+          <Title level={2}>{t('login')}</Title>
+          <Text type="secondary">{t('loginPageDescription')}</Text>
         </Form.Item>
         <Form.Item
           hasFeedback
@@ -61,18 +61,19 @@ const LoginPage = () => {
           rules={[
             {
               required: true,
-              message: 'Пожалуйста введите ваш email!',
+              message: t('registerPageNotifacation1'),
             },
             {
               type: 'email',
-              message: 'Введен некорректный email!',
+              message: t('registerPageNotifacation2'),
             },
           ]}
         >
           <Input
             autoFocus
             prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="Email"
+            placeholder={t('email')}
+            autoComplete="email"
           />
         </Form.Item>
         <Form.Item
@@ -83,35 +84,36 @@ const LoginPage = () => {
           rules={[
             {
               required: true,
-              message: 'Пожалуйста введите ваш пароль!',
+              message: t('registerPageNotifacation3'),
             },
             {
               min: 5,
-              message: 'Пароль должен содержать минимум 5 символов',
+              message: t('registerPageNotifacation4'),
             },
           ]}
         >
           <Input.Password
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
-            placeholder="Password"
+            placeholder={t('password')}
+            autoComplete="current-password"
           />
         </Form.Item>
         <Form.Item>
           <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>Remember me</Checkbox>
+            <Checkbox>{t('rememberMe')}</Checkbox>
           </Form.Item>
           <a className="login-form-forgot" href="">
-            Forgot your password?
+            {t('forgotPassword')}
           </a>
         </Form.Item>
         <Form.Item>
           <Flex justify="space-around">
             <Button shape="round" type="primary" htmlType="submit">
-              Log in
+              {t('login')}
             </Button>
             <Link to="/register">
-              <Button type="link">Don't have an account?</Button>
+              <Button type="link">{t('dontHaveAccount')}</Button>
             </Link>
           </Flex>
         </Form.Item>

@@ -18,9 +18,9 @@ const StackPage = () => {
   const [currentStack, setCurrentStack] = useState(null);
   const [currentCategories, setCurrentCategories] = useState([]);
 
-  // console.log(stacks, 'stacks');
-  console.log(categories, 'categories');
-  console.log(skills, 'skills');
+  console.log(stacks, 'stacks');
+  // console.log(categories, 'categories');
+  // console.log(skills, 'skills');
 
   useEffect(() => {
     const stack = stacks.data.find((stack) => stack._id === id);

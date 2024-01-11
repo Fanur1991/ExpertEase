@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, Input, Button, Form, List, Space, Typography, Flex } from 'antd';
+import {
+  Card,
+  Input,
+  Button,
+  Form,
+  List,
+  Space,
+  Typography,
+  Flex,
+  Tooltip,
+} from 'antd';
 import { PlusOutlined, LinkOutlined, DeleteOutlined } from '@ant-design/icons';
 import { v4 as uuid } from 'uuid';
 import {
@@ -10,6 +20,7 @@ import {
   selectUserData,
 } from '../../redux/slices/userDataSlice';
 import { openMessage } from '../../utils/openMessage';
+import { useTranslation } from 'react-i18next';
 
 import './ProjectsPage.less';
 
@@ -21,6 +32,7 @@ const ProjectsPage = () => {
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
+  const { t } = useTranslation();
   const projects = userData.user?.projects || [];
 
   useEffect(() => {
@@ -39,7 +51,7 @@ const ProjectsPage = () => {
     dispatch(addProjects(newProject));
     form.resetFields();
     setStacks([]);
-    openMessage('success', 'The project has been added');
+    openMessage('success', t('projectsPageNotification1'));
   };
 
   const handleStackInputChange = (e) => {
@@ -58,7 +70,7 @@ const ProjectsPage = () => {
 
   const handleDelete = (project) => {
     dispatch(deleteProjects(project.id));
-    openMessage('success', 'The project has been deleted');
+    openMessage('success', t('projectsPageNotification2'));
   };
 
   const createStacks = (project) => {
@@ -66,7 +78,7 @@ const ProjectsPage = () => {
       return (
         <Flex gap="small">
           <Space>
-            <Text italic>Stacks:</Text>
+            <Text italic>{t('stacks')}:</Text>
             {project.stack.map((tech, index) => (
               <Text keyboard key={index}>
                 {tech}
@@ -94,46 +106,43 @@ const ProjectsPage = () => {
       >
         <Form.Item className="projectspage__form-item">
           <Title level={3} className="projectspage__title">
-            Projects
+            {t('projectsPageTitle')}
           </Title>
-          <Text type="secondary">
-            Use the form below to describe your projects, technology stack and
-            attach a link to the repository
-          </Text>
+          <Text type="secondary">{t('projectsPageDescription')}</Text>
         </Form.Item>
         <Form.Item
           className="projectspage__form-item"
           name="title"
-          label="Project name"
+          label={t('projectName')}
           rules={[{ required: true, message: 'Enter the project name!' }]}
         >
-          <Input placeholder="Project name" />
+          <Input placeholder={t('projectName')} />
         </Form.Item>
 
         <Form.Item
           className="projectspage__form-item"
           name="description"
-          label="Description"
+          label={t('description')}
           rules={[
             { required: true, message: 'Enter the project description!' },
           ]}
         >
-          <TextArea rows={4} placeholder="Description" />
+          <TextArea rows={4} placeholder={t('description')} />
         </Form.Item>
 
         <Form.Item
           className="projectspage__form-item"
           name="stack"
-          label="Stack"
+          label={t('stacks')}
           rules={[{ required: true, message: 'Enter the stack!' }]}
         >
-          <Input onChange={handleStackInputChange} placeholder="Stacks" />
+          <Input onChange={handleStackInputChange} placeholder={t('stacks')} />
         </Form.Item>
 
         <Form.Item
           className="projectspage__form-item"
           name="repository"
-          label="Repository link"
+          label={t('repositoryLink')}
           rules={[{ type: 'url', message: 'Enter the correct link!' }]}
         >
           <Input placeholder="https://www.example.com" />
@@ -141,7 +150,7 @@ const ProjectsPage = () => {
 
         <Form.Item>
           <Button type="primary" htmlType="submit" icon={<PlusOutlined />}>
-            Add Project
+            {t('buttonAddProject')}
           </Button>
         </Form.Item>
       </Form>
@@ -156,18 +165,22 @@ const ProjectsPage = () => {
               title={project.title}
               extra={
                 <Space>
-                  <a
-                    href={project.repository}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <LinkOutlined />
-                  </a>
-                  <Button
-                    type="text"
-                    icon={<DeleteOutlined />}
-                    onClick={() => handleDelete(project)}
-                  />
+                  <Tooltip title={t('promptText2')} color="blue">
+                    <a
+                      href={project.repository}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <LinkOutlined />
+                    </a>
+                  </Tooltip>
+                  <Tooltip title={t('promptText1')} color="blue">
+                    <Button
+                      type="text"
+                      icon={<DeleteOutlined />}
+                      onClick={() => handleDelete(project)}
+                    />
+                  </Tooltip>
                 </Space>
               }
             >

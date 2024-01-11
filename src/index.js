@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import store, { persistor } from './redux/store';
-import { Flex, Spin } from 'antd';
+import { Flex, Spin, ConfigProvider } from 'antd';
 import './lang/i18next';
 
 const App = lazy(() => import('./App'));
@@ -21,7 +21,9 @@ root.render(
     >
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <App />
+          <ConfigProvider theme={{ cssVar: true, hashed: false }}>
+            <App />
+          </ConfigProvider>
         </PersistGate>
       </Provider>
     </Suspense>

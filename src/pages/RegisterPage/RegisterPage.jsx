@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import { Button, Form, Input, Typography, Flex } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { checkIsAuth, registerUser } from '../../redux/slices/authSlice';
+import { useTranslation } from 'react-i18next';
 import './RegisterPage.less';
 
 const { Title, Text } = Typography;
@@ -12,19 +12,17 @@ const { Title, Text } = Typography;
 const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { status } = useSelector((state) => state.auth);
+  // const { status } = useSelector((state) => state.auth);
   const isAuth = useSelector(checkIsAuth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   useEffect(() => {
-    if (status) {
-      toast(status);
-    }
     if (isAuth) {
       navigate('/');
     }
-  }, [status, isAuth, navigate]);
+  }, [isAuth, navigate]);
 
   const handleSubmit = () => {
     try {
@@ -48,10 +46,8 @@ const RegisterPage = () => {
         onFinish={handleSubmit}
       >
         <Form.Item className="register-title">
-          <Title level={1}>Sign Up</Title>
-          <Text type="secondary">
-            Create your account to build a rating of your skills for HR.
-          </Text>
+          <Title level={2}>{t('signup')}</Title>
+          <Text type="secondary">{t('registerPageDescription')}</Text>
         </Form.Item>
         <Form.Item
           hasFeedback
@@ -61,18 +57,19 @@ const RegisterPage = () => {
           rules={[
             {
               required: true,
-              message: 'Пожалуйста введите ваш email!',
+              message: t('registerPageNotifacation1'),
             },
             {
               type: 'email',
-              message: 'Введен некорректный email!',
+              message: t('registerPageNotifacation2'),
             },
           ]}
         >
           <Input
             autoFocus
             prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="Email"
+            placeholder={t('email')}
+            autoComplete="email"
           />
         </Form.Item>
         <Form.Item
@@ -83,27 +80,28 @@ const RegisterPage = () => {
           rules={[
             {
               required: true,
-              message: 'Пожалуйста введите ваш пароль!',
+              message: t('registerPageNotifacation3'),
             },
             {
               min: 5,
-              message: 'Пароль должен содержать минимум 5 символов',
+              message: t('registerPageNotifacation4'),
             },
           ]}
         >
           <Input.Password
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
-            placeholder="Password"
+            placeholder={t('password')}
+            autoComplete="current-password"
           />
         </Form.Item>
         <Form.Item>
           <Flex justify="space-around">
             <Button shape="round" type="primary" htmlType="submit">
-              Sign up
+              {t('signup')}
             </Button>
             <Link to="/login">
-              <Button type="link">Already have an account?</Button>
+              <Button type="link">{t('alreadyHaveAccount')}</Button>
             </Link>
           </Flex>
         </Form.Item>

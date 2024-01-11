@@ -1,6 +1,8 @@
 @import '../../styles/main.less';
 
 .app-header {
+  display: flex;
+  align-items: center;
   background-color: @header-backgroundColor;
   height: 64px;
 
@@ -9,7 +11,7 @@
     height: 40px;
   }
 
-  &__menu {
+  &__button {
     background-color: @menu-backgroundColor;
     border: @menu-backgroundColor;
     color: @font-color-button;
@@ -30,9 +32,4 @@
       color: @font-color-button;
     }
   }
-}
-
-.ant-dropdown .ant-dropdown-menu {
-  background-color: @menu-backgroundColor;
-  margin-top: -10px;
 }

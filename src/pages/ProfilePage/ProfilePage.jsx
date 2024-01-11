@@ -1,6 +1,15 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, Input, Button, Avatar, Upload, Space, Typography } from 'antd';
+import {
+  Form,
+  Input,
+  Button,
+  Avatar,
+  Upload,
+  Space,
+  Typography,
+  Tooltip,
+} from 'antd';
 import {
   LoadingOutlined,
   PlusOutlined,
@@ -17,6 +26,7 @@ import { selectAuth } from '../../redux/slices/authSlice';
 import { API_URL as baseUrl } from '../../config';
 import { getBase64, beforeUpload } from '../../utils/utils';
 import { openMessage } from '../../utils/openMessage';
+import { useTranslation } from 'react-i18next';
 import './ProfilePage.less';
 
 const { Title, Text } = Typography;
@@ -31,9 +41,10 @@ const ProfilePage = () => {
   const userAuth = useSelector(selectAuth);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
+  const { t } = useTranslation();
 
-  console.log(useSelector(selectUserData), 'userDataslice');
-  console.log(useSelector(selectAuth), 'authSlice');
+  // console.log(useSelector(selectUserData), 'userDataslice');
+  // console.log(useSelector(selectAuth), 'authSlice');
 
   useEffect(() => {
     form.setFieldsValue({
@@ -78,9 +89,9 @@ const ProfilePage = () => {
     const { email, ...updateData } = formData;
     dispatch(updateProfile(updateData)).then((result) => {
       if (updateProfile.fulfilled.match(result)) {
-        openMessage('success', 'Profile details added successfully');
+        openMessage('success', t('profilePageNotification1'));
       } else {
-        openMessage('error', 'Error loading data');
+        openMessage('error', t('profilePageNotification2'));
       }
     });
   };
@@ -124,14 +135,14 @@ const ProfilePage = () => {
 
       dispatch(updateAvatarProfile(formData)).then((result) => {
         if (updateAvatarProfile.fulfilled.match(result)) {
-          openMessage('success', 'Photo uploaded successfully');
+          openMessage('success', t('profilePageNotification3'));
           setIsImageSelected(false);
         } else {
-          openMessage('error', 'Error uploading photo');
+          openMessage('error', t('profilePageNotification4'));
         }
       });
     } else {
-      openMessage('error', 'No file selected for upload');
+      openMessage('error', t('profilePageNotification5'));
     }
   }, [selectedImage, userAuth.user?._id, dispatch]);
 
@@ -166,9 +177,9 @@ const ProfilePage = () => {
       dispatch(deleteAvatarProfile()).then((result) => {
         if (deleteAvatarProfile.fulfilled.match(result)) {
           setImageUrl(null);
-          openMessage('success', 'Photo deleted successfully');
+          openMessage('success', t('profilePageNotification6'));
         } else {
-          openMessage('error', 'Error while deleting photo');
+          openMessage('error', t('profilePageNotification7'));
         }
       });
     },
@@ -201,7 +212,7 @@ const ProfilePage = () => {
     if (info.file.status === 'error') {
       console.error('Error while downloading file:', info.file.error);
       setLoading(false);
-      openMessage('error', 'Error loading file.');
+      openMessage('error', t('profilePageNotification8'));
       setSelectedImage(null);
     }
   };
@@ -225,7 +236,13 @@ const ProfilePage = () => {
 
   const uploadButton = (
     <div className="profilepage__avatar-upload">
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
+      {loading ? (
+        <LoadingOutlined />
+      ) : (
+        <Tooltip title={t('buttonUpload')} color="blue">
+          <PlusOutlined />
+        </Tooltip>
+      )}
     </div>
   );
 
@@ -270,11 +287,9 @@ const ProfilePage = () => {
       >
         <Form.Item>
           <Title level={3} className="profilepage__title">
-            Profile
+            {t('profilePageTitle')}
           </Title>
-          <Text type="secondary">
-            Update your profile details the form below
-          </Text>
+          <Text type="secondary">{t('profilePageDescription')}</Text>
         </Form.Item>
 
         <Form.Item
@@ -299,21 +314,24 @@ const ProfilePage = () => {
                 className="profilepage__avatar-delete"
                 onClick={handleDeleteAvatar}
               >
-                <CloseOutlined />
+                <Tooltip title={t('buttonDelete')} color="blue">
+                  <CloseOutlined />
+                </Tooltip>
               </div>
             </Upload>
             {isImageSelected && (
               <Space size="large">
                 <Button size="small" danger onClick={handleCancel}>
-                  Cancel
+                  {t('cancel')}
                 </Button>
+
                 <Button
                   autoFocus
                   size="small"
                   type="primary"
                   onClick={handleUpload}
                 >
-                  Upload
+                  {t('upload')}
                 </Button>
               </Space>
             )}
@@ -322,7 +340,7 @@ const ProfilePage = () => {
 
         <Form.Item
           hasFeedback
-          label="First Name"
+          label={t('firstname')}
           name="firstname"
           rules={[
             { required: false, message: 'Please enter your name!' },
@@ -330,14 +348,14 @@ const ProfilePage = () => {
           ]}
         >
           <Input
-            placeholder="First Name"
+            placeholder={t('firstname')}
             onChange={(e) => setFirstname(e.target.value)}
           />
         </Form.Item>
 
         <Form.Item
           hasFeedback
-          label="Last Name"
+          label={t('surname')}
           name="surname"
           rules={[
             {
@@ -347,10 +365,10 @@ const ProfilePage = () => {
             { min: 2, message: 'Last name must contain at least 2 letters' },
           ]}
         >
-          <Input placeholder="Last Name" />
+          <Input placeholder={t('surname')} />
         </Form.Item>
 
-        <Form.Item label="Email" name="email">
+        <Form.Item label={t('email')} name="email">
           <Input disabled type="email" />
         </Form.Item>
 
@@ -390,7 +408,7 @@ const ProfilePage = () => {
 
         <Form.Item
           hasFeedback
-          label="Website"
+          label={t('website')}
           name="websiteUrl"
           rules={[
             {
@@ -407,7 +425,7 @@ const ProfilePage = () => {
 
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Confirm
+            {t('confirm')}
           </Button>
         </Form.Item>
       </Form>

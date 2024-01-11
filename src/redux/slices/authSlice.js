@@ -20,6 +20,14 @@ export const registerUser = createAsyncThunk(
       if (data.token) {
         window.localStorage.setItem('token', data.token);
       }
+
+      notification.success({
+        message: 'Successful sign up',
+        description: 'You are signed up',
+        placement: 'bottomRight',
+        duration: 3,
+      });
+
       return data;
     } catch (error) {
       // console.log(error.response.data.errors[0].msg);
@@ -57,7 +65,7 @@ export const loginUser = createAsyncThunk(
       }
 
       notification.success({
-        message: 'Successful login',
+        message: 'Successful log in',
         description: 'You are logged in',
         placement: 'bottomRight',
         duration: 3,

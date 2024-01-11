@@ -11,10 +11,13 @@ import {
   LogoutOutlined,
   DashboardOutlined,
 } from '@ant-design/icons';
-import { toast } from 'react-toastify';
 import { logout } from '../../redux/slices/authSlice';
 import { Container } from '../../components/Container/Container';
 // import { selectStacks } from '../../redux/slices/stacksSlice';
+import { useTranslation } from 'react-i18next';
+import { openMessage } from '../../utils/openMessage';
+import MySkillsPage from '../MySkillsPage/MySkillsPage';
+import SkillsPage from '../MySkillsPage/SkillsPage/SkillsPage';
 
 import './UserPage.less';
 
@@ -26,8 +29,15 @@ const UserPage = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   // const stacks = useSelector(selectStacks);
+  const { t } = useTranslation();
 
-  const selectedKeys = location.pathname;
+  const getSelectedMenuKey = () => {
+    if (location.pathname.startsWith('/user/skills')) {
+      return '/user/skills';
+    }
+
+    return location.pathname;
+  };
 
   function getItem(label, key, icon, type, path, onClick) {
     return {
@@ -42,7 +52,7 @@ const UserPage = () => {
   const logoutHandler = () => {
     dispatch(logout());
     window.localStorage.removeItem('token');
-    toast('Вы вышли из системы.');
+    openMessage('success', t('youloggedout'));
   };
 
   const showModal = () => {
@@ -54,37 +64,43 @@ const UserPage = () => {
   };
 
   const items = [
-    getItem('Overview', '/user', <DashboardOutlined />, null, '/user'),
-    getItem('Skills', '/user/skills', <RocketOutlined />, null, '/user/skills'),
+    getItem(t('overview'), '/user', <DashboardOutlined />, null, '/user'),
     getItem(
-      'Projects',
+      t('skills'),
+      '/user/skills',
+      <RocketOutlined />,
+      null,
+      '/user/skills'
+    ),
+    getItem(
+      t('projects'),
       '/user/projects',
       <ProjectOutlined rotate={270} />,
       null,
       '/user/projects'
     ),
     getItem(
-      'Profile',
+      t('profile'),
       '/user/profile',
       <IdcardOutlined />,
       null,
       '/user/profile'
     ),
     getItem(
-      'Settings',
+      t('settings'),
       '/user/settings',
       <SettingOutlined />,
       null,
       '/user/settings'
     ),
     getItem(
-      'Feedback',
+      t('feedback'),
       '/user/feedback',
       <MessageOutlined />,
       null,
       '/user/feedback'
     ),
-    getItem('Logout', 'logout', <LogoutOutlined />, null, '', showModal),
+    getItem(t('logout'), 'logout', <LogoutOutlined />, null, '', showModal),
   ];
 
   const renderContent = () => {
@@ -94,16 +110,23 @@ const UserPage = () => {
           <Form className="skillspage" layout="vertical">
             <Form.Item className="skillspage__form-item">
               <Title level={3} className="skills__title">
-                Profile Overview
+                {t('userPageTitle')}
               </Title>
-              <Text type="secondary">
-                Здесь будет текущий прогресс по заполненным стекам и ссылка на
-                него для HR
-              </Text>
+              <Text type="secondary">{t('userPageDescription')}</Text>
+              
             </Form.Item>
           </Form>
         </div>
       );
+    }
+
+    if (
+      location.pathname.startsWith('/user/skills') &&
+      location.pathname !== '/user/skills'
+    ) {
+      return <SkillsPage />;
+    } else if (location.pathname === '/user/skills') {
+      return <MySkillsPage />;
     }
 
     return <Outlet />;
@@ -127,7 +150,7 @@ const UserPage = () => {
             <Menu
               className="userpage-layout__menu"
               mode="inline"
-              selectedKeys={[selectedKeys]}
+              selectedKeys={[getSelectedMenuKey()]}
               defaultSelectedKeys={['1']}
               items={items}
             />
@@ -143,10 +166,10 @@ const UserPage = () => {
                 danger: true,
               }}
               centered
-              okText="Yes"
-              cancelText="No"
+              okText={t('yes')}
+              cancelText={t('no')}
             >
-              <Title level={3}>Are you sure you want to logout?</Title>
+              <Title level={3}>{t('areYouSureYouWantToLogout')}</Title>
             </Modal>
           </Content>
         </Layout>

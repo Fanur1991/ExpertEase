@@ -1,5 +1,4 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { Layout } from 'antd';
@@ -16,7 +15,8 @@ import NotFound from './pages/NotFoundPage/NotFoundPage';
 import StackPage from './pages/StacksPage/StackPage/StackPage';
 import UserPage from './pages/UserPage/UserPage';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
-import SkillsPage from './pages/SkillsPage/SkillsPage';
+import MySkillsPage from './pages/MySkillsPage/MySkillsPage';
+import SkillsPage from './pages/MySkillsPage/SkillsPage/SkillsPage';
 import ProjectsPage from './pages/ProjectsPage/ProjectsPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import SettingsPage from './pages/SettingsPage/SettingsPage';
@@ -92,10 +92,20 @@ function App() {
               element={
                 <>
                   <PageTitle title="Skills" />
-                  <SkillsPage />
+                  <MySkillsPage />
                 </>
               }
-            />
+            >
+              <Route
+                path=":url"
+                element={
+                  <>
+                    <PageTitle title="Skill" />
+                    <SkillsPage />
+                  </>
+                }
+              />
+            </Route>
             <Route
               path="projects"
               element={
@@ -143,7 +153,6 @@ function App() {
             }
           />
         </Routes>
-        {/* <ToastContainer position="bottom-right" autoClose={1500} /> */}
       </Content>
       {!location.pathname.startsWith('/user') && <AppFooter />}
     </Layout>

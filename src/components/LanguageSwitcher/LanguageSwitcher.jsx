@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Dropdown, Button } from 'antd';
+import { Dropdown, Button, ConfigProvider } from 'antd';
 import { GlobalOutlined } from '@ant-design/icons';
 import './LanguageSwitcher.less';
 
@@ -36,21 +36,31 @@ const LanguageSwitcher = () => {
     },
   ];
   return (
-    <Dropdown
-      menu={{ items, defaultSelectedKeys: ['1'] }}
-      trigger={['hover']}
-      placement="bottom"
+    <ConfigProvider
+      theme={{
+        token: {
+          colorBgElevated: '#b37feb',
+          controlItemBgHover: '#d3adf7',
+        },
+        components: {
+          Dropdown: {
+            colorBgElevated: '#b37feb',
+            controlItemBgHover: '#d3adf7',
+          },
+        },
+      }}
     >
-      <a onClick={(e) => e.preventDefault()}>
+      <Dropdown menu={{ items }} trigger={['hover']} placement="bottom" arrow>
         <Button
+          onClick={(e) => e.preventDefault()}
           className="languageswitcher__button"
           shape="round"
           icon={<GlobalOutlined />}
         >
           {shortLngName}
         </Button>
-      </a>
-    </Dropdown>
+      </Dropdown>
+    </ConfigProvider>
   );
 };
 

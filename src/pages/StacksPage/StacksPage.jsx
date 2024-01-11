@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Avatar, Card, Flex, List, Typography, Spin, Divider } from 'antd';
+import { Avatar, Card, Flex, List, Typography, Spin, Skeleton } from 'antd';
 import { fetchStack, selectStacks } from '../../redux/slices/stacksSlice';
 import { fetchCategory } from '../../redux/slices/categoriesSlice';
 import { fetchSkill } from '../../redux/slices/skillsSlice';
@@ -16,6 +16,7 @@ const API_URL3 = 'http://localhost:3002/api/skills';
 const StacksPage = () => {
   const stacks = useSelector(selectStacks);
   const dispatch = useDispatch();
+  const [avatarIsLoaded, setAvatarIsLoaded] = useState(true);
 
   useEffect(() => {
     dispatch(fetchStack(API_URL));
@@ -36,7 +37,7 @@ const StacksPage = () => {
       grid={{
         gutter: 8,
         xs: 1,
-        sm: 2,
+        sm: 1,
         md: 2,
         lg: 3,
         xl: 4,
@@ -48,7 +49,7 @@ const StacksPage = () => {
         <List.Item className="list-item">
           <Link className="card-link" to={`/stacks/${item._id}`}>
             <Card className="card">
-              <Flex gap="small" justify="center" align="center">
+              <Flex gap="middle" justify="center" align="center">
                 <Avatar
                   src={`https://xsgames.co/randomusers/avatar.php?g=pixel&key=${index}`}
                 />

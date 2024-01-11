@@ -9,6 +9,7 @@ import {
 } from '../../redux/slices/userDataSlice';
 import { selectAuth } from '../../redux/slices/authSlice';
 import { openMessage } from '../../utils/openMessage';
+import { useTranslation } from 'react-i18next';
 import './SettingsPage.less';
 
 const { Title, Text } = Typography;
@@ -19,6 +20,7 @@ const SettingsPage = () => {
   const navigate = useNavigate();
   const userAuth = useSelector(selectAuth);
   const [form] = Form.useForm();
+  const { t } = useTranslation();
 
   // console.log(useSelector(selectUserData), 'userDataslice');
   // console.log(useSelector(selectAuth), 'authSlice');
@@ -27,7 +29,7 @@ const SettingsPage = () => {
     const { newPassword, confirmPassword } = values;
 
     if (newPassword !== confirmPassword) {
-      openMessage('error', 'Password mismatch!');
+      openMessage('error', t('settingsPageNotification1'));
       return;
     }
 
@@ -35,10 +37,10 @@ const SettingsPage = () => {
       await dispatch(
         changePassword({ userId: userAuth.user._id, newPassword })
       ).unwrap();
-      openMessage('success', 'Password updated successfully');
+      openMessage('success', t('settingsPageNotification2'));
       form.resetFields();
     } catch (error) {
-      openMessage('error', error.message || 'Error while changing password');
+      openMessage('error', error.message || t('settingsPageNotification3'));
     }
   };
 
@@ -53,11 +55,11 @@ const SettingsPage = () => {
   const handleDeleteAccount = () => {
     dispatch(deleteUserAccount(userAuth.user._id)).then((result) => {
       if (deleteUserAccount.fulfilled.match(result)) {
-        openMessage('success', 'Account deleted');
+        openMessage('success', t('settingsPageNotification4'));
         closeModal();
         navigate('/');
       } else {
-        openMessage('error', 'Error while deleting account');
+        openMessage('error', t('settingsPageNotification5'));
       }
     });
   };
@@ -75,16 +77,14 @@ const SettingsPage = () => {
       >
         <Form.Item>
           <Title level={3} className="settingspage__title">
-            Password
+            {t('settingsPageTitlte1')}
           </Title>
-          <Text type="secondary">
-            You can update your password in the form below
-          </Text>
+          <Text type="secondary">{t('settingsPageDescription1')}</Text>
         </Form.Item>
 
         <Form.Item
           hasFeedback
-          label="New Password"
+          label={t('newPassword')}
           name="newPassword"
           rules={[
             {
@@ -100,13 +100,13 @@ const SettingsPage = () => {
           <Input.Password
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
-            placeholder="New Password"
+            placeholder={t('newPassword')}
           />
         </Form.Item>
 
         <Form.Item
           hasFeedback
-          label="Confirm New Password"
+          label={t('confirmPassword')}
           name="confirmPassword"
           rules={[
             {
@@ -122,29 +122,27 @@ const SettingsPage = () => {
           <Input.Password
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
-            placeholder="Confirm New Password"
+            placeholder={t('confirmPassword')}
           />
         </Form.Item>
 
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Update Password
+            {t('buttonUpdatePassword')}
           </Button>
         </Form.Item>
       </Form>
       <Form>
         <Form.Item>
           <Title level={3} className="settings__title">
-            Delete Account
+            {t('settingsPageTitlte2')}
           </Title>
-          <Text type="secondary">
-            Here you can delete your account permanently
-          </Text>
+          <Text type="secondary">{t('settingsPageDescription2')}</Text>
         </Form.Item>
 
         <Form.Item>
           <Button type="primary" danger onClick={showModal}>
-            Delete Account
+            {t('buttondeleteAccount')}
           </Button>
           <Modal
             open={isModalOpen}
@@ -155,11 +153,11 @@ const SettingsPage = () => {
               danger: true,
             }}
             centered
-            okText="Delete"
-            cancelText="Cancel"
+            okText={t('buttonDelete')}
+            cancelText={t('cancel')}
           >
-            <Title level={3}>Delete Account</Title>
-            <Text>Are you sure you want to delete your account?</Text>
+            <Title level={3}>{t('settingsPageTitlte3')}</Title>
+            <Text>{t('settingsPageDescription3')}</Text>
           </Modal>
         </Form.Item>
       </Form>
