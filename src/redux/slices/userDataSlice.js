@@ -148,7 +148,7 @@ export const fetchProfile = createAsyncThunk(
       const token = auth.token;
 
       if (!token) {
-        throw new Error('Токен отсутствует');
+        rejectWithValue('Токен отсутствует');
       }
 
       const response = await axios.get('/auth/user/profile', {

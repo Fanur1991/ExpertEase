@@ -37,7 +37,7 @@ export const registerUser = createAsyncThunk(
         console.log(error.response.data);
         console.log(error.response.status);
         console.log(error.response.headers);
-        return rejectWithValue(error.response.data.errors[0].msg);
+        return rejectWithValue(error.response.data.message);
       } else if (error.request) {
         // Запрос был сделан, но ответа не последовало
         console.log(error.request);
@@ -65,7 +65,7 @@ export const loginUser = createAsyncThunk(
       }
 
       notification.success({
-        message: 'Successful log in',
+        message: 'Success',
         description: 'You are logged in',
         placement: 'bottomRight',
         duration: 3,
@@ -108,23 +108,19 @@ export const getMe = createAsyncThunk('auth/getMe', async (_, thunkAPI) => {
     const token = window.localStorage.getItem('token');
 
     if (!token) {
-      throw new Error('Токен отсутствует');
+      return thunkAPI.rejectWithValue('Токен отсутствует');
     }
+
     const response = await axios.get('/auth/me', {
       headers: { Authorization: `Bearer ${token}` },
     });
 
     if (!response.data || !response.data.user) {
-      throw new Error('Токен невалиден');
+      return thunkAPI.rejectWithValue('Токен невалиден');
     }
 
     return response.data;
   } catch (error) {
-    console.error(error);
-    // return thunkAPI.rejectWithValue({
-    //   message: 'Failed to fetch user data',
-    //   error: error?.response?.data || 'Неизвестная ошибка',
-    // });
     if (error.response && error.response.status === 401) {
       window.localStorage.removeItem('token');
       return thunkAPI.rejectWithValue('Пожалуйста, войдите заново.');
@@ -151,7 +147,9 @@ export const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    // --------------------------------------------------------
     // Register user
+    // --------------------------------------------------------
     builder.addCase(registerUser.pending, (state) => {
       state.isLoading = true;
       state.status = null;
@@ -167,7 +165,9 @@ export const authSlice = createSlice({
       state.status =
         action.payload || 'Ошибка при регистрации. Неккоректные данные';
     });
+    // --------------------------------------------------------
     // Login user
+    // --------------------------------------------------------
     builder.addCase(loginUser.pending, (state) => {
       state.isLoading = true;
       state.status = null;
@@ -183,7 +183,9 @@ export const authSlice = createSlice({
       state.status =
         action.payload || 'Ошибка при авторизации. Неккоректные данные';
     });
-    // Проверка авторизации
+    // --------------------------------------------------------
+    // Check auth of user
+    // --------------------------------------------------------
     builder.addCase(getMe.pending, (state) => {
       state.isLoading = true;
       state.status = null;

@@ -5,6 +5,9 @@ import { Button, Form, Input, Typography, Flex } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { checkIsAuth, registerUser } from '../../redux/slices/authSlice';
 import { useTranslation } from 'react-i18next';
+import { openNotification } from '../../utils/openNotification';
+// import { selectAuth } from '../../redux/slices/authSlice';
+
 import './RegisterPage.less';
 
 const { Title, Text } = Typography;
@@ -12,8 +15,9 @@ const { Title, Text } = Typography;
 const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // const { status } = useSelector((state) => state.auth);
+  const { status } = useSelector((state) => state.auth);
   const isAuth = useSelector(checkIsAuth);
+  // const userAuth = useSelector(authSlice)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -24,11 +28,17 @@ const RegisterPage = () => {
     }
   }, [isAuth, navigate]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     try {
-      dispatch(registerUser({ email, password }));
-      setPassword('');
-      setEmail('');
+      const actionResult = await dispatch(registerUser({ email, password }));
+      if (registerUser.fulfilled.match(actionResult)) {
+        setPassword('');
+        setEmail('');
+        navigate('/');
+      } else if (registerUser.rejected.match(actionResult)) {
+        const errorMessage = actionResult.payload;
+        openNotification('error', 'Error', errorMessage);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -51,8 +61,6 @@ const RegisterPage = () => {
         </Form.Item>
         <Form.Item
           hasFeedback
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
           name="email"
           rules={[
             {
@@ -70,12 +78,12 @@ const RegisterPage = () => {
             prefix={<UserOutlined className="site-form-item-icon" />}
             placeholder={t('email')}
             autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </Form.Item>
         <Form.Item
           hasFeedback
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
           name="password"
           rules={[
             {
@@ -93,10 +101,12 @@ const RegisterPage = () => {
             type="password"
             placeholder={t('password')}
             autoComplete="current-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Item>
         <Form.Item>
-          <Flex justify="space-around">
+          <Flex align="center" justify="space-evenly">
             <Button shape="round" type="primary" htmlType="submit">
               {t('signup')}
             </Button>

@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Header } from 'antd/lib/layout/layout';
-import { checkIsAuth, logout } from '../../redux/slices/authSlice';
+import { checkIsAuth, logout, selectAuth } from '../../redux/slices/authSlice';
+import { selectUserData } from '../../redux/slices/userDataSlice';
 import { logoutUserData } from '../../redux/slices/userDataSlice';
-import { Button, Flex, Space, Dropdown, ConfigProvider } from 'antd';
+import { Button, Flex, Space, Dropdown, ConfigProvider, Avatar } from 'antd';
 import {
   LoginOutlined,
   UserOutlined,
@@ -16,13 +17,23 @@ import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
 import { openMessage } from '../../utils/openMessage';
 import logo from '../../img/logo/logo.png';
+import { API_URL as baseUrl } from '../../config';
 import './AppHeader.less';
 
 const AppHeader = () => {
   const [size, setSize] = useState('middle');
+  const [imageUrl, setImageUrl] = useState('');
   const isAuth = useSelector(checkIsAuth);
+  const userAuth = useSelector(selectAuth);
+  const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const firstName = userAuth.user?.firstname;
+  const lastName = userAuth.user?.surname;
+
+  useEffect(() => {
+    setImageUrl(userData.user?.avatarUrl || '');
+  }, [userData.user?.avatarUrl]);
 
   const logoutHandler = () => {
     dispatch(logout());
@@ -36,10 +47,28 @@ const AppHeader = () => {
       label: (
         <Flex align="center" justify="center">
           <Link style={{ color: 'white' }} to="/user">
-            <Space size="small">
-              <UserOutlined style={{ color: 'white' }} />
-              {t('profile')}
-            </Space>
+            <Flex align="center" justify="center" gap="small">
+              {imageUrl ? (
+                <img
+                  className="profilepage__avatar-image"
+                  src={
+                    imageUrl.startsWith('uploads')
+                      ? `${baseUrl}${imageUrl}`
+                      : imageUrl
+                  }
+                  alt="avatar"
+                  style={{ width: '32px', height: '32px', borderRadius: '50%' }}
+                />
+              ) : (
+                <Avatar
+                  style={{
+                    backgroundColor: '#87d068',
+                  }}
+                  icon={<UserOutlined />}
+                />
+              )}
+              {(firstName && `${firstName} ${lastName}`) || t('profile')}
+            </Flex>
           </Link>
         </Flex>
       ),

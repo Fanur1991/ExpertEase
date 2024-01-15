@@ -1,6 +1,6 @@
 {
   "account": "Cuenta",
-  "login": "Iniciar sesión",
+  "login": "Iniciar Sesión",
   "signup": "Registrarse",
   "profile": "Mi Perfil",
   "reserved": "Reservado",
@@ -12,6 +12,7 @@
   "feedback": "Comentarios",
   "yes": "Sí",
   "no": "No",
+  "of": "de",
   "cancel": "Cancelar",
   "upload": "Cargar",
   "buttonDelete": "Eliminar",

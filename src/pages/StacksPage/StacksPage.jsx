@@ -5,6 +5,8 @@ import { Avatar, Card, Flex, List, Typography, Spin, Skeleton } from 'antd';
 import { fetchStack, selectStacks } from '../../redux/slices/stacksSlice';
 import { fetchCategory } from '../../redux/slices/categoriesSlice';
 import { fetchSkill } from '../../redux/slices/skillsSlice';
+import { fetchProfile } from '../../redux/slices/userDataSlice';
+
 import './StacksPage.less';
 
 const { Title } = Typography;
@@ -19,6 +21,7 @@ const StacksPage = () => {
   const [avatarIsLoaded, setAvatarIsLoaded] = useState(true);
 
   useEffect(() => {
+    dispatch(fetchProfile());
     dispatch(fetchStack(API_URL));
     dispatch(fetchCategory(API_URL2));
     dispatch(fetchSkill(API_URL3));

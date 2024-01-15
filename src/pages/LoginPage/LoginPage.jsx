@@ -2,10 +2,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkIsAuth, loginUser } from '../../redux/slices/authSlice';
-import { toast } from 'react-toastify';
 import { Button, Checkbox, Form, Input, Typography, Flex } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
+import { openNotification } from '../../utils/openNotification';
+
 import './LoginPage.less';
 
 const { Title, Text } = Typography;
@@ -20,21 +21,28 @@ const LoginPage = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (status) {
-      toast(status);
-    }
     if (isAuth) {
       navigate('/');
     }
-  }, [status, isAuth, navigate]);
+  }, [isAuth, navigate]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     try {
-      dispatch(loginUser({ email, password }));
-      setPassword('');
-      setEmail('');
+      const actionResult = await dispatch(loginUser({ email, password }));
+      if (loginUser.fulfilled.match(actionResult)) {
+        setPassword('');
+        setEmail('');
+        navigate('/');
+      } else if (loginUser.rejected.match(actionResult)) {
+        const errorMessage = actionResult.payload;
+        openNotification.error(
+          'error',
+          'Error',
+          errorMessage || 'Error description'
+        );
+      }
     } catch (error) {
-      console.log(error);
+      console.error('Ошибка входа:', error);
     }
   };
 
@@ -55,8 +63,6 @@ const LoginPage = () => {
         </Form.Item>
         <Form.Item
           hasFeedback
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
           name="email"
           rules={[
             {
@@ -74,12 +80,12 @@ const LoginPage = () => {
             prefix={<UserOutlined className="site-form-item-icon" />}
             placeholder={t('email')}
             autoComplete="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </Form.Item>
         <Form.Item
           hasFeedback
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
           name="password"
           rules={[
             {
@@ -94,21 +100,22 @@ const LoginPage = () => {
         >
           <Input.Password
             prefix={<LockOutlined className="site-form-item-icon" />}
-            type="password"
             placeholder={t('password')}
             autoComplete="current-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Item>
         <Form.Item>
-          <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>{t('rememberMe')}</Checkbox>
-          </Form.Item>
-          <a className="login-form-forgot" href="">
-            {t('forgotPassword')}
-          </a>
+          <Flex align="center" justify="space-evenly">
+            <Checkbox name="remember">{t('rememberMe')}</Checkbox>
+            <Link to="" className="login-form-forgot">
+              {t('forgotPassword')}
+            </Link>
+          </Flex>
         </Form.Item>
         <Form.Item>
-          <Flex justify="space-around">
+          <Flex align="center" justify="space-evenly">
             <Button shape="round" type="primary" htmlType="submit">
               {t('login')}
             </Button>

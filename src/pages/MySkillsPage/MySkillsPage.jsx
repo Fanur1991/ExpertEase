@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Form, Typography, Card, Flex, List, Spin } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { selectStacks } from '../../redux/slices/stacksSlice';
+import ScrollToTop from '../../components/ScrollToTop/ScrollToTop';
+
 import './MySkillsPage.less';
 
 const { Title, Text } = Typography;
@@ -39,7 +41,7 @@ const MySkillsPage = () => {
               md: 1,
               lg: 2,
               xl: 2,
-              xxl: 3,
+              xxl: 2,
             }}
             itemLayout="horizontal"
             dataSource={stacks.data}
@@ -66,6 +68,7 @@ const MySkillsPage = () => {
           />
         </Form.Item>
       </Form>
+      <ScrollToTop />
     </div>
   );
 };
