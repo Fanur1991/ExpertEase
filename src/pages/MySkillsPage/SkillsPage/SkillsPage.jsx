@@ -16,19 +16,18 @@ import {
   Checkbox,
 } from 'antd';
 import { StarFilled } from '@ant-design/icons';
-import { v4 as uuidv4 } from 'uuid';
 import { selectStacks } from '../../../redux/slices/stacksSlice';
 import { selectCategories } from '../../../redux/slices/categoriesSlice';
 import { selectSkills } from '../../../redux/slices/skillsSlice';
 import { useTranslation } from 'react-i18next';
-import StacksDownMenu from '../../../components/StacksDownMenu/StacksDownMenu';
+import StacksDownMenu from '../../../components/SkillsPageComponents/StacksDownMenu/StacksDownMenu';
 
 import './SkillsPage.less';
 import ScrollToTop from '../../../components/ScrollToTop/ScrollToTop';
 
 const { Title, Text } = Typography;
 
-const SkillPage = () => {
+const SkillsPage = () => {
   const { url } = useParams();
   const stacks = useSelector(selectStacks);
   const categories = useSelector(selectCategories);
@@ -82,13 +81,6 @@ const SkillPage = () => {
     }
   }, [url, stacks, categories]);
 
-  const IconText = ({ icon, text }) => (
-    <Space>
-      {React.createElement(icon)}
-      {text}
-    </Space>
-  );
-
   const itemRender = (_, type, originalElement) => {
     if (type === 'prev') {
       return <a>Previous</a>;
@@ -127,7 +119,6 @@ const SkillPage = () => {
               align: 'center',
               total: currentCategories.length,
               onChange: (page) => {},
-              // pageSize: 5,
             }}
             header={currentStack ? <StacksDownMenu /> : <StacksDownMenu />}
             renderItem={(category) => {
@@ -221,10 +212,10 @@ const SkillPage = () => {
                                     ) : (
                                       <Tag>
                                         <Space size="small">
-                                          <Rate allowHalf defaultValue={1} />
+                                          <Rate allowHalf defaultValue={0} />
                                           <Text>
                                             <span style={{ color: 'red' }}>
-                                              1
+                                              0
                                             </span>{' '}
                                             <span
                                               style={{
@@ -280,4 +271,4 @@ const SkillPage = () => {
   );
 };
 
-export default SkillPage;
+export default SkillsPage;

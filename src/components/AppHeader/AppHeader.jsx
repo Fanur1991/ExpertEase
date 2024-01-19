@@ -16,7 +16,7 @@ import { Container } from '../Container/Container';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
 import { openMessage } from '../../utils/openMessage';
-import logo from '../../img/logo/logo.png';
+import logo from '../../img/logo/logo2.png';
 import { API_URL as baseUrl } from '../../config';
 import './AppHeader.less';
 
@@ -117,13 +117,13 @@ const AppHeader = () => {
               <ConfigProvider
                 theme={{
                   token: {
-                    colorBgElevated: '#b37feb',
-                    controlItemBgHover: '#d3adf7',
+                    colorBgElevated: '#EA25B5',
+                    controlItemBgHover: '#ff82f4',
                   },
                   components: {
                     Dropdown: {
-                      colorBgElevated: '#b37feb',
-                      controlItemBgHover: '#d3adf7',
+                      colorBgElevated: '#EA25B5',
+                      controlItemBgHover: '#ff82f4',
                     },
                   },
                 }}

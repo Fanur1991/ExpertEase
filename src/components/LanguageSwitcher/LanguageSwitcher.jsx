@@ -45,13 +45,13 @@ const LanguageSwitcher = () => {
     <ConfigProvider
       theme={{
         token: {
-          colorBgElevated: '#b37feb',
-          controlItemBgHover: '#d3adf7',
+          colorBgElevated: '#EA25B5',
+          controlItemBgHover: '#ff82f4',
         },
         components: {
           Dropdown: {
-            colorBgElevated: '#b37feb',
-            controlItemBgHover: '#d3adf7',
+            colorBgElevated: '#EA25B5',
+            controlItemBgHover: '#ff82f4',
           },
         },
       }}

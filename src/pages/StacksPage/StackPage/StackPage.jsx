@@ -7,6 +7,7 @@ import { selectStacks } from '../../../redux/slices/stacksSlice';
 import { selectCategories } from '../../../redux/slices/categoriesSlice';
 import { selectSkills } from '../../../redux/slices/skillsSlice';
 import { Container } from '../../../components/Container/Container';
+import SnakeLayout from '../../../components/SnakeLayout/SnakeLayout';
 
 const { Title, Paragraph } = Typography;
 
@@ -17,6 +18,7 @@ const StackPage = () => {
   const skills = useSelector(selectSkills);
   const [currentStack, setCurrentStack] = useState(null);
   const [currentCategories, setCurrentCategories] = useState([]);
+  const [currentSkills, setCurrentSkills] = useState([]);
 
   console.log(stacks, 'stacks');
   // console.log(categories, 'categories');
@@ -24,6 +26,7 @@ const StackPage = () => {
 
   useEffect(() => {
     const stack = stacks.data.find((stack) => stack._id === id);
+    const category = categories.data.find((category) => category._id)
     if (stack) {
       setCurrentStack(stack);
       const relatedCategories = stack
@@ -32,6 +35,12 @@ const StackPage = () => {
           )
         : [];
       setCurrentCategories(relatedCategories);
+      const relatedSkills = stack
+        ? skills.data.filter((skill) =>
+            category.skills.includes(skill._id)
+          )
+        : [];
+        setCurrentSkills(relatedSkills)
     }
   }, [id, stacks, categories]);
 
@@ -43,43 +52,11 @@ const StackPage = () => {
     </Flex>
   ) : (
     <Container>
-      <Title type="success" level={2}>
-        {currentStack.name}
-      </Title>
-      <Paragraph>{currentStack.desc}</Paragraph>
-      <Title level={3}>Категории и навыки</Title>
-      <List
-        grid={{ gutter: 16, column: 4 }}
-        dataSource={currentCategories}
-        renderItem={(category) => (
-          <List.Item key={category._id}>
-            <Card title={category.name}>
-              <List
-                dataSource={category.skills
-                  .map((skillId) =>
-                    skills.data.find((skill) => skill._id === skillId)
-                  )
-                  .filter((skill) => skill !== null)}
-                renderItem={(skill) => {
-                  return skill ? (
-                    <List.Item key={skill._id}>
-                      <strong>{skill.name}</strong>: {skill.desc}
-                      <Space align="center" wrap>
-                        {skill.details &&
-                          skill.details.map((detail) => (
-                            <Tag color="magenta" key={uuidv4()}>
-                              {detail}
-                            </Tag>
-                          ))}
-                      </Space>
-                    </List.Item>
-                  ) : null;
-                }}
-              />
-            </Card>
-          </List.Item>
-        )}
-      />
+      {/* <SnakeLayout
+        currentStack={currentStack}
+        currentCategories={currentCategories}
+        currentSkills={currentSkills}
+      /> */}
     </Container>
   );
 };

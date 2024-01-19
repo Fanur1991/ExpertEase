@@ -1,24 +1,44 @@
 @import '../../styles/main.less';
 
-.list {
-  margin: 0 100px;
-}
+.stackspage {
+  margin-left: 50px;
+  margin-right: 50px;
 
-.card {
-  background-color: #0f172a;
-  border: 1.5px solid #434343;
-  color: #8c8c8c;
-  overflow: hidden;
-}
+  &__list-item {
+  }
 
-.card:hover {
-  border: 1.5px solid #8c8c8c;
-}
+  // &__card-link {
+  //   display: block;
+  //   // width: 100%;
+  //   overflow: hidden;
+  //   text-overflow: ellipsis;
+  //   white-space: nowrap;
+  //   margin-left: auto;
+  //   margin-right: auto;
+  // }
 
-.card-link {
-  display: block;
-  width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  &__card {
+    width: 300px;
+    position: relative;
+    margin: 10px;
+    background-color: @card-backgroundColor;
+    border: 1.5px solid @card-backgroundColor;
+    color: @font-color-footer-text2;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    z-index: 1;
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.05);
+      z-index: 10;
+    }
+
+    &-avatar {
+      margin-left: 35px;
+      margin-right: 20px;
+      border: 1px @font-color-footer-text2 solid;
+      border-radius: 100%;
+    }
+  }
 }

@@ -4,16 +4,17 @@
   display: flex;
   align-items: center;
   background-color: @header-backgroundColor;
-  height: 64px;
+  height: @header-height;
 
   &__logo {
     display: block;
-    height: 40px;
+    // height: @logo-height;
+    max-width: 200px;
   }
 
   &__button {
-    background-color: @menu-backgroundColor;
-    border: @menu-backgroundColor;
+    background-color: @button-backgroundColor;
+    border: @button-backgroundColor;
     color: @font-color-button;
 
     &:hover {

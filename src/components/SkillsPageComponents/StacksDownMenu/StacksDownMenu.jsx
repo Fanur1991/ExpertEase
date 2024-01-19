@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Dropdown, Button, Flex, Space } from 'antd';
 import { UserOutlined, DownOutlined } from '@ant-design/icons';
-import { selectStacks } from '../../redux/slices/stacksSlice';
-import { selectCategories } from '../../redux/slices/categoriesSlice';
-import { selectSkills } from '../../redux/slices/skillsSlice';
+import { selectStacks } from '../../../redux/slices/stacksSlice';
+import { selectCategories } from '../../../redux/slices/categoriesSlice';
+import { selectSkills } from '../../../redux/slices/skillsSlice';
 import { useTranslation } from 'react-i18next';
 
 import './StacksDownMenu.less';

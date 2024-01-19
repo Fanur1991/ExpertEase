@@ -1,21 +1,17 @@
 import { Footer } from 'antd/lib/layout/layout';
 import { Container } from '../Container/Container';
 
+import './AppFooter.less';
+
 const AppFooter = () => {
   return (
-    <Footer
-      style={{
-        textAlign: 'center',
-        backgroundColor: '#0E1627',
-        height: '64px',
-      }}
-    >
-      <Container>
-        <span style={{ color: '#8c8c8c' }}>
+    <Footer className="app-footer">
+      <Container className="app-footer__content">
+        <span className="app-footer__content__text">
           Created by
           <a
+            className="app-footer__content__text-name"
             target="_blank"
-            style={{ color: '#f759ab' }}
             href="https://www.linkedin.com/in/fanur-khusainov-ab86b2102/"
             rel="noopener noreferrer"
           >
