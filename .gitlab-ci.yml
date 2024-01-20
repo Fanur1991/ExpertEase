@@ -6,8 +6,8 @@ build_job:
   stage: build
   script:
     - docker build -t my-react-app .
-  tags:
-    - docker
+#  tags:
+#    - docker
 
 deploy_job:
   stage: deploy
