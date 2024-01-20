@@ -2,19 +2,16 @@ stages:
   - build
   - deploy
 
-build:
-  image: node:latest
+build_job:
   stage: build
   script:
-    - npm install
-    - npm run build
-  artifacts:
-    paths:
-      - build/
+    - docker build -t my-react-app .
+  tags:
+    - docker
 
-deploy:
-  image: alpine
+deploy_job:
   stage: deploy
   script:
-    - apk add --no-cache kubectl
-    - kubectl apply -f deployment.yaml
+    - kubectl apply -f deployment.yml
+  tags:
+    - kubernetes
