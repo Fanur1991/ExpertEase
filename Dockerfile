@@ -1,21 +1,18 @@
-# Основа - Node.js
-FROM node:alpine
+# Базовый образ
+FROM node:latest as build
 
-# Установка рабочего каталога в контейнере
+# Установка рабочей директории
 WORKDIR /app
 
 # Копирование файлов проекта
-COPY package.json .
-COPY yarn.lock .
-
-# Установка зависимостей
-RUN yarn install
-
-# Копирование остальных файлов проекта
 COPY . .
 
-# Сборка приложения
-RUN yarn build
+# Установка зависимостей и сборка проекта
+RUN npm install
+RUN npm run build
 
-# Запуск приложения
-CMD ["yarn", "start"]
+# Финальный образ
+FROM nginx:alpine
+COPY --from=build /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
