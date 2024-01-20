@@ -1,28 +1,20 @@
-image: node:14.19.0 # change to match your node version
+stages:
+  - build
+  - deploy
 
-cache:
-  paths:
-    - node_modules/
-
-before_script:
-  - npm install
-
-test:
-  stage: test
+build:
+  image: node:latest
+  stage: build
   script:
-    - CI=true npm test
-
-pages:
-  environment: production
-  stage: deploy
-  script:
-    - CI=true npm run build
-    - rm -rf public
-    - mv build public
+    - npm install
+    - npm run build
   artifacts:
     paths:
-      - public # GitLab pages serve from a 'public' directory
-    expire_in: '900'
-  only:
-    - master # run on master branch
-    - main
+      - build/
+
+deploy:
+  image: alpine
+  stage: deploy
+  script:
+    - apk add --no-cache kubectl
+    - kubectl apply -f deployment.yaml
