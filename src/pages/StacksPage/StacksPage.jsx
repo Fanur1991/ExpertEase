@@ -1,41 +1,49 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import {
-  Avatar,
-  Card,
-  Flex,
-  List,
-  Typography,
-  Spin,
-  Skeleton,
-  Meta,
-} from 'antd';
+import { useNavigate } from 'react-router-dom';
+import { Avatar, Card, Flex, List, Typography, Spin, Skeleton } from 'antd';
 import { fetchStack, selectStacks } from '../../redux/slices/stacksSlice';
-import { fetchCategory } from '../../redux/slices/categoriesSlice';
-import { fetchSkill } from '../../redux/slices/skillsSlice';
+import {
+  fetchCategory,
+  selectCategories,
+} from '../../redux/slices/categoriesSlice';
+import { fetchSkill, selectSkills } from '../../redux/slices/skillsSlice';
 import { fetchProfile } from '../../redux/slices/userDataSlice';
+import {
+  API_URL_stacks,
+  API_URL_categories,
+  API_URL_skills,
+} from '../../config';
 
 import './StacksPage.less';
-
-const { Title } = Typography;
-
-const API_URL = 'http://localhost:3002/api/stacks';
-const API_URL2 = 'http://localhost:3002/api/categories';
-const API_URL3 = 'http://localhost:3002/api/skills';
+const { Title, Text } = Typography;
 
 const StacksPage = () => {
   const stacks = useSelector(selectStacks);
+  const categories = useSelector(selectCategories);
+  const skills = useSelector(selectSkills);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loadedAvatars, setLoadedAvatars] = useState({});
 
   useEffect(() => {
     dispatch(fetchProfile());
-    dispatch(fetchStack(API_URL));
-    dispatch(fetchCategory(API_URL2));
-    dispatch(fetchSkill(API_URL3));
+    dispatch(fetchStack(API_URL_stacks));
+    dispatch(fetchCategory(API_URL_categories));
+    dispatch(fetchSkill(API_URL_skills));
   }, [dispatch]);
+
+  useEffect(() => {
+    localStorage.setItem('stacks', JSON.stringify(stacks));
+  }, [stacks]);
+
+  useEffect(() => {
+    localStorage.setItem('categories', JSON.stringify(categories));
+  }, [categories]);
+
+  useEffect(() => {
+    localStorage.setItem('skills', JSON.stringify(skills));
+  }, [skills]);
 
   const handleAvatarLoad = (index) => {
     setLoadedAvatars((prev) => ({ ...prev, [index]: true }));
@@ -43,13 +51,13 @@ const StacksPage = () => {
 
   return stacks.isLoading ? (
     <Flex justify="center" align="center">
-      <Title level={5} style={{ color: '#8c8c8c' }}>
+      <Title className="stackspage__title" level={5}>
         Loading <Spin />
       </Title>
     </Flex>
   ) : (
     <List
-      className="stackspage"
+      className="stackspage__list"
       size="middle"
       grid={{
         gutter: 8,
@@ -58,18 +66,17 @@ const StacksPage = () => {
         md: 2,
         lg: 3,
         xl: 3,
-        xxl: 4,
+        xxl: 3,
       }}
       itemLayout="horizontal"
       dataSource={stacks.data}
       renderItem={(item, index) => (
         <List.Item className="stackspage__list-item">
           <Flex justify="space-evenly" align="center">
-            {/* <Link className="stackspage__card-link" to={`/stacks/${item._id}`}> */}
             <Card
-              onClick={() => navigate(`/stacks/${item._id}`)}
-              size="small"
               className="stackspage__card"
+              onClick={() => navigate(`/stacks/${item.url}`)}
+              size="small"
             >
               <Flex gap="middle" align="center">
                 {!loadedAvatars[index] && (
@@ -81,10 +88,9 @@ const StacksPage = () => {
                   onLoad={() => handleAvatarLoad(index)}
                   style={loadedAvatars[index] ? {} : { display: 'none' }}
                 />
-                <span>{item.name}</span>
+                <Text className="stackspage__card-title">{item.title}</Text>
               </Flex>
             </Card>
-            {/* </Link> */}
           </Flex>
         </List.Item>
       )}

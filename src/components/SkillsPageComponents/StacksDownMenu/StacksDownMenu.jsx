@@ -28,7 +28,7 @@ const StacksDownMenu = () => {
           >
             <Space size="small">
               <UserOutlined />
-              {stack.name}
+              {stack.title}
             </Space>
           </NavLink>
         </Flex>
@@ -50,7 +50,7 @@ const StacksDownMenu = () => {
         className="stacksdownmenu__button"
         icon={<DownOutlined />}
       >
-        Choose Skills
+        Default Skills
       </Button>
     </Dropdown>
   );

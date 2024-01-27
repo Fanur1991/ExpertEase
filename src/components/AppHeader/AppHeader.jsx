@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Header } from 'antd/lib/layout/layout';
 import { checkIsAuth, logout, selectAuth } from '../../redux/slices/authSlice';
 import { selectUserData } from '../../redux/slices/userDataSlice';
@@ -19,6 +19,7 @@ import { openMessage } from '../../utils/openMessage';
 import logo from '../../img/logo/logo2.png';
 import { API_URL as baseUrl } from '../../config';
 import './AppHeader.less';
+import AvatarComponent from '../AvatarComponent/AvatarComponent';
 
 const AppHeader = () => {
   const [size, setSize] = useState('middle');
@@ -27,9 +28,10 @@ const AppHeader = () => {
   const userAuth = useSelector(selectAuth);
   const userData = useSelector(selectUserData);
   const dispatch = useDispatch();
+  const location = useLocation();
   const { t } = useTranslation();
-  const firstName = userAuth.user?.firstname;
-  const lastName = userAuth.user?.surname;
+  const firstname = userAuth.user?.firstname;
+  const lastname = userAuth.user?.lastname;
 
   useEffect(() => {
     setImageUrl(userData.user?.avatarUrl || '');
@@ -46,53 +48,60 @@ const AppHeader = () => {
     {
       label: (
         <Flex align="center" justify="center">
-          <Link style={{ color: 'white' }} to="/user">
+          <Link
+            style={{
+              color: '#262626',
+              display: 'flex',
+              alignItems: 'center',
+              width: '100%',
+              height: 30,
+            }}
+            to="/user"
+          >
             <Flex align="center" justify="center" gap="small">
-              {imageUrl ? (
-                <img
-                  className="profilepage__avatar-image"
-                  src={
-                    imageUrl.startsWith('uploads')
-                      ? `${baseUrl}${imageUrl}`
-                      : imageUrl
-                  }
-                  alt="avatar"
-                  style={{ width: '32px', height: '32px', borderRadius: '50%' }}
-                />
-              ) : (
-                <Avatar
-                  style={{
-                    backgroundColor: '#87d068',
-                  }}
-                  icon={<UserOutlined />}
-                />
-              )}
-              {(firstName && `${firstName} ${lastName}`) || t('profile')}
+              <AvatarComponent
+                imageUrl={imageUrl}
+                firstname={firstname}
+                userData={userData}
+                imageClass="app-header__avatar-image"
+                blindClass="app-header__avatar-blind"
+                characterClass="app-header__avatar-character"
+              />
+              {(firstname && `${firstname} ${lastname}`) || t('profile')}
             </Flex>
           </Link>
         </Flex>
       ),
       key: '0',
     },
-    {
-      label: (
-        <Flex align="center" justify="center">
-          <Link style={{ color: 'white' }} to="/">
-            {t('reserved')}
-          </Link>
-        </Flex>
-      ),
-      key: '1',
-    },
+    // {
+    //   label: (
+    //     <Flex align="center" justify="center">
+    //       <Link style={{ color: 'white' }} to="/">
+    //         {t('reserved')}
+    //       </Link>
+    //     </Flex>
+    //   ),
+    //   key: '1',
+    // },
     {
       type: 'divider',
     },
     {
       label: (
         <Flex align="center" justify="center">
-          <Link style={{ color: 'white' }} onClick={logoutHandler}>
+          <Link
+            style={{
+              color: '#262626',
+              display: 'flex',
+              alignItems: 'center',
+              width: '100%',
+              height: 30,
+            }}
+            onClick={logoutHandler}
+          >
             <Space size="small">
-              <LogoutOutlined style={{ color: 'white' }} />
+              <LogoutOutlined style={{ color: '#262626' }} />
               {t('logout')}
             </Space>
           </Link>
@@ -106,45 +115,44 @@ const AppHeader = () => {
     <Header className="app-header">
       <Container className="app-header__content">
         <Flex justify="space-between" align="center">
-          <Flex justify="flex-start" align="center">
-            <Link to="/">
-              <img className="app-header__logo" src={logo} alt="logo" />
-            </Link>
-          </Flex>
+          {location.pathname === '/' ? (
+            <sapn className="app-header__logo" src={logo}></sapn>
+          ) : (
+            <Flex justify="flex-start" align="center">
+              <Link to="/">
+                <img className="app-header__logo" src={logo} alt="logo" />
+              </Link>
+            </Flex>
+          )}
           {isAuth ? (
             <Flex align="center" gap="large">
               <LanguageSwitcher />
-              <ConfigProvider
-                theme={{
-                  token: {
-                    colorBgElevated: '#EA25B5',
-                    controlItemBgHover: '#ff82f4',
-                  },
-                  components: {
-                    Dropdown: {
-                      colorBgElevated: '#EA25B5',
-                      controlItemBgHover: '#ff82f4',
-                    },
-                  },
-                }}
-              >
+              <ConfigProvider>
                 <Dropdown
                   overlayClassName="app-header__dropdown"
                   menu={{
                     items,
                     className: 'app-header__dropdown-menu',
                   }}
-                  trigger={['hover']}
-                  placement="bottom"
+                  trigger={['click']}
+                  placement="bottomRight"
                   arrow
                 >
                   <Button
                     onClick={(e) => e.preventDefault()}
                     className="app-header__button"
-                    shape="round"
-                    icon={<DownOutlined />}
+                    shape="circle"
+                    // icon={<DownOutlined />}
                   >
-                    {t('account')}
+                    {/* {t('account')} */}
+                    <AvatarComponent
+                      imageUrl={imageUrl}
+                      firstname={firstname}
+                      userData={userData}
+                      imageClass="app-header__avatar-image"
+                      blindClass="app-header__avatar-blind"
+                      characterClass="app-header__avatar-character"
+                    />
                   </Button>
                 </Dropdown>
               </ConfigProvider>

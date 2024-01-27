@@ -1,5 +1,54 @@
 @import '../../../styles/main.less';
 
-.yellow-star svg {
-  fill: #fadb14;
+.skillspage {
+  padding: 20px;
+
+  &__containertitle {
+    margin-bottom: 12px;
+  }
+
+  &__button {
+    padding: 0 10px 0 15px !important;
+    color: @font-color-button;
+    background-color: @button-backgroundColor;
+    padding: 10px 20px;
+    border: none;
+    clip-path: polygon(15% 0, 100% 0, 100% 100%, 15% 100%, 0 50%);
+
+    &:hover {
+      color: @font-color-button !important;
+      background-color: @button-backgroundColor !important;
+      border-color: @button-backgroundColor !important;
+      filter: brightness(@button-brightness);
+    }
+
+    .anticon {
+      color: @font-color-button;
+
+      &:hover {
+        color: @font-color-button;
+      }
+    }
+  }
+
+  &__title {
+    margin-bottom: 0 !important;
+    font-size: @font-size-title !important;
+  }
+  &__subtitle {
+    font-size: @font-size-subtitle;
+  }
+  &__list {
+    margin-top: 0;
+    padding: 0;
+    &-title {
+      font-size: @font-size-subtitle !important;
+    }
+    &-button {
+      color: #8c8c8c;
+    }
+  }
+  .yellow-star svg {
+    fill: #fadb14;
+  }
 }

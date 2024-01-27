@@ -32,7 +32,7 @@ const skillSlice = createSlice({
       state.isLoading = false;
       state.data = action.payload.data.map((skill) => {
         return {
-          name: skill.name,
+          title: skill.title,
           desc: skill.desc,
           _id: skill._id,
           details: skill.details,

@@ -30,13 +30,17 @@ const stackSlice = createSlice({
     });
     builder.addCase(fetchStack.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.data = action.payload.data.map((stack) => ({
-        name: stack.name,
-        desc: stack.desc,
-        categories: stack.categories,
-        _id: stack._id,
-        url: stack.url,
-      }));
+      state.data = action.payload.data
+        .slice()
+        .sort((a, b) => a.stackId - b.stackId)
+        .map((stack) => ({
+          stackId: stack.stackId,
+          title: stack.title,
+          desc: stack.desc,
+          categories: stack.categories,
+          _id: stack._id,
+          url: stack.url,
+        }));
     });
     builder.addCase(fetchStack.rejected, (state) => {
       state.isLoading = false;

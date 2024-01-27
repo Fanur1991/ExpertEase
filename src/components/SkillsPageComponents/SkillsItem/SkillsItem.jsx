@@ -18,7 +18,7 @@ const SkillItem = ({ skill, loading }) => {
                 active
               />
             ) : (
-              <Text style={{ fontWeight: 500 }}>{skill.name}</Text>
+              <Text style={{ fontWeight: 500 }}>{skill.title}</Text>
             )}
             <Flex align="center" justify="center" gap="middle">
               {loading ? (

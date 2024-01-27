@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Layout, Menu, Typography, Form, Modal } from 'antd';
+import { Layout, Menu, Typography, Form, Modal, ConfigProvider } from 'antd';
 import {
   ProjectOutlined,
   IdcardOutlined,
@@ -106,14 +106,15 @@ const UserPage = () => {
   const renderContent = () => {
     if (location.pathname === '/user') {
       return (
-        <div style={{ padding: '20px' }}>
-          <Form className="skillspage" layout="vertical">
-            <Form.Item className="skillspage__form-item">
-              <Title level={3} className="skills__title">
+        <div className="userpage__container">
+          <Form layout="vertical">
+            <Form.Item>
+              <Title className="userpage__container-title">
                 {t('userPageTitle')}
               </Title>
-              <Text type="secondary">{t('userPageDescription')}</Text>
-              
+              <Text className="userpage__container-subtitle" type="secondary">
+                {t('userPageDescription')}
+              </Text>
             </Form.Item>
           </Form>
         </div>
@@ -135,9 +136,9 @@ const UserPage = () => {
   return (
     <Layout className="userpage">
       <Container>
-        <Layout className="userpage-layout">
+        <Layout className="userpage__layout">
           <Sider
-            className="userpage-layout__sider"
+            className="userpage__layout-sider"
             breakpoint="md"
             collapsedWidth="0"
             onBreakpoint={(broken) => {
@@ -148,7 +149,7 @@ const UserPage = () => {
             }}
           >
             <Menu
-              className="userpage-layout__menu"
+              className="userpage__layout-menu"
               mode="inline"
               selectedKeys={[getSelectedMenuKey()]}
               defaultSelectedKeys={['1']}
@@ -156,21 +157,41 @@ const UserPage = () => {
             />
           </Sider>
           <Content>
-            <div className="userpage-layout__content">{renderContent()}</div>
-            <Modal
-              open={isModalOpen}
-              onOk={logoutHandler}
-              onCancel={closeModal}
-              okButtonProps={{
-                type: 'primary',
-                danger: true,
+            <div className="userpage__layout-content">{renderContent()}</div>
+            <ConfigProvider
+              theme={{
+                components: {
+                  Modal: {
+                    colorBgElevated: '#ffffff',
+                  },
+                  Button: {
+                    colorPrimary: '#04bbec',
+                    colorPrimaryHover: '#04bbec',
+                  },
+                },
               }}
-              centered
-              okText={t('yes')}
-              cancelText={t('no')}
             >
-              <Title level={3}>{t('areYouSureYouWantToLogout')}</Title>
-            </Modal>
+              <Modal
+                className="userpage__modal"
+                open={isModalOpen}
+                onOk={logoutHandler}
+                onCancel={closeModal}
+                okButtonProps={{
+                  type: 'primary',
+                  danger: true,
+                }}
+                cancelButtonProps={{
+                  type: 'primary',
+                }}
+                centered
+                okText={t('yes')}
+                cancelText={t('no')}
+              >
+                <Title className="userpage__modal-title">
+                  {t('areYouSureYouWantToLogout')}
+                </Title>
+              </Modal>
+            </ConfigProvider>
           </Content>
         </Layout>
       </Container>

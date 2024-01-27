@@ -1,26 +1,23 @@
 @import '../../styles/main.less';
 
 .stackspage {
-  margin-left: 50px;
-  margin-right: 50px;
-
-  &__list-item {
+  &__list {
+    margin-left: 85px;
+    margin-right: 85px;
+    @media (max-width: 1200px) {
+      margin: 0 auto;
+    }
   }
 
-  // &__card-link {
-  //   display: block;
-  //   // width: 100%;
-  //   overflow: hidden;
-  //   text-overflow: ellipsis;
-  //   white-space: nowrap;
-  //   margin-left: auto;
-  //   margin-right: auto;
-  // }
+  &__title {
+    color: @font-color-loading;
+  }
 
   &__card {
-    width: 300px;
+    width: 280px;
     position: relative;
-    margin: 10px;
+    margin-top: 10px;
+    // margin: 10px;
     background-color: @card-backgroundColor;
     border: 1.5px solid @card-backgroundColor;
     color: @font-color-footer-text2;
@@ -39,6 +36,11 @@
       margin-right: 20px;
       border: 1px @font-color-footer-text2 solid;
       border-radius: 100%;
+    }
+
+    &-text {
+      font-weight: 400;
+      font-family: @primary-font;
     }
   }
 }

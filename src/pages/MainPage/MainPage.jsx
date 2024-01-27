@@ -2,6 +2,7 @@ import { Typography, Flex } from 'antd';
 import { Container } from '../../components/Container/Container';
 import StacksPage from '../../pages/StacksPage/StacksPage';
 import { useTranslation } from 'react-i18next';
+import img from '../../img/PIXEL.png';
 
 import './MainPage.less';
 
@@ -13,7 +14,7 @@ const MainPage = () => {
   return (
     <Container>
       <Flex justify="center" align="center" gap="middle" vertical>
-        <Title
+        {/* <Title
           style={{
             fontSize: '50px',
             textAlign: 'center',
@@ -23,7 +24,8 @@ const MainPage = () => {
           }}
         >
           Developer Skills Rating
-        </Title>
+        </Title> */}
+        <img style={{ marginTop: 30, marginBottom: 30 }} src={img}></img>
         <Title
           type="secondary"
           level={3}

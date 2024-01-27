@@ -1,6 +1,13 @@
 @import '../../styles/main.less';
 
 .myskillspage {
+  padding: 20px;
+  &__title {
+    font-size: @font-size-title !important;
+  }
+  &__subtitle {
+    font-size: @font-size-subtitle;
+  }
   &__list {
     padding: 0;
   }
@@ -9,18 +16,17 @@
     max-width: 400px;
     height: 180px;
     border: 1px solid #d9d9d9;
+    border-radius: 0;
     overflow: hidden;
+    .ant-card-head-title {
+      font-size: @font-size-card-text;
+    }
+    &-text {
+      font-size: @font-size-card-text;
+    }
 
     @media (max-width: 1200px) {
       height: 200px;
     }
-  }
-
-  &__link {
-    // display: block;
-    // width: 100%;
-    // overflow: hidden;
-    // text-overflow: ellipsis;
-    // white-space: nowrap;
   }
 }

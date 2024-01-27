@@ -6,7 +6,7 @@ const { Title, Text } = Typography;
 const HeaderComponent = ({ currentStack }) => (
   <Form.Item className="skillspage__form-item">
     <Title level={3} className="skills__title">
-      {currentStack ? currentStack.name : 'Загрузка...'}
+      {currentStack ? currentStack.title : 'Загрузка...'}
     </Title>
     <Text type="secondary">
       {currentStack ? currentStack.desc : 'Загрузка...'}

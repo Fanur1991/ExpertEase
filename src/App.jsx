@@ -52,7 +52,7 @@ function App() {
           {/* <Route path="stacks" element={<>
                 <PageTitle title="Стеки" /><StacksPage /></>} /> */}
           <Route
-            path="stacks/:id"
+            path="stacks/:url"
             element={
               <>
                 <PageTitle title="Stacks" />
@@ -91,7 +91,7 @@ function App() {
               path="skills"
               element={
                 <>
-                  <PageTitle title="Skills" />
+                  <PageTitle title="My Skills" />
                   <MySkillsPage />
                 </>
               }
@@ -100,7 +100,7 @@ function App() {
                 path=":url"
                 element={
                   <>
-                    <PageTitle title="Skill" />
+                    <PageTitle title="Skills" />
                     <SkillsPage />
                   </>
                 }
@@ -147,7 +147,7 @@ function App() {
             path="*"
             element={
               <>
-                <PageTitle title="NotFound" />
+                <PageTitle title="Not Found" />
                 <NotFound />
               </>
             }

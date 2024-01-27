@@ -21,7 +21,23 @@ root.render(
     >
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <ConfigProvider theme={{ cssVar: true, hashed: false }}>
+          <ConfigProvider
+            theme={{
+              cssVar: true,
+              hashed: false,
+              token: {
+                colorBgElevated: '#f5f5f5',
+                controlItemBgHover: '#bae0ff',
+              },
+              components: {
+                Dropdown: {
+                  colorBgElevated: '#f5f5f5',
+                  controlItemBgHover: '#bae0ff',
+                  controlItemBgActive: '#bae0ff',
+                },
+              },
+            }}
+          >
             <App />
           </ConfigProvider>
         </PersistGate>

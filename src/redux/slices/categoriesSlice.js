@@ -32,7 +32,7 @@ const categorySlice = createSlice({
       state.isLoading = false;
       state.data = action.payload.data.map((category) => {
         return {
-          name: category.name,
+          title: category.title,
           desc: category.desc,
           skills: category.skills,
           _id: category._id,

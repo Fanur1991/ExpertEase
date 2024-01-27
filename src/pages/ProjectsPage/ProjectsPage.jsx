@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   Card,
   Input,
-  Button,
   Form,
   List,
   Space,
@@ -21,6 +20,7 @@ import {
 } from '../../redux/slices/userDataSlice';
 import { openMessage } from '../../utils/openMessage';
 import { useTranslation } from 'react-i18next';
+import CustomButton from '../../components/CustomButton/CustomButton';
 
 import './ProjectsPage.less';
 
@@ -45,7 +45,7 @@ const ProjectsPage = () => {
     const newProject = {
       ...values,
       id: uuid(),
-      stack: validStacks,
+      stacks: validStacks,
     };
 
     dispatch(addProjects(newProject));
@@ -74,15 +74,15 @@ const ProjectsPage = () => {
   };
 
   const createStacks = (project) => {
-    if (project.stack.length !== 0) {
+    if (project.stacks.length !== 0) {
       return (
         <Flex gap="small">
           <Space>
             <Text italic>{t('stacks')}:</Text>
-            {project.stack.map((tech, index) => (
+            {project.stacks.map((tech, index) => (
               <Text keyboard key={index}>
                 {tech}
-                {index !== project.stack.length - 1
+                {index !== project.stacks.length - 1
                   ? tech.includes(',')
                     ? ''
                     : ','
@@ -97,18 +97,20 @@ const ProjectsPage = () => {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div className="projectspage">
       <Form
-        className="projectspage"
+        className="projectspage__form"
         form={form}
         layout="vertical"
         onFinish={onFinish}
       >
         <Form.Item className="projectspage__form-item">
-          <Title level={3} className="projectspage__title">
+          <Title className="projectspage__title">
             {t('projectsPageTitle')}
           </Title>
-          <Text type="secondary">{t('projectsPageDescription')}</Text>
+          <Text className="projectspage__subtitle" type="secondary">
+            {t('projectsPageDescription')}
+          </Text>
         </Form.Item>
         <Form.Item
           className="projectspage__form-item"
@@ -121,7 +123,7 @@ const ProjectsPage = () => {
 
         <Form.Item
           className="projectspage__form-item"
-          name="description"
+          name="desc"
           label={t('description')}
           rules={[
             { required: true, message: 'Enter the project description!' },
@@ -132,7 +134,7 @@ const ProjectsPage = () => {
 
         <Form.Item
           className="projectspage__form-item"
-          name="stack"
+          name="stacks"
           label={t('stacks')}
           rules={[{ required: true, message: 'Enter the stack!' }]}
         >
@@ -141,7 +143,7 @@ const ProjectsPage = () => {
 
         <Form.Item
           className="projectspage__form-item"
-          name="repository"
+          name="repositoryUrl"
           label={t('repositoryLink')}
           rules={[{ type: 'url', message: 'Enter the correct link!' }]}
         >
@@ -149,34 +151,37 @@ const ProjectsPage = () => {
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" icon={<PlusOutlined />}>
-            {t('buttonAddProject')}
-          </Button>
+          <CustomButton
+            type="primary"
+            htmlType="submit"
+            icon={<PlusOutlined />}
+            children={t('buttonAddProject')}
+          />
         </Form.Item>
       </Form>
 
       <List
+        className="projectspage__list"
         dataSource={projects}
         renderItem={(project, index) => (
-          <List.Item key={index}>
+          <List.Item className="projectspage__list-item" key={index}>
             <Card
-              className=""
-              style={{ width: '100%' }}
+              className="projectspage__card"
               title={project.title}
               extra={
                 <Space>
-                  <Tooltip title={t('promptText2')} color="blue">
+                  <Tooltip title={t('promptText2')} color="#04bbec">
                     <a
-                      href={project.repository}
+                      href={project.repositoryUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <LinkOutlined />
+                      <CustomButton type="link" icon={<LinkOutlined />} />
                     </a>
                   </Tooltip>
-                  <Tooltip title={t('promptText1')} color="blue">
-                    <Button
-                      type="text"
+                  <Tooltip title={t('promptText1')} color="#04bbec">
+                    <CustomButton
+                      type="link"
                       icon={<DeleteOutlined />}
                       onClick={() => handleDelete(project)}
                     />
@@ -185,7 +190,7 @@ const ProjectsPage = () => {
               }
             >
               <Flex gap="small" vertical>
-                <Text strong>{project.description}</Text>
+                <Text strong>{project.desc}</Text>
                 {createStacks(project)}
               </Flex>
             </Card>

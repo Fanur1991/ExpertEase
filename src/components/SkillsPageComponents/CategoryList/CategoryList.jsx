@@ -61,10 +61,10 @@ const CategoryList = ({
                     <Flex>
                       <Tooltip
                         mouseEnterDelay={0.5}
-                        color="#87d068"
+                        color="#04bbec"
                         title={category.desc}
                       >
-                        <Title level={5}>{category.name}</Title>
+                        <Title level={5}>{category.title}</Title>
                       </Tooltip>
                     </Flex>
                   )

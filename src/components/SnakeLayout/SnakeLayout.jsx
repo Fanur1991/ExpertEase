@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Flex, Modal, Col } from 'antd';
-import './SnakeLayout.less';
 import { Link } from 'react-router-dom';
+import './SnakeLayout.less';
 
 const SnakeLayout = ({ currentStack, currentCategories, currentSkills }) => {
   return (
@@ -12,7 +12,7 @@ const SnakeLayout = ({ currentStack, currentCategories, currentSkills }) => {
           bodyStyle={{ fontSize: 20 }}
           loading={false}
         >
-          {currentStack.name}
+          {currentStack.title}
         </Card>
       </Flex>
       <Flex
@@ -22,16 +22,13 @@ const SnakeLayout = ({ currentStack, currentCategories, currentSkills }) => {
         wrap="wrap"
       >
         {currentCategories.map((category, index) => (
-          <Flex align="center" justify="center">
-            <Link>
-              <Card
-                bodyStyle={{ fontSize: 18 }}
-                key={index}
-                className="snakelayout__body-card"
-              >
-                {category.name}
-              </Card>
-            </Link>
+          <Flex align="center" justify="center" key={index}>
+            <Card
+              className="snakelayout__body-card"
+              bodyStyle={{ fontSize: 18 }}
+            >
+              {category.title}
+            </Card>
           </Flex>
         ))}
       </Flex>

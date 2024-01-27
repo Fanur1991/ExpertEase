@@ -1,7 +1,16 @@
 @import '../../styles/main.less';
 
 .profilepage {
+  padding: 20px;
   max-width: 500px;
+
+  &__title {
+    font-size: @font-size-title !important;
+  }
+
+  &__subtitle {
+    font-size: @font-size-subtitle !important;
+  }
 
   &__avatar-container {
     position: relative;
@@ -46,8 +55,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px dashed #ff4d4f;
-    color: #ff4d4f;
+    border: 1px dashed @button-backgroundColor;
+    color: @button-backgroundColor;
   }
 
   &__avatar-upload {
@@ -61,7 +70,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px dashed #2f54eb;
-    color: #2f54eb;
+    border: 1px dashed @button-backgroundColorLightBlue;
+    color: @button-backgroundColorLightBlue;
   }
 }

@@ -243,6 +243,35 @@ export const deleteProjects = createAsyncThunk(
   }
 );
 
+export const addUserStack = createAsyncThunk(
+  'stacks/addUserStack',
+  async (stackData, { getState, rejectWithValue }) => {
+    try {
+      const { auth } = getState();
+      const token = auth.token;
+      const userId = auth.user._id;
+
+      if (!token) {
+        return rejectWithValue('Токен отсутствует');
+      }
+
+      const response = await axios.post(
+        '/auth/user/add-stack',
+        {
+          userId,
+          stackData,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const userDataSlice = createSlice({
   name: 'userData',
   initialState,
@@ -394,6 +423,21 @@ const userDataSlice = createSlice({
       state.user = action.payload;
     });
     builder.addCase(deleteProjects.rejected, (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    });
+    // --------------------------------------------------------------------------------------------
+    // Add user stack to rate
+    // --------------------------------------------------------------------------------------------
+    builder.addCase(addUserStack.pending, (state) => {
+      state.isLoading = true;
+      state.error = null;
+    });
+    builder.addCase(addUserStack.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.user.stacksRating.push(action.payload);
+    });
+    builder.addCase(addUserStack.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     });

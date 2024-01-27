@@ -1,15 +1,6 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  Form,
-  Input,
-  Button,
-  Avatar,
-  Upload,
-  Space,
-  Typography,
-  Tooltip,
-} from 'antd';
+import { Form, Input, Button, Upload, Space, Typography, Tooltip } from 'antd';
 import {
   LoadingOutlined,
   PlusOutlined,
@@ -23,10 +14,12 @@ import {
   fetchProfile,
 } from '../../redux/slices/userDataSlice';
 import { selectAuth } from '../../redux/slices/authSlice';
-import { API_URL as baseUrl } from '../../config';
 import { getBase64, beforeUpload } from '../../utils/utils';
 import { openMessage } from '../../utils/openMessage';
 import { useTranslation } from 'react-i18next';
+import CustomButton from '../../components/CustomButton/CustomButton';
+import AvatarComponent from '../../components/AvatarComponent/AvatarComponent';
+
 import './ProfilePage.less';
 
 const { Title, Text } = Typography;
@@ -43,34 +36,11 @@ const ProfilePage = () => {
   const [form] = Form.useForm();
   const { t } = useTranslation();
 
-  // console.log(useSelector(selectUserData), 'userDataslice');
-  // console.log(useSelector(selectAuth), 'authSlice');
-
   useEffect(() => {
     form.setFieldsValue({
       email: userAuth.user.email,
     });
   }, [form, userAuth]);
-
-  // useEffect(() => {
-  //   if (userData.user) {
-  //     form.setFieldsValue(userData.user);
-  //   } else {
-  //     dispatch(fetchProfile(userAuth.user._id));
-  //   }
-  // }, [userData, form]);
-
-  // useEffect(() => {
-  //   // Если данные пользователя еще не загружены, загружаем их
-  //   if (!userData.user && userAuth.user._id) {
-  //     dispatch(fetchProfile(userAuth.user._id));
-  //   }
-
-  //   // Обновляем imageUrl, когда данные пользователя загружены или изменены
-  //   if (userData.user && userData.user.avatarUrl) {
-  //     setImageUrl(userData.user.avatarUrl);
-  //   }
-  // }, [dispatch, userAuth.user._id, userData.user]);
 
   useEffect(() => {
     if (!userData.user && userAuth.user._id) {
@@ -96,36 +66,11 @@ const ProfilePage = () => {
     });
   };
 
-  // const handleCancel = () => {
-  //   setSelectedImage(null);
-  //   setImageUrl(userData.user.avatarUrl);
-  //   setIsImageSelected(false);
-  // };
-
   const handleCancel = useCallback(() => {
     setSelectedImage(null);
     setImageUrl(userData.user.avatarUrl);
     setIsImageSelected(false);
   }, [userData.user?.avatarUrl]);
-
-  // const handleUpload = () => {
-  //   if (selectedImage) {
-  //     const formData = new FormData();
-  //     formData.append('avatarUrl', selectedImage);
-  //     formData.append('userId', userAuth.user._id);
-
-  //     dispatch(updateAvatarProfile(formData)).then((result) => {
-  //       if (updateAvatarProfile.fulfilled.match(result)) {
-  //         message.success('Фотография успешно загружена');
-  //         setIsImageSelected(false);
-  //       } else {
-  //         message.error('Ошибка при загрузке фотографии');
-  //       }
-  //     });
-  //   } else {
-  //     message.error('Файл для загрузки не выбран');
-  //   }
-  // };
 
   const handleUpload = useCallback(() => {
     if (selectedImage) {
@@ -145,25 +90,6 @@ const ProfilePage = () => {
       openMessage('error', t('profilePageNotification5'));
     }
   }, [selectedImage, userAuth.user?._id, dispatch]);
-
-  // const handleDeleteAvatar = (event) => {
-  //   event.stopPropagation();
-
-  //   const existAvatarUrl = userData.user.avatarUrl;
-
-  //   if (!existAvatarUrl) {
-  //     return;
-  //   }
-
-  //   dispatch(deleteAvatarProfile()).then((result) => {
-  //     if (deleteAvatarProfile.fulfilled.match(result)) {
-  //       setImageUrl(null);
-  //       message.success('Фотография успешно удалена');
-  //     } else {
-  //       message.error('Ошибка при удалении фотографии');
-  //     }
-  //   });
-  // };
 
   const handleDeleteAvatar = useCallback(
     (event) => {
@@ -239,45 +165,17 @@ const ProfilePage = () => {
       {loading ? (
         <LoadingOutlined />
       ) : (
-        <Tooltip title={t('buttonUpload')} color="blue">
+        <Tooltip title={t('buttonUpload')} color="#04bbec">
           <PlusOutlined />
         </Tooltip>
       )}
     </div>
   );
 
-  const avatarCharacter = useMemo(() => {
-    if (userData.user && userData.user.firstname) {
-      return userData.user.firstname[0].toUpperCase();
-    } else if (firstname && firstname.length > 0) {
-      return firstname[0].toUpperCase();
-    }
-    return 'А';
-  }, [userData.user?.firstname, firstname]);
-
-  const renderAvatar = () => {
-    if (imageUrl) {
-      return (
-        <img
-          className="profilepage__avatar-image"
-          src={
-            imageUrl.startsWith('uploads') ? `${baseUrl}${imageUrl}` : imageUrl
-          }
-          alt="avatar"
-        />
-      );
-    }
-    return (
-      <Avatar className="profilepage__avatar-blind" alt="avatar">
-        <span className="profilepage__avatar-character">{avatarCharacter}</span>
-      </Avatar>
-    );
-  };
-
   return (
-    <div style={{ padding: '20px' }}>
+    <div className="profilepage">
       <Form
-        className="profilepage"
+        className="profilepage__form"
         name="personalDetails"
         form={form}
         onFinish={onFinish}
@@ -285,14 +183,15 @@ const ProfilePage = () => {
         initialValues={{ remember: true }}
         size="middle"
       >
-        <Form.Item>
-          <Title level={3} className="profilepage__title">
-            {t('profilePageTitle')}
-          </Title>
-          <Text type="secondary">{t('profilePageDescription')}</Text>
+        <Form.Item className="profilepage__form-item">
+          <Title className="profilepage__title">{t('profilePageTitle')}</Title>
+          <Text className="profilepage__subtitle" type="secondary">
+            {t('profilePageDescription')}
+          </Text>
         </Form.Item>
 
         <Form.Item
+          className="profilepage__form-item"
           name="avatarUrl"
           valuePropName="fileList"
           getValueFromEvent={normFile}
@@ -308,13 +207,20 @@ const ProfilePage = () => {
               customRequest={dummyRequest}
               onChange={handleChange}
             >
-              {renderAvatar()}
+              <AvatarComponent
+                imageUrl={imageUrl}
+                firstname={firstname}
+                userData={userData}
+                imageClass="profilepage__avatar-image"
+                blindClass="profilepage__avatar-blind"
+                characterClass="profilepage__avatar-character"
+              />
               {uploadButton}
               <div
                 className="profilepage__avatar-delete"
                 onClick={handleDeleteAvatar}
               >
-                <Tooltip title={t('buttonDelete')} color="blue">
+                <Tooltip title={t('buttonDelete')} color="#04bbec">
                   <CloseOutlined />
                 </Tooltip>
               </div>
@@ -324,21 +230,20 @@ const ProfilePage = () => {
                 <Button size="small" danger onClick={handleCancel}>
                   {t('cancel')}
                 </Button>
-
-                <Button
+                <CustomButton
+                  type="primary"
                   autoFocus
                   size="small"
-                  type="primary"
                   onClick={handleUpload}
-                >
-                  {t('upload')}
-                </Button>
+                  children={t('upload')}
+                />
               </Space>
             )}
           </div>
         </Form.Item>
 
         <Form.Item
+          className="profilepage__form-item"
           hasFeedback
           label={t('firstname')}
           name="firstname"
@@ -354,9 +259,10 @@ const ProfilePage = () => {
         </Form.Item>
 
         <Form.Item
+          className="profilepage__form-item"
           hasFeedback
-          label={t('surname')}
-          name="surname"
+          label={t('lastname')}
+          name="lastname"
           rules={[
             {
               required: false,
@@ -365,14 +271,19 @@ const ProfilePage = () => {
             { min: 2, message: 'Last name must contain at least 2 letters' },
           ]}
         >
-          <Input placeholder={t('surname')} />
+          <Input placeholder={t('lastname')} />
         </Form.Item>
 
-        <Form.Item label={t('email')} name="email">
+        <Form.Item
+          className="profilepage__form-item"
+          label={t('email')}
+          name="email"
+        >
           <Input disabled type="email" />
         </Form.Item>
 
         <Form.Item
+          className="profilepage__form-item"
           hasFeedback
           label="Github"
           name="githubUrl"
@@ -390,6 +301,7 @@ const ProfilePage = () => {
         </Form.Item>
 
         <Form.Item
+          className="profilepage__form-item"
           hasFeedback
           label="LinkedIn"
           name="linkedinUrl"
@@ -407,6 +319,7 @@ const ProfilePage = () => {
         </Form.Item>
 
         <Form.Item
+          className="profilepage__form-item"
           hasFeedback
           label={t('website')}
           name="websiteUrl"
@@ -423,10 +336,12 @@ const ProfilePage = () => {
           <Input placeholder="https://example.com" />
         </Form.Item>
 
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            {t('confirm')}
-          </Button>
+        <Form.Item className="profilepage__form-item">
+          <CustomButton
+            type="primary"
+            htmlType="submit"
+            children={t('confirm')}
+          />
         </Form.Item>
       </Form>
     </div>

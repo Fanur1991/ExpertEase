@@ -1,19 +1,64 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Form, Typography, Card, Flex, List, Spin } from 'antd';
+import {
+  Form,
+  Typography,
+  Card,
+  Flex,
+  List,
+  Spin,
+  Button,
+  Tooltip,
+  Modal,
+  Input,
+  ConfigProvider,
+} from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { selectStacks } from '../../redux/slices/stacksSlice';
+import { selectCategories } from '../../redux/slices/categoriesSlice';
+import { selectSkills } from '../../redux/slices/skillsSlice';
 import ScrollToTop from '../../components/ScrollToTop/ScrollToTop';
+import { addUserStack } from '../../redux/slices/userDataSlice';
 
 import './MySkillsPage.less';
+import CustomButton from '../../components/CustomButton/CustomButton';
 
 const { Title, Text } = Typography;
 
 const MySkillsPage = () => {
   const stacks = useSelector(selectStacks);
+  const categories = useSelector(selectCategories);
+  const skills = useSelector(selectSkills);
+  const [stackTitle, setStackTitle] = useState('');
+  const [stackUrl, setStackUrl] = useState('');
+  const [stackId, setStackId] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // console.log(stackId);
+
+  const showModal = (stackProps) => {
+    const { stackTitle, stackUrl, stackId } = stackProps;
+    setIsModalOpen(true);
+    setStackTitle(stackTitle);
+    setStackUrl(stackUrl);
+    setStackId(stackId);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleAddStackTitle = () => {
+    setStackTitle(stackTitle);
+    dispatch(addUserStack({ title: stackTitle, stackId, totalRating: 184 }));
+    navigate(`/user/skills/${stackUrl}`);
+    closeModal();
+  };
 
   return stacks.isLoading ? (
     <Flex justify="center" align="center">
@@ -22,15 +67,17 @@ const MySkillsPage = () => {
       </Title>
     </Flex>
   ) : (
-    <div style={{ padding: '20px' }}>
-      <Form className="myskillspage" layout="vertical">
+    <div className="myskillspage">
+      <Form className="myskillspage__form" layout="vertical">
         <Form.Item className="myskillspage__form-item">
-          <Title level={3} className="myskillspage__title">
+          <Title className="myskillspage__title">
             {t('myskillsPageTitle')}
           </Title>
-          <Text type="secondary">{t('myskillsPageDescription')}</Text>
+          <Text className="myskillspage__subtitle" type="secondary">
+            {t('myskillsPageDescription')}
+          </Text>
         </Form.Item>
-        <Form.Item>
+        <Form.Item className="myskillspage__form-item">
           <List
             className="myskillspage__list"
             size="middle"
@@ -49,8 +96,31 @@ const MySkillsPage = () => {
               <List.Item className="myskillspage__list-item">
                 <Card
                   className="myskillspage__card"
-                  onClick={() => navigate(`/user/skills/${item.url}`)}
-                  title={item.name}
+                  onClick={(e) => {
+                    navigate(`/user/skills/${item.url}`);
+                  }}
+                  title={item.title}
+                  extra={
+                    <Tooltip
+                      mouseEnterDelay={0.5}
+                      color="#04bbec"
+                      title={t('buttonAddSkill')}
+                    >
+                      <CustomButton
+                        type="primary"
+                        size="small"
+                        icon={<PlusOutlined />}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          showModal({
+                            stackTitle: item.title,
+                            stackUrl: item.url,
+                            stackId: item._id,
+                          });
+                        }}
+                      />
+                    </Tooltip>
+                  }
                   hoverable
                   bordered={true}
                   headStyle={{
@@ -61,11 +131,50 @@ const MySkillsPage = () => {
                     padding: '15px',
                   }}
                 >
-                  <Text type="secondary">{item.desc}</Text>
+                  <Text className="myskillspage__card-text" type="secondary">
+                    {item.desc}
+                  </Text>
                 </Card>
               </List.Item>
             )}
           />
+          <ConfigProvider
+            theme={{
+              components: {
+                Modal: {
+                  colorBgElevated: '#ffffff',
+                },
+                Button: {
+                  colorPrimary: '#04bbec',
+                  colorPrimaryHover: '#04bbec',
+                },
+              },
+            }}
+          >
+            <Modal
+              className="myskillspage__modal"
+              open={isModalOpen}
+              onOk={handleAddStackTitle}
+              onCancel={closeModal}
+              okButtonProps={{
+                type: 'primary',
+              }}
+              centered
+              okText={t('buttonSaveSkill')}
+              cancelText={t('cancel')}
+            >
+              <Title className="myskillspage__modal-text" level={3}>
+                {t('inputStackTitle')}
+              </Title>
+              <Input
+                className="myskillspage__modal-input"
+                value={stackTitle}
+                onChange={(e) => setStackTitle(e.target.value)}
+                autoFocus
+                placeholder={t('inputStackTitle')}
+              />
+            </Modal>
+          </ConfigProvider>
         </Form.Item>
       </Form>
       <ScrollToTop />

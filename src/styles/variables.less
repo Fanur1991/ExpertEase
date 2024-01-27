@@ -6,6 +6,8 @@
 
 // Font colors
 @font-color: #5e629c;
+@font-color-loading: #8c8c8c;
+@font-color-text: #8c8c8c;
 @font-color-button: #ffffff;
 @font-color-button-black: #000000;
 @font-color-button-hover: #f0f0f0;
@@ -15,23 +17,40 @@
 @font-color-footer-link-hover: #ff82f4;
 
 // BackgroundColors;
-@header-backgroundColor: #00214a;
-@main-backgroundColor: #00214a;
-@footer-backgroundColor: #00214a;
+// @header-backgroundColor: #00214a;
+@header-backgroundColor: radial-gradient(
+  circle at bottom,
+  #002559 45%,
+  #00214a
+);
+// @main-backgroundColor: #00214a;
+@main-backgroundColor: radial-gradient(circle, #002559 50%, #00214a);
+// @footer-backgroundColor: #00214a;
+@footer-backgroundColor: radial-gradient(circle at top, #002559 45%, #00214a);
 @menu-backgroundColor: #efdbff;
 @button-backgroundColor: #ea25b5;
 @button-backgroundColorViolet: #b37feb;
 @avatar-backgroundColor: #ea25b5;
 @menu-backgroundColorWhite: #ffffff;
 @card-backgroundColor: #04bbec;
+@tooltip-backgroundColor: #04bbec;
+@button-backgroundColorLightBlue: #04bbec;
 @border: 1px solid #ddd;
 
 // Font
 @primary-font: 'Poppins', sans-serif;
+@secondary-font: 'Montserrat', sans-serif;
 
 // Font Size
+@font-size-title: 24px;
+@font-size-subtitle: 18px;
+@font-size-text: 16px;
+@font-size-card-text: 15px;
 
 // Header and Footer height
 @logo-height: 40px;
 @header-height: 64px;
 @footer-height: 64px;
+
+// Button brightness
+@button-brightness: 110%;

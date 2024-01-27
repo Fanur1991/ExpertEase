@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -14,21 +14,27 @@ import {
   Tag,
   Tooltip,
   Checkbox,
+  Button,
+  Dropdown,
 } from 'antd';
-import { StarFilled } from '@ant-design/icons';
+import { StarFilled, DownOutlined } from '@ant-design/icons';
 import { selectStacks } from '../../../redux/slices/stacksSlice';
 import { selectCategories } from '../../../redux/slices/categoriesSlice';
 import { selectSkills } from '../../../redux/slices/skillsSlice';
 import { useTranslation } from 'react-i18next';
 import StacksDownMenu from '../../../components/SkillsPageComponents/StacksDownMenu/StacksDownMenu';
+import ScrollToTop from '../../../components/ScrollToTop/ScrollToTop';
+import userDataSlice, {
+  selectUserData,
+} from '../../../redux/slices/userDataSlice';
 
 import './SkillsPage.less';
-import ScrollToTop from '../../../components/ScrollToTop/ScrollToTop';
 
 const { Title, Text } = Typography;
 
 const SkillsPage = () => {
   const { url } = useParams();
+  const userData = useSelector(selectUserData);
   const stacks = useSelector(selectStacks);
   const categories = useSelector(selectCategories);
   const skills = useSelector(selectSkills);
@@ -36,6 +42,9 @@ const SkillsPage = () => {
   const [currentCategories, setCurrentCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
+  // console.log(userData.user.stacksRating);
 
   const initialCheckboxState = {};
   currentCategories.forEach((category) => {
@@ -91,22 +100,41 @@ const SkillsPage = () => {
     return originalElement;
   };
 
+  const items = userData?.user?.stacksRating.map((stack, index) => {
+    return {
+      label: <a href="">{stack?.title}</a>,
+      key: index,
+    };
+  });
+
   return (
-    <div style={{ padding: '20px' }}>
-      <Form className="skillspage" layout="vertical">
+    <div className="skillspage">
+      <Form className="skillspage__form" layout="vertical">
         <Form.Item className="skillspage__form-item">
-          <Title level={3} className="skills__title">
-            {currentStack ? currentStack.name : 'Загрузка...'}
-          </Title>
-          <Text type="secondary">
+          <Flex
+            className="skillspage__containertitle"
+            justify="start"
+            align="center"
+            gap="large"
+          >
+            <Button
+              className="skillspage__button"
+              onClick={() => navigate('/user/skills')}
+            >
+              {t('buttonBack')}
+            </Button>
+            <Title className="skillspage__title">
+              {currentStack ? currentStack.title : 'Загрузка...'}
+            </Title>
+          </Flex>
+          <Text className="skillspage__subtitle" type="secondary">
             {currentStack ? currentStack.desc : 'Загрузка...'}
           </Text>
         </Form.Item>
 
-        <Form.Item>
+        <Form.Item className="skillspage__form">
           <List
             className="skillspage__list"
-            style={{ marginTop: 0, padding: 0 }}
             itemLayout="vertical"
             size="large"
             dataSource={currentCategories}
@@ -120,7 +148,40 @@ const SkillsPage = () => {
               total: currentCategories.length,
               onChange: (page) => {},
             }}
-            header={currentStack ? <StacksDownMenu /> : <StacksDownMenu />}
+            header={
+              <Flex justify="space-between" align="center">
+                <Title className="skillspage__list-title">
+                  {userData.user.stacksRating.length > 0 ? (
+                    <Dropdown
+                      menu={{
+                        items,
+                        className: 'skillspage__list-dropdown',
+                      }}
+                      trigger={['click']}
+                    >
+                      <a onClick={(e) => e.preventDefault()}>
+                        <Space>
+                          My Saved Skills
+                          <DownOutlined />
+                        </Space>
+                      </a>
+                    </Dropdown>
+                  ) : (
+                    currentStack?.title
+                  )}
+                </Title>
+                <Flex gap="middle">
+                  <Tooltip
+                    mouseEnterDelay={0.5}
+                    color="#04bbec"
+                    title={t('buttonAddSkill')}
+                  >
+                    <Button className="skillspage__list-button">Add</Button>
+                  </Tooltip>
+                  <StacksDownMenu />
+                </Flex>
+              </Flex>
+            }
             renderItem={(category) => {
               const skillsData = skills.data.filter((skill) =>
                 category.skills.includes(skill._id)
@@ -143,10 +204,10 @@ const SkillsPage = () => {
                           <Flex>
                             <Tooltip
                               mouseEnterDelay={0.5}
-                              color="#87d068"
+                              color="#04bbec"
                               title={category.desc}
                             >
-                              <Title level={5}>{category.name}</Title>
+                              <Title level={5}>{category.title}</Title>
                             </Tooltip>
                           </Flex>
                         )
@@ -194,7 +255,7 @@ const SkillsPage = () => {
                                     />
                                   ) : (
                                     <Text style={{ fontWeight: 500 }}>
-                                      {skill.name}
+                                      {skill.title}
                                     </Text>
                                   )}
                                   <Flex

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Form, Input, Button, Typography, message, Modal } from 'antd';
+import { Form, Input, Typography, Modal, ConfigProvider } from 'antd';
 import { LockOutlined } from '@ant-design/icons';
 import {
   changePassword,
@@ -11,6 +11,7 @@ import { selectAuth } from '../../redux/slices/authSlice';
 import { openMessage } from '../../utils/openMessage';
 import { useTranslation } from 'react-i18next';
 import './SettingsPage.less';
+import CustomButton from '../../components/CustomButton/CustomButton';
 
 const { Title, Text } = Typography;
 
@@ -21,9 +22,6 @@ const SettingsPage = () => {
   const userAuth = useSelector(selectAuth);
   const [form] = Form.useForm();
   const { t } = useTranslation();
-
-  // console.log(useSelector(selectUserData), 'userDataslice');
-  // console.log(useSelector(selectAuth), 'authSlice');
 
   const onFinish = async (values) => {
     const { newPassword, confirmPassword } = values;
@@ -65,9 +63,9 @@ const SettingsPage = () => {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div className="settingspage">
       <Form
-        className="settingspage"
+        className="settingspage__form"
         name="settings"
         form={form}
         onFinish={onFinish}
@@ -75,14 +73,17 @@ const SettingsPage = () => {
         initialValues={{ remember: true }}
         size="middle"
       >
-        <Form.Item>
-          <Title level={3} className="settingspage__title">
+        <Form.Item className="settingspage__form-item">
+          <Title className="settingspage__title">
             {t('settingsPageTitlte1')}
           </Title>
-          <Text type="secondary">{t('settingsPageDescription1')}</Text>
+          <Text className="settingspage__subtitle" type="secondary">
+            {t('settingsPageDescription1')}
+          </Text>
         </Form.Item>
 
         <Form.Item
+          className="settingspage__form-item"
           hasFeedback
           label={t('newPassword')}
           name="newPassword"
@@ -105,6 +106,7 @@ const SettingsPage = () => {
         </Form.Item>
 
         <Form.Item
+          className="settingspage__form-item"
           hasFeedback
           label={t('confirmPassword')}
           name="confirmPassword"
@@ -126,39 +128,68 @@ const SettingsPage = () => {
           />
         </Form.Item>
 
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            {t('buttonUpdatePassword')}
-          </Button>
+        <Form.Item className="settingspage__form-item">
+          <CustomButton
+            type="primary"
+            htmlType="submit"
+            children={t('buttonUpdatePassword')}
+          />
         </Form.Item>
       </Form>
-      <Form>
-        <Form.Item>
-          <Title level={3} className="settings__title">
+      <Form className="settingspage__form">
+        <Form.Item className="settingspage__form-item">
+          <Title className="settingspage__title">
             {t('settingsPageTitlte2')}
           </Title>
-          <Text type="secondary">{t('settingsPageDescription2')}</Text>
+          <Text className="settingspage__subtitle" type="secondary">
+            {t('settingsPageDescription2')}
+          </Text>
         </Form.Item>
 
-        <Form.Item>
-          <Button type="primary" danger onClick={showModal}>
-            {t('buttondeleteAccount')}
-          </Button>
-          <Modal
-            open={isModalOpen}
-            onOk={handleDeleteAccount}
-            onCancel={closeModal}
-            okButtonProps={{
-              type: 'primary',
-              danger: true,
+        <Form.Item className="settingspage__form-item">
+          <CustomButton
+            danger
+            type="primary"
+            onClick={showModal}
+            children={t('buttondeleteAccount')}
+          />
+          <ConfigProvider
+            theme={{
+              components: {
+                Modal: {
+                  colorBgElevated: '#ffffff',
+                },
+                Button: {
+                  colorPrimary: '#04bbec',
+                  colorPrimaryHover: '#04bbec',
+                },
+              },
             }}
-            centered
-            okText={t('buttonDelete')}
-            cancelText={t('cancel')}
           >
-            <Title level={3}>{t('settingsPageTitlte3')}</Title>
-            <Text>{t('settingsPageDescription3')}</Text>
-          </Modal>
+            <Modal
+              className="settingspage__modal"
+              open={isModalOpen}
+              onOk={handleDeleteAccount}
+              onCancel={closeModal}
+              okButtonProps={{
+                type: 'primary',
+                danger: true,
+              }}
+              cancelButtonProps={{
+                type: 'primary',
+              }}
+              centered
+              okText={t('buttonDelete')}
+              cancelText={t('cancel')}
+            >
+              <Title className="settingspage__modal-title">
+                {t('settingsPageTitlte3')}
+              </Title>
+              <Text className="settingspage__modal-subtitle">
+                {t('settingsPageDescription3')}
+              </Text>
+            </Modal>
+          </ConfigProvider>
         </Form.Item>
       </Form>
     </div>
