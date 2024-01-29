@@ -13,5 +13,5 @@ deploy_job:
   stage: deploy
   script:
     - kubectl apply -f deployment.yml
-  tags:
-    - kubernetes
+#  tags:
+#    - kubernetes
