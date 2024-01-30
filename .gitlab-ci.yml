@@ -1,17 +1,39 @@
 stages:
   - build
-  - deploy
+  - test
 
 build_job:
   stage: build
+  image: node:latest
   script:
-    - docker build -t my-react-app .
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - build/
+
+test_job:
+  stage: test
+  image: node:latest
+  script:
+    - npm install
+    - npm test
+
+
+#stages:
+#  - build
+#  - deploy
+
+#build_job:
+#  stage: build
+#  script:
+#    - docker build -t my-react-app .
 #  tags:
 #    - docker
 
-deploy_job:
-  stage: deploy
-  script:
-    - kubectl apply -f deployment.yml
+#deploy_job:
+#  stage: deploy
+#  script:
+#    - kubectl apply -f deployment.yml
 #  tags:
 #    - kubernetes
