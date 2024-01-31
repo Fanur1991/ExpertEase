@@ -8,11 +8,13 @@ build_job:
   script:
     - echo "Start building App"
     - npm install
-    - npm build
+    - npm run build
     - echo "Build successfully!"
-#  artifacts:
-#    paths:
-#      - build/
+  artifacts:
+    expire_in: 1 hour
+    paths:
+      - build
+      - node_modules/
 
 test_job:
   stage: test
