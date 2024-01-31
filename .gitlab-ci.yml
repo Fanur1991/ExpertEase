@@ -1,14 +1,16 @@
 stages:
   - build
   - test
+  - docker-build
+#  - deploy
 
 build_job:
   stage: build
   image: node
   script:
     - echo "Start building App"
-    - npm install
-    - npm run build
+    - yarn install
+    - yarn run build
     - echo "Build successfully!"
   artifacts:
     expire_in: 1 hour
@@ -21,8 +23,8 @@ test_job:
   image: node
   script:
     - echo "Testing App"
-    - npm install
-    - CI=true npm test
+    - yarn install
+    - CI=true yarn test
     - echo "Test successfully!"
 
 docker-build:
@@ -35,3 +37,14 @@ docker-build:
   script:
     - docker build --pull -t "$CI_REGISTRY_IMAGE" .
     - docker push "$CI_REGISTRY_IMAGE"
+    - echo "Registry image:" $CI_REGISTRY_IMAGE
+
+#  deploy:
+#    stage: deploy
+#    image: kroniak/ssh-client
+#      - echo "deploying app"
+#   script:
+#      - chmod 400 $SSH_PRIVATE_KEY
+#      - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY root@$PROD_SERVER_IP "docker pull registry.gitlab.com/alfredomartinezzz/budgefy"
+#      - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY root@$PROD_SERVER_IP "docker stop budgefycontainer || true && docker rm budgefycontainer || true"
+#      - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY root@$PROD_SERVER_IP "docker run -p 3001:80 -d --name budgefycontainer registry.gitlab.com/alfredomartinezzz/budgefy"
