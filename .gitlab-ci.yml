@@ -3,14 +3,19 @@ stages:
   - test
   - deploy
 
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+
 build_job:
   stage: build
   image: docker:latest
   services:
     - docker:dind
   script:
-    - docker build -t my-react-app .
-    - docker save my-react-app > /cache/my-react-app.tar
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
 
 test_job:
   stage: test
