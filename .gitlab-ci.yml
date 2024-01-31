@@ -10,9 +10,10 @@ variables:
 
 build_job:
   stage: build
-  image: docker:latest
+  image: docker:19.03.12
   services:
-    - docker:dind
+    - name: docker:19.03.12-dind
+      command: ["--dockerd-flags", "--host=tcp://0.0.0.0:2375"]
   script:
     - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG .
