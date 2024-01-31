@@ -19,11 +19,17 @@ build_job:
 
 test_job:
   stage: test
-  image: node:lts-alpine
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: tcp://localhost:2375
+    DOCKER_TLS_CERTDIR: ""
   script:
     - echo "Running tests"
-    - npm install
-    - npm run test
+    - docker run --name frontend-container -d frontend-image
+    - docker exec frontend-container npm test
+    - docker stop frontend-container
+    - docker rm frontend-container
 
 deploy_job:
   stage: deploy
