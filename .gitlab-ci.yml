@@ -14,13 +14,16 @@ build_job:
     DOCKER_HOST: tcp://localhost:2375
     DOCKER_TLS_CERTDIR: ""
   script:
+    - echo "Running build"
     - docker build -t frontend-image .
 
 test_job:
   stage: test
+  image: node:lts-alpine
   script:
     - echo "Running tests"
-    # Здесь можно добавить скрипты для запуска тестов
+    - npm install
+    - npm run test
 
 deploy_job:
   stage: deploy
