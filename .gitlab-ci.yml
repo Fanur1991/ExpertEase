@@ -4,36 +4,21 @@ stages:
 
 build_job:
   stage: build
-  image: node:latest
+  image: node
   script:
+    - echo "Start building App"
     - npm install
-    - npm run build
-  artifacts:
-    paths:
-      - build/
+    - npm build
+    - echo "Build successfully!"
+#  artifacts:
+#    paths:
+#      - build/
 
 test_job:
   stage: test
-  image: node:latest
+  image: node
   script:
+    - echo "Testing App"
     - npm install
-    - npm test
-
-
-#stages:
-#  - build
-#  - deploy
-
-#build_job:
-#  stage: build
-#  script:
-#    - docker build -t my-react-app .
-#  tags:
-#    - docker
-
-#deploy_job:
-#  stage: deploy
-#  script:
-#    - kubectl apply -f deployment.yml
-#  tags:
-#    - kubernetes
+    - CI=true npm test
+    - echo "Test successfully!"
