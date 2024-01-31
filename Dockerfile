@@ -1,57 +1,25 @@
+# Используйте официальный образ Node.js в качестве базового образа
+FROM node:latest as build
 
-# 1. For build React app
-FROM node:lts AS development
-
-# Set working directory
+# Установите рабочий каталог в контейнере
 WORKDIR /app
 
-# 
-COPY package.json /app/package.json
-COPY package-lock.json /app/package-lock.json
+# Копируйте файлы package.json и package-lock.json (или yarn.lock)
+COPY package*.json ./
 
-# Same as npm install
-RUN npm ci
+# Установите зависимости проекта
+RUN npm install
 
-COPY . /app
+# Копируйте оставшиеся файлы проекта
+COPY . .
 
-ENV CI=true
-ENV PORT=3000
-
-CMD [ "npm", "start" ]
-
-FROM development AS build
-
+# Соберите приложение для продакшена
 RUN npm run build
 
+# Используйте nginx для раздачи собранного приложения
+FROM nginx:stable-alpine
+COPY --from=build /app/build /usr/share/nginx/html
 
-FROM development as dev-envs
-RUN <<EOF
-apt-get update
-apt-get install -y --no-install-recommends git
-EOF
-
-RUN <<EOF
-useradd -s /bin/bash -m vscode
-groupadd docker
-usermod -aG docker vscode
-EOF
-# install Docker tools (cli, buildx, compose)
-COPY --from=gloursdocker/docker / /
-CMD [ "npm", "start" ]
-
-# 2. For Nginx setup
-FROM nginx:alpine
-
-# Copy config nginx
-COPY --from=build /app/.nginx/nginx.conf /etc/nginx/conf.d/default.conf
-
-WORKDIR /usr/share/nginx/html
-
-# Remove default nginx static assets
-RUN rm -rf ./*
-
-# Copy static assets from builder stage
-COPY --from=build /app/build .
-
-# Containers run nginx with global directives and daemon off
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+# Откройте 80 порт и запустите nginx
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
