@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  frontend:
+    container_name: frontend-skills-prod
+    build:
+      context: .
+      dockerfile: Dockerfile-prod
+    ports:
+      - "3000:3000"
