@@ -1,5 +1,5 @@
 # Базовый образ
-FROM node:latest as build
+FROM node:alpine as build
 
 # Установка рабочей директории
 WORKDIR /app
@@ -9,6 +9,7 @@ COPY . .
 
 # Установка зависимостей и сборка проекта
 RUN npm install
+RUN npm install react-scripts@5.0.1 -g
 RUN npm run build
 
 # Финальный образ
