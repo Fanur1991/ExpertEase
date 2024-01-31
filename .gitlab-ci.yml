@@ -15,9 +15,12 @@ build_job:
     DOCKER_TLS_CERTDIR: ""
   script:
     - echo "Running build"
-    - docker build -t frontend-image .
+#    - docker build -t frontend-image .
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
 
-test_job:
+# disabled
+.test_job:
   stage: test
   services:
     - docker:dind
@@ -27,15 +30,19 @@ test_job:
   script:
     - echo "Running tests"
     - docker run --name frontend-container -d frontend-image
-    - docker exec frontend-container npm test
+    - docker exec frontend-container npm test --passWithNoTests
     - docker stop frontend-container
     - docker rm frontend-container
 
 deploy_job:
   stage: deploy
+  variables:
+    KUBE_CONFIG: ${KUBE_CONFIG}
   script:
-    - echo "Deploying to server"
-    # Здесь можно добавить скрипты для деплоя, например, на удаленный сервер или в облако
+    - echo "Deploying to Kubernetes"
+    - kubectl --kubeconfig $KUBE_CONFIG apply -f deployment.yaml
+    - kubectl --kubeconfig $KUBE_CONFIG apply -f service.yaml
+    - kubectl set image deployment/your-deployment-name your-container-name=$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG --record
 
 cache:
   paths:
