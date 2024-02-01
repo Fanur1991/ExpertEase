@@ -15,7 +15,7 @@ build_job:
     DOCKER_HOST: tcp://localhost:2375
     DOCKER_TLS_CERTDIR: ""
     CI_REGISTRY: http://127.0.0.1:8111
-    CI_REGISTRY_IMAGE: "http://127.0.0.1:8111/skills/developer-skills-rating-client"
+    CI_REGISTRY_IMAGE: "127.0.0.1:8111/skills/developer-skills-rating-client"
   script:
     - echo "Running build"
     - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG .
