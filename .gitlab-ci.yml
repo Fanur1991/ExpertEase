@@ -49,7 +49,7 @@ deploy_job:
     DOCKER_TLS_CERTDIR: ""
   script:
     - echo "Deploying to Docker Swarm"
-    - docker stack deploy --compose-file docker-compose.yml frontend-skills-stack
+    - docker stack deploy --compose-file docker-compose-dev.yml frontend-skills-stack
 
 cache:
   paths:
