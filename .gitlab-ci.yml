@@ -39,13 +39,9 @@ build_job:
 
 deploy_job:
   stage: deploy
-  variables:
-    KUBE_CONFIG: ${KUBE_CONFIG}
   script:
     - echo "Deploying to Kubernetes"
-    - kubectl --kubeconfig $KUBE_CONFIG apply -f deployment.yaml
-    - kubectl --kubeconfig $KUBE_CONFIG apply -f service.yaml
-    - kubectl set image deployment/your-deployment-name your-container-name=$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG --record
+    - docker stack deploy --compose-file docker-compose.yml your-stack-name
 
 cache:
   paths:
