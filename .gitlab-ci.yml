@@ -14,12 +14,12 @@ build_job:
   variables:
     DOCKER_HOST: tcp://localhost:2375
     DOCKER_TLS_CERTDIR: ""
-    CI_REGISTRY: http://127.0.0.1:8111
-    CI_REGISTRY_IMAGE: "127.0.0.1:8111/skills/developer-skills-rating-client"
+    CI_REGISTRY: http://registry.gitlab.aidar-sandbox.ru:5555
+    CI_REGISTRY_IMAGE: "registry.gitlab.aidar-sandbox.ru:5555/skills/developer-skills-rating-client"
   script:
     - echo "Running build"
-    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG .
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG .
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
 
 # disabled
