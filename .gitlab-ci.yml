@@ -14,12 +14,11 @@ build_job:
   variables:
     DOCKER_HOST: tcp://localhost:2375
     DOCKER_TLS_CERTDIR: ""
-    CI_REGISTRY_IMAGE: "your-registry-image-name"
-    CI_COMMIT_REF_SLUG: "main"
+    CI_REGISTRY_IMAGE: "127.0.0.1:8111/skills/developer-skills-rating-client"
   script:
     - echo "Running build"
-#    - docker build -t frontend-image .
     - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG .
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
 
 # disabled
@@ -40,8 +39,8 @@ build_job:
 deploy_job:
   stage: deploy
   script:
-    - echo "Deploying to Kubernetes"
-    - docker stack deploy --compose-file docker-compose.yml your-stack-name
+    - echo "Deploying to Docker Swarm"
+    - docker stack deploy --compose-file docker-compose.yml frontend-skills-stack
 
 cache:
   paths:
