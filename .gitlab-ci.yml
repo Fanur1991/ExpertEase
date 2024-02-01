@@ -9,10 +9,13 @@ build_job:
   services:
     - docker:dind
   before_script:
+    - apk add --no-cache git
     - docker info
   variables:
     DOCKER_HOST: tcp://localhost:2375
     DOCKER_TLS_CERTDIR: ""
+    CI_REGISTRY_IMAGE: "your-registry-image-name"
+    CI_COMMIT_REF_SLUG: "main"
   script:
     - echo "Running build"
 #    - docker build -t frontend-image .
