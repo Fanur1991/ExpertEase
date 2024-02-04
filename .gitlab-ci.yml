@@ -3,11 +3,11 @@ stages:
   - test
   - deploy
 
-variables:
-  DOCKER_HOST: tcp://localhost:2375
-  DOCKER_TLS_CERTDIR: ""
-  CI_REGISTRY: http://registry.gitlab.aidar-sandbox.ru:5555
-  CI_REGISTRY_IMAGE: registry.gitlab.aidar-sandbox.ru:5555/skills/developer-skills-rating-client
+#variables:
+#  DOCKER_HOST: tcp://localhost:2375
+#  DOCKER_TLS_CERTDIR: ""
+#  CI_REGISTRY: http://registry.gitlab.aidar-sandbox.ru:5555
+#  CI_REGISTRY_IMAGE: registry.gitlab.aidar-sandbox.ru:5555/skills/developer-skills-rating-client
 
 default:
   image: docker:23.0.3
@@ -18,9 +18,12 @@ cache:
   key: "$CI_COMMIT_REF_NAME"
   paths:
     - cache/
+  expire_in: 7 day
 
 build_job:
   stage: build
+  only:
+    - main
   script:
     - echo "Running build"
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
@@ -30,6 +33,8 @@ build_job:
 # disabled
 .test_job:
   stage: test
+  only:
+    - main
   script:
     - echo "Running tests"
     - docker run --name frontend-container -d frontend-image
@@ -39,6 +44,8 @@ build_job:
 
 deploy_job:
   stage: deploy
+  only:
+    - main
   script:
     - echo "Deploying to Docker Swarm"
     - docker stack deploy --compose-file docker-compose-dev.yml frontend-skills-stack
