@@ -18,7 +18,6 @@ cache:
   key: "$CI_COMMIT_REF_NAME"
   paths:
     - cache/
-  expire_in: 7 day
 
 build_job:
   stage: build
