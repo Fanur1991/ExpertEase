@@ -3,15 +3,16 @@ stages:
   - test
   - deploy
 
+variables:
+  DOCKER_HOST: tcp://localhost:2375
+  DOCKER_TLS_CERTDIR: ""
+  CI_REGISTRY: http://registry.gitlab.aidar-sandbox.ru:5555
+  CI_REGISTRY_IMAGE: registry.gitlab.aidar-sandbox.ru:5555/skills/developer-skills-rating-client
+
 default:
   image: docker:23.0.3
   services:
     - docker:dind
-  variables:
-    DOCKER_HOST: tcp://localhost:2375
-    DOCKER_TLS_CERTDIR: ""
-    CI_REGISTRY: http://registry.gitlab.aidar-sandbox.ru:5555
-    CI_REGISTRY_IMAGE: registry.gitlab.aidar-sandbox.ru:5555/skills/developer-skills-rating-client
 
 cache:
   key: "$CI_COMMIT_REF_NAME"
