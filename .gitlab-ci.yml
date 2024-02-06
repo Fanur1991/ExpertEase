@@ -19,9 +19,9 @@ build_job:
     - main
   script:
     - echo "Running build"
-    - echo "user=$CI_REGISTRY_USER token=$CI_JOB_TOKEN registry=$CI_REGISTRY"
     - docker build -t $CI_REGISTRY_IMAGE .
-    - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN http://gitlab.aidar-sandbox.ru:5050/v2/
+    - echo "user=$CI_REGISTRY_USER token=$CI_JOB_TOKEN registry=$CI_REGISTRY"
+    - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN http://127.0.0.1:5050/v2/
     - docker push $CI_REGISTRY_IMAGE
 
 # disabled
