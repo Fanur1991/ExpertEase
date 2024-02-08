@@ -1,5 +1,5 @@
 # Base image for a lightweight React application
-FROM node:lts-alpine as builder
+FROM node:lts-alpine111 as builder
 
 # Set working directory inside the container
 WORKDIR /app
