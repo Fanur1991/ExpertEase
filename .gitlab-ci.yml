@@ -20,8 +20,8 @@ build_job:
   variables:
 #    DOCKER_HOST: tcp://localhost:2375
     DOCKER_TLS_CERTDIR: ""
-    CI_REGISTRY: http://registry.gitlab.aidar-sandbox.ru:5555
-    CI_REGISTRY_IMAGE: registry.gitlab.aidar-sandbox.ru:5555/skills/developer-skills-rating-client
+    CI_REGISTRY: http://127.0.0.1:5555
+    CI_REGISTRY_IMAGE: 127.0.0.1:5555/skills/developer-skills-rating-client
   script:
     - echo "Running build"
     - echo "user=$CI_REGISTRY_USER token=$CI_JOB_TOKEN registry=$CI_REGISTRY"
