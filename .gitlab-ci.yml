@@ -20,7 +20,7 @@ build_job:
   variables:
 #    DOCKER_HOST: tcp://localhost:2375
     DOCKER_TLS_CERTDIR: ""
-    CI_REGISTRY: http://127.0.0.1:5555
+    CI_REGISTRY: 127.0.0.1:5555
     CI_REGISTRY_IMAGE: 127.0.0.1:5555/skills/developer-skills-rating-client
   script:
     - echo "Running build"
