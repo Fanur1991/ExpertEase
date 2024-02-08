@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   frontend:
-    image: registry.gitlab.aidar-sandbox.ru:5555/skills/developer-skills-rating-client:latest
+    image: ${CI_REGISTRY_IMAGE}
     ports:
       - "3000:3000"
     volumes:
