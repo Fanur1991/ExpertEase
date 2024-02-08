@@ -3,10 +3,13 @@ stages:
   - test
   - deploy
 
+variables:
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_REGISTRY: localhost:5000
+  CI_REGISTRY_IMAGE: $DOCKER_REGISTRY/skills/developer-skills-rating-client
+
 default:
   image: docker:23.0.3
-#  services:
-#    - docker:dind
 
 cache:
   key: "$CI_COMMIT_REF_NAME"
@@ -17,15 +20,8 @@ build_job:
   stage: build
   only:
     - main
-  variables:
-#    DOCKER_HOST: tcp://localhost:2375
-    DOCKER_TLS_CERTDIR: ""
-    DOCKER_REGISTRY: localhost:5000
-    CI_REGISTRY_IMAGE: $DOCKER_REGISTRY/skills/developer-skills-rating-client
   script:
     - echo "Running build"
-#    - echo "user=$CI_REGISTRY_USER token=$CI_JOB_TOKEN registry=$CI_REGISTRY"
-#    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker build -t $CI_REGISTRY_IMAGE .
     - docker push $CI_REGISTRY_IMAGE
 
