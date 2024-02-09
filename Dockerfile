@@ -14,6 +14,8 @@ RUN npm install react-scripts@3.4.1 -g --silent
 # Copy application files into the container
 COPY . .
 
+EXPOSE 3000
+
 ENTRYPOINT ["npm"]
 
 CMD ["start"]
