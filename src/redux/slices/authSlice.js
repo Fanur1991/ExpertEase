@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { notification } from 'antd';
+import { notification, message } from 'antd';
 import axios from '../../utils/axios';
+import { openMessage } from '../../utils/openMessage';
 
 const initialState = {
   user: null,
@@ -21,23 +22,25 @@ export const registerUser = createAsyncThunk(
         window.localStorage.setItem('token', data.token);
       }
 
-      notification.success({
-        message: 'Successful sign up',
-        description: 'You are signed up',
-        placement: 'bottomRight',
-        duration: 3,
-      });
+      openMessage('success', 'You are signed up');
 
       return data;
     } catch (error) {
+      console.log(error);
       // console.log(error.response.data.errors[0].msg);
       // return rejectWithValue(error.response.data.errors[0].msg);
+
       if (error.response) {
         // Запрос был сделан, и сервер ответил статусом ошибки, который не в диапазоне 2xx
         console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
+        // console.log(error.response.status);
+        // console.log(error.response.headers);
         return rejectWithValue(error.response.data.message);
+
+        // return rejectWithValue({
+        //   status: error.response.status,
+        //   message: error.response.data,
+        // });
       } else if (error.request) {
         // Запрос был сделан, но ответа не последовало
         console.log(error.request);
@@ -64,12 +67,7 @@ export const loginUser = createAsyncThunk(
         window.localStorage.setItem('token', data.token);
       }
 
-      notification.success({
-        message: 'Success',
-        description: 'You are logged in',
-        placement: 'bottomRight',
-        duration: 3,
-      });
+      openMessage('success', 'You are logged in');
 
       return data;
     } catch (error) {

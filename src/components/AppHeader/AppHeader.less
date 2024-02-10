@@ -6,6 +6,22 @@
   background: @header-backgroundColor;
   height: @header-height;
 
+  @media (max-width: 992px) {
+    background: @header-backgroundColor-max992px;
+  }
+
+  @media (max-width: 768px) {
+    background: @header-backgroundColor-max768px;
+  }
+
+  @media (max-width: 576px) {
+    background: @header-backgroundColor-max576px;
+  }
+
+  @media (max-width: 400px) {
+    background: @header-backgroundColor-max400px;
+  }
+
   &__logo {
     display: block;
     // height: @logo-height;

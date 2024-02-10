@@ -14,7 +14,7 @@ root.render(
   <BrowserRouter>
     <Suspense
       fallback={
-        <Flex align="center" justify="center">
+        <Flex style={{ marginTop: 150 }} align="center" justify="center">
           <Spin size="large" />
         </Flex>
       }
@@ -26,6 +26,7 @@ root.render(
               cssVar: true,
               hashed: false,
               token: {
+                fontFamily: 'Montserrat, sans-serif',
                 colorBgElevated: '#f5f5f5',
                 controlItemBgHover: '#bae0ff',
               },

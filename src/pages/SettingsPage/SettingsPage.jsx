@@ -10,8 +10,8 @@ import {
 import { selectAuth } from '../../redux/slices/authSlice';
 import { openMessage } from '../../utils/openMessage';
 import { useTranslation } from 'react-i18next';
-import './SettingsPage.less';
 import CustomButton from '../../components/CustomButton/CustomButton';
+import './SettingsPage.less';
 
 const { Title, Text } = Typography;
 
@@ -38,7 +38,11 @@ const SettingsPage = () => {
       openMessage('success', t('settingsPageNotification2'));
       form.resetFields();
     } catch (error) {
-      openMessage('error', error.message || t('settingsPageNotification3'));
+      if (error) {
+        openMessage('error', error);
+      } else {
+        openMessage('error', error.message || t('settingsPageNotification3'));
+      }
     }
   };
 
@@ -96,6 +100,14 @@ const SettingsPage = () => {
               min: 5,
               message: 'Password must contain at least 5 characters',
             },
+            {
+              pattern: /\d/,
+              message: 'Password must contain at least one digit',
+            },
+            {
+              pattern: /[!@#$%^&*(),.?":{}|<>]/,
+              message: 'Password must contain at least one special character',
+            },
           ]}
         >
           <Input.Password
@@ -110,6 +122,7 @@ const SettingsPage = () => {
           hasFeedback
           label={t('confirmPassword')}
           name="confirmPassword"
+          dependencies={['newPassword']}
           rules={[
             {
               required: true,
@@ -119,6 +132,24 @@ const SettingsPage = () => {
               min: 5,
               message: 'Password must contain at least 5 characters',
             },
+            {
+              pattern: /\d/,
+              message: 'Password must contain at least one digit',
+            },
+            {
+              pattern: /[!@#$%^&*(),.?":{}|<>]/,
+              message: 'Password must contain at least one special character',
+            },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue('newPassword') === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error('The two passwords that you entered do not match!')
+                );
+              },
+            }),
           ]}
         >
           <Input.Password

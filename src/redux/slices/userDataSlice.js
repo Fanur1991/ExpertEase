@@ -25,7 +25,6 @@ export const updateProfile = createAsyncThunk(
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      // return response.data.user;
 
       // Обновляем пользователя в userDataSlice
       const updatedUserData = response.data.user;
@@ -39,7 +38,13 @@ export const updateProfile = createAsyncThunk(
       return updatedUserData;
     } catch (error) {
       console.error('Ошибка при загрузке:', error);
-      return rejectWithValue(error.response.data);
+
+      return rejectWithValue(error.response.data.message);
+
+      // return rejectWithValue({
+      //   status: error.response.status,
+      //   message: error.response.data,
+      // });
     }
   }
 );
@@ -110,9 +115,16 @@ export const changePassword = createAsyncThunk(
 
       return response.data;
     } catch (error) {
+      console.error('Ошибка при изменении пароля:', error);
+
       const errorMessage =
         error.response?.data?.message || 'Ошибка при изменении пароля';
       return rejectWithValue(errorMessage);
+
+      // return rejectWithValue({
+      //   status: error.response.status,
+      //   message: error.response.data,
+      // });
     }
   }
 );

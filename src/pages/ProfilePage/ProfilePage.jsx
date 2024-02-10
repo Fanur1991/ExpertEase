@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { unwrapResult } from '@reduxjs/toolkit';
 import { Form, Input, Button, Upload, Space, Typography, Tooltip } from 'antd';
 import {
   LoadingOutlined,
@@ -55,15 +56,30 @@ const ProfilePage = () => {
     }
   }, [userData, userAuth.user._id, dispatch, form]);
 
-  const onFinish = (formData) => {
+  // const onFinish = (formData) => {
+  //   const { email, ...updateData } = formData;
+  //   dispatch(updateProfile(updateData)).then((result) => {
+  //     if (updateProfile.fulfilled.match(result)) {
+  //       openMessage('success', t('profilePageNotification1'));
+  //     } else {
+  //       openMessage('error', t('profilePageNotification2'));
+  //     }
+  //   });
+  // };
+
+  const onFinish = async (formData) => {
     const { email, ...updateData } = formData;
-    dispatch(updateProfile(updateData)).then((result) => {
-      if (updateProfile.fulfilled.match(result)) {
-        openMessage('success', t('profilePageNotification1'));
+    try {
+      const resultAction = await dispatch(updateProfile(updateData));
+      unwrapResult(resultAction);
+      openMessage('success', t('profilePageNotification1'));
+    } catch (error) {
+      if (error) {
+        openMessage('error', error);
       } else {
         openMessage('error', t('profilePageNotification2'));
       }
-    });
+    }
   };
 
   const handleCancel = useCallback(() => {

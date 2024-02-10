@@ -5,11 +5,23 @@
   padding: 0;
 }
 
-body {
-  font-family: @primary-font !important;
-}
-
 .layout {
   min-height: 100vh;
   background: @main-backgroundColor;
+
+  @media (max-width: 992px) {
+    background: @main-backgroundColor-max992px;
+  }
+
+  @media (max-width: 768px) {
+    background: @main-backgroundColor-max768px;
+  }
+
+  @media (max-width: 576px) {
+    background: @main-backgroundColor-max576px;
+  }
+
+  @media (max-width: 400px) {
+    background: @main-backgroundColor-max400px;
+  }
 }

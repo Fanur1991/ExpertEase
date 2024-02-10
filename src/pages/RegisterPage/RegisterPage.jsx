@@ -9,6 +9,7 @@ import { openNotification } from '../../utils/openNotification';
 // import { selectAuth } from '../../redux/slices/authSlice';
 
 import './RegisterPage.less';
+import { openMessage } from '../../utils/openMessage';
 
 const { Title, Text } = Typography;
 
@@ -37,12 +38,34 @@ const RegisterPage = () => {
         navigate('/');
       } else if (registerUser.rejected.match(actionResult)) {
         const errorMessage = actionResult.payload;
-        openNotification('error', 'Error', errorMessage);
+        openMessage('error', errorMessage);
       }
     } catch (error) {
       console.log(error);
     }
   };
+
+  // const handleSubmit = async () => {
+  //   try {
+  //     await dispatch(registerUser({ email, password })).unwrap();
+
+  //     setPassword('');
+  //     setEmail('');
+  //     navigate('/');
+  //   } catch (error) {
+
+  //     console.log(error);
+  //     const { message } = error;
+
+  //     if (message && message.errors) {
+
+  //         openMessage('error', message);
+
+  //     } else {
+  //       openMessage('error', 'An unknown error occurred');
+  //     }
+  //   }
+  // };
 
   return (
     <Flex justify="center" align="center">
@@ -93,6 +116,14 @@ const RegisterPage = () => {
             {
               min: 5,
               message: t('registerPageNotifacation4'),
+            },
+            {
+              pattern: /\d/,
+              message: 'Password must contain at least one digit',
+            },
+            {
+              pattern: /[!@#$%^&*(),.?":{}|<>]/,
+              message: 'Password must contain at least one special character',
             },
           ]}
         >

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 // Color
 // @gradient-bg: linear-gradient(to right, #5533ff 50%, #25ddf5 100%);
@@ -17,16 +17,63 @@
 @font-color-footer-link-hover: #ff82f4;
 
 // BackgroundColors;
+
 // @header-backgroundColor: #00214a;
 @header-backgroundColor: radial-gradient(
-  circle at bottom,
+  ellipse at bottom,
+  #002559 16%,
+  #00214a
+);
+@header-backgroundColor-max992px: radial-gradient(
+  ellipse at bottom,
+  #002559 12%,
+  #00214a
+);
+@header-backgroundColor-max768px: radial-gradient(
+  ellipse at bottom,
+  #002559 20%,
+  #00214a
+);
+@header-backgroundColor-max576px: radial-gradient(
+  ellipse at bottom,
+  #002559 35%,
+  #00214a
+);
+@header-backgroundColor-max400px: radial-gradient(
+  ellipse at bottom,
   #002559 45%,
   #00214a
 );
 // @main-backgroundColor: #00214a;
-@main-backgroundColor: radial-gradient(circle, #002559 50%, #00214a);
+@main-backgroundColor: radial-gradient(ellipse, #002559 60%, #00214a);
+@main-backgroundColor-max992px: radial-gradient(ellipse, #002559 55%, #00214a);
+@main-backgroundColor-max768px: radial-gradient(circle, #002559 65%, #00214a);
+@main-backgroundColor-max576px: radial-gradient(circle, #002559 75%, #00214a);
+@main-backgroundColor-max400px: radial-gradient(circle, #002559 80%, #00214a);
+
 // @footer-backgroundColor: #00214a;
-@footer-backgroundColor: radial-gradient(circle at top, #002559 45%, #00214a);
+@footer-backgroundColor: radial-gradient(ellipse at top, #002559 16%, #00214a);
+@footer-backgroundColor-max992px: radial-gradient(
+  ellipse at top,
+  #002559 12%,
+  #00214a
+);
+@footer-backgroundColor-max768px: radial-gradient(
+  ellipse at top,
+  #002559 20%,
+  #00214a
+);
+@footer-backgroundColor-max576px: radial-gradient(
+  ellipse at top,
+  #002559 35%,
+  #00214a
+);
+@footer-backgroundColor-max400px: radial-gradient(
+  ellipse at top,
+  #002559 45%,
+  #00214a
+);
+
 @menu-backgroundColor: #efdbff;
 @button-backgroundColor: #ea25b5;
 @button-backgroundColorViolet: #b37feb;
@@ -38,8 +85,7 @@
 @border: 1px solid #ddd;
 
 // Font
-@primary-font: 'Poppins', sans-serif;
-@secondary-font: 'Montserrat', sans-serif;
+@primary-font: 'Montserrat', sans-serif;
 
 // Font Size
 @font-size-title: 24px;

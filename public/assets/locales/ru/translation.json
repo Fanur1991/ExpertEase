@@ -51,7 +51,7 @@
   "rememberMe": "Запомнить меня",
   "dontHaveAccount": "Нет аккаунта?",
   "alreadyHaveAccount": "Уже есть аккаунт?",
-  "profilePageNotification1": "Данные профиля успешно добавлены",
+  "profilePageNotification1": "Данные профиля успешно обновлены",
   "profilePageNotification2": "Ошибка загрузки данных",
   "profilePageNotification3": "Фото успешно загружено",
   "profilePageNotification4": "Ошибка при загрузке фото",
@@ -84,8 +84,8 @@
   "registerPageNotifacation4": "Пароль должен содержать минимум 5 символов",
   "stacksPageTitle": "",
   "stacksPageDescription": "",
-  "areYouSureYouWantToLogout": "Вы уверены, что хотите выйти из системы?",
+  "areYouSureYouWantToLogout": "Вы уверены, что хотите выйти из аккаунта?",
   "createUniqueProfile": "Создайте свой уникальный профиль навыков, оцените свои знания и поделитесь ими с потенциальными работодателями",
-  "youloggedout": "Вы вышли из системы",
+  "youloggedout": "Вы вышли из аккаунта",
   "pageIsNotFound": "Извините, страница не существует"
 }

@@ -116,7 +116,7 @@ const AppHeader = () => {
       <Container className="app-header__content">
         <Flex justify="space-between" align="center">
           {location.pathname === '/' ? (
-            <sapn className="app-header__logo" src={logo}></sapn>
+            <span className="app-header__logo" src={logo}></span>
           ) : (
             <Flex justify="flex-start" align="center">
               <Link to="/">

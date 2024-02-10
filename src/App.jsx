@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { Layout } from 'antd';
 import { Content } from 'antd/lib/layout/layout';
-import 'react-toastify/dist/ReactToastify.css';
 import PageTitle from './components/PageTitle/PageTitle';
 import MainPage from './pages/MainPage/MainPage';
 import RegisterPage from './pages/RegisterPage/RegisterPage';

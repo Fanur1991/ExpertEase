@@ -187,9 +187,10 @@ const UserPage = () => {
                 okText={t('yes')}
                 cancelText={t('no')}
               >
-                <Title className="userpage__modal-title">
+                <Title className="userpage__modal-title">{t('logout')}</Title>
+                <Text className="userpage__modal-subtitle">
                   {t('areYouSureYouWantToLogout')}
-                </Title>
+                </Text>
               </Modal>
             </ConfigProvider>
           </Content>
