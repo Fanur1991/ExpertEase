@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  frontend:
+    image: ${CI_REGISTRY_IMAGE}
+    ports:
+      - "3000:3000"
+    volumes:
+      - /app/node_modules
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    environment:
+      - BACKEND_BASE_URL=http://192.168.1.222:3002

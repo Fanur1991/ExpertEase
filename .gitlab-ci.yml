@@ -1,17 +1,46 @@
 stages:
   - build
+  - test
   - deploy
+
+variables:
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_REGISTRY: localhost:5000
+  CI_REGISTRY_IMAGE: $DOCKER_REGISTRY/skills/developer-skills-rating-client
+
+default:
+  image: docker:23.0.3
+
+cache:
+  key: "$CI_COMMIT_REF_NAME"
+  paths:
+    - cache/
 
 build_job:
   stage: build
+  only:
+    - main
   script:
-    - docker build -t my-react-app .
-#  tags:
-#    - docker
+    - echo "Running build"
+    - docker build -t $CI_REGISTRY_IMAGE .
+    - docker push $CI_REGISTRY_IMAGE
+
+# disabled
+.test_job:
+  stage: test
+  only:
+    - main
+  script:
+    - echo "Running tests"
+    - docker run --name frontend-container -d frontend-image
+    - docker exec frontend-container npm test --passWithNoTests
+    - docker stop frontend-container
+    - docker rm frontend-container
 
 deploy_job:
   stage: deploy
+  only:
+    - main
   script:
-    - kubectl apply -f deployment.yml
-  tags:
-    - kubernetes
+    - echo "Deploying to Docker Swarm"
+    - docker stack deploy --compose-file docker-compose-dev.yml frontend-skills-stack
