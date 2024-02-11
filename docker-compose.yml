@@ -8,6 +8,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:3002
     volumes:
       - .:/app
       - /app/node_modules

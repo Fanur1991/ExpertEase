@@ -1,5 +1,4 @@
 import axios from 'axios';
-import {BACKEND_BASE_URL} from '../config';
 
 const instance = axios.create({
   baseURL: '/api',
