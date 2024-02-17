@@ -11,9 +11,9 @@ import {
   LogoutOutlined,
   DashboardOutlined,
 } from '@ant-design/icons';
-import { logout } from '../../redux/slices/authSlice';
+import { logout, selectAuth } from '../../redux/slices/authSlice';
+import { selectUserData } from '../../redux/slices/userDataSlice';
 import { Container } from '../../components/Container/Container';
-// import { selectStacks } from '../../redux/slices/stacksSlice';
 import { useTranslation } from 'react-i18next';
 import { openMessage } from '../../utils/openMessage';
 import MySkillsPage from '../MySkillsPage/MySkillsPage';
@@ -28,8 +28,12 @@ const UserPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useDispatch();
   const location = useLocation();
-  // const stacks = useSelector(selectStacks);
+  const userAuth = useSelector(selectAuth);
+  const userData = useSelector(selectUserData);
   const { t } = useTranslation();
+  const firstname = userAuth.user?.firstname;
+  const lastname = userAuth.user?.lastname;
+  const userId = userAuth.user?._id.slice(0, 10);
 
   const getSelectedMenuKey = () => {
     if (location.pathname.startsWith('/user/skills')) {
@@ -110,11 +114,11 @@ const UserPage = () => {
           <Form layout="vertical">
             <Form.Item>
               <Title className="userpage__container-title">
-                {t('userPageTitle')}
+                {(firstname && `${firstname} ${lastname}`) || `User ${userId}`}
               </Title>
-              <Text className="userpage__container-subtitle" type="secondary">
+              {/* <Text className="userpage__container-subtitle" type="secondary">
                 {t('userPageDescription')}
-              </Text>
+              </Text> */}
             </Form.Item>
           </Form>
         </div>

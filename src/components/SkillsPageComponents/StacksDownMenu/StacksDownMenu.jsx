@@ -1,6 +1,5 @@
 import React from 'react';
 import { useParams, useNavigate, NavLink } from 'react-router-dom';
-import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Dropdown, Button, Flex, Space } from 'antd';
 import { UserOutlined, DownOutlined } from '@ant-design/icons';
@@ -24,7 +23,7 @@ const StacksDownMenu = () => {
           <NavLink
             style={{ color: '#8c8c8c' }}
             className={url === stack.url ? 'active' : ''}
-            to={`skills/${stack.url}`}
+            to={`/stacks/${stack.url}`}
           >
             <Space size="small">
               <UserOutlined />
@@ -50,7 +49,7 @@ const StacksDownMenu = () => {
         className="stacksdownmenu__button"
         icon={<DownOutlined />}
       >
-        Default Skills
+        Default Stacks
       </Button>
     </Dropdown>
   );

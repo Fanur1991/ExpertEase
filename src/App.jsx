@@ -26,6 +26,10 @@ import './App.less';
 function App() {
   const location = useLocation();
   const dispatch = useDispatch();
+  const hiddenFooterPath = ['/user', '/stacks'];
+  const hideFooterComponent = hiddenFooterPath.some((path) =>
+    location.pathname.startsWith(path)
+  );
 
   useEffect(() => {
     const token = window.localStorage.getItem('token');
@@ -153,7 +157,7 @@ function App() {
           />
         </Routes>
       </Content>
-      {!location.pathname.startsWith('/user') && <AppFooter />}
+      {!hideFooterComponent && <AppFooter />}
     </Layout>
   );
 }

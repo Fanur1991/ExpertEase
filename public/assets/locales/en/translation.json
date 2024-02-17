@@ -87,5 +87,11 @@
   "areYouSureYouWantToLogout": "Are you sure you want to logout?",
   "createUniqueProfile": "Create your unique skills profile, assess your knowledge, and share it with potential employers",
   "youloggedout": "You are logged out",
-  "pageIsNotFound": "Sorry, the page you visited does not exist."
+  "pageIsNotFound": "Sorry, the page you visited does not exist",
+  "myLevel": "My Level",
+  "notSelected": "Not selected",
+  "iDontKnow": "Beginner",
+  "iKnowTheory": "Theorist",
+  "iApplyIt": "Developer",
+  "professional": "Expert"
 }

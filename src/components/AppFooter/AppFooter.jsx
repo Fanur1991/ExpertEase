@@ -9,7 +9,7 @@ const AppFooter = () => {
   return (
     <Footer className="app-footer">
       <p className="app-footer__text">
-        Created by
+        &copy; Copyright {new Date().getFullYear()}. Created by
         <Tooltip
           className="app-footer__text-name"
           mouseEnterDelay={0.2}
@@ -40,7 +40,7 @@ const AppFooter = () => {
           }
         >
           {' '}
-          Brothers
+          Bros
         </Tooltip>
       </p>
     </Footer>

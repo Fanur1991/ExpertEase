@@ -5,19 +5,13 @@ import { Header } from 'antd/lib/layout/layout';
 import { checkIsAuth, logout, selectAuth } from '../../redux/slices/authSlice';
 import { selectUserData } from '../../redux/slices/userDataSlice';
 import { logoutUserData } from '../../redux/slices/userDataSlice';
-import { Button, Flex, Space, Dropdown, ConfigProvider, Avatar } from 'antd';
-import {
-  LoginOutlined,
-  UserOutlined,
-  LogoutOutlined,
-  DownOutlined,
-} from '@ant-design/icons';
+import { Button, Flex, Space, Dropdown, ConfigProvider } from 'antd';
+import { LoginOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Container } from '../Container/Container';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
 import { openMessage } from '../../utils/openMessage';
 import logo from '../../img/logo/logo2.png';
-import { API_URL as baseUrl } from '../../config';
 import './AppHeader.less';
 import AvatarComponent from '../AvatarComponent/AvatarComponent';
 
@@ -142,9 +136,7 @@ const AppHeader = () => {
                     onClick={(e) => e.preventDefault()}
                     className="app-header__button"
                     shape="circle"
-                    // icon={<DownOutlined />}
                   >
-                    {/* {t('account')} */}
                     <AvatarComponent
                       imageUrl={imageUrl}
                       firstname={firstname}

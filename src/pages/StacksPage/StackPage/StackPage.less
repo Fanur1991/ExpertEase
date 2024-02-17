@@ -3,57 +3,62 @@
 .stackpage {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - @header-height - @footer-height);
-  overflow: auto;
+  min-height: calc(100vh - @header-height);
+  // min-height: 900px;
+  background: #f5f5f5;
 
-  &__parent {
-    &-container {
-      background: @main-backgroundColor;
-      height: 250px;
-      &-flex {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+  &__form {
+    padding: 50px;
+    background: #ffffff;
+  }
+
+  &__containertitle {
+    margin-bottom: 12px;
+  }
+
+  &__button {
+    padding: 0 10px 0 15px !important;
+    color: @font-color-button;
+    background-color: @button-backgroundColor;
+    padding: 10px 20px;
+    border: none;
+    clip-path: polygon(15% 0, 100% 0, 100% 100%, 15% 100%, 0 50%);
+
+    &:hover {
+      color: @font-color-button !important;
+      background-color: @button-backgroundColor !important;
+      border-color: @button-backgroundColor !important;
+      filter: brightness(@button-brightness);
+    }
+
+    .anticon {
+      color: @font-color-button;
+
+      &:hover {
+        color: @font-color-button;
       }
     }
   }
 
   &__title {
-    margin: 20px auto !important;
-    color: #d3adf7 !important;
+    margin-bottom: 0 !important;
+    font-size: @font-size-title !important;
   }
-  &__text {
-    text-align: center;
-    width: 600px !important;
-    font-size: 18px;
-    color: @font-color-footer-text;
+  &__subtitle {
+    font-size: @font-size-subtitle;
   }
+  &__list {
+    margin-top: 0;
+    padding: 0;
+    &-title {
+      font-size: @font-size-subtitle !important;
+    }
+    &-button {
+      color: #8c8c8c;
+    }
+  }
+}
 
-  &__children {
-    &-container {
-      flex-grow: 1;
-      background-color: #d9d9d9;
-      min-height: 0;
-    }
-    &-flex {
-      margin-top: -60px;
-      margin-left: 80px;
-      margin-right: 70px;
-    }
-    &-card {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      width: 300px;
-      height: 150px;
-      margin: 20px 25px;
-      font-weight: 500;
-      color: #434343;
-      background-color: #f5f5f5;
-      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-      border-radius: 0;
-      cursor: pointer;
-    }
-  }
+.yellow-star svg {
+  fill: #fadb14;
 }

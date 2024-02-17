@@ -87,5 +87,11 @@
   "areYouSureYouWantToLogout": "¿Estás seguro de que quieres cerrar sesión?",
   "createUniqueProfile": "Crea tu perfil único de habilidades, evalúa tus conocimientos y compártelos con posibles empleadores",
   "youloggedout": "Estás desconectado",
-  "pageIsNotFound": "Lo sentimos, la página que visitaste no existe."
+  "pageIsNotFound": "Lo sentimos, la página que visitaste no existe",
+  "myLevel": "Mi Nivel",
+  "notSelected": "No seleccionado",
+  "iDontKnow": "Principiante",
+  "iKnowTheory": "Teórico",
+  "iApplyIt": "Desarrollador",
+  "professional": "Experto"
 }
