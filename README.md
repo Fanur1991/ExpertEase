@@ -6,6 +6,7 @@ Skillzometer is a platform designed for developers to easily evaluate their tech
 
 ### Frontend Technologies
 
+![JavaScript](https://img.shields.io/badge/-JavaScript-yellow) ![React](https://img.shields.io/badge/-React-blue) ![Redux](https://img.shields.io/badge/-Redux-purple) 
 - **React**: A JavaScript library for building user interfaces. ![React](https://img.shields.io/badge/-React-blue)
 - **Redux Toolkit**: A package for efficient Redux development. ![Redux](https://img.shields.io/badge/-Redux-purple)
 - **Ant Design**: A React UI library with a set of high-quality components.
