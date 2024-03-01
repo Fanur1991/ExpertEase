@@ -6,22 +6,19 @@ Skillzometer is a platform designed for developers to easily evaluate their tech
 
 ### Frontend Technologies
 
-![JavaScript](https://img.shields.io/badge/-JavaScript-yellow) ![React](https://img.shields.io/badge/-React-blue) ![Redux](https://img.shields.io/badge/-Redux-purple) 
-- **React**: A JavaScript library for building user interfaces.
-- **Redux Toolkit**: A package for efficient Redux development.
+- **JavaScript**: Programming language for frontend development. ![JavaScript](https://img.shields.io/badge/-JavaScript-yellow)
+- **React**: A JavaScript library for building user interfaces. ![React](https://img.shields.io/badge/-React-blue)
+- **Redux**: State management library for JavaScript applications. ![Redux](https://img.shields.io/badge/-Redux-purple)
+- **Redux Toolkit**: A package for efficient Redux development. ![Redux Toolkit](https://img.shields.io/badge/-Redux_Toolkit-purple)
+
+### Additional Frontend Libraries and Tools
+
 - **Ant Design**: A React UI library with a set of high-quality components.
 - **axios**: Promise-based HTTP client for the browser and Node.js.
 - **i18next**: Internationalization framework for JavaScript.
 - **React Icons**: A library of icons for React.
 - **UUID**: A package for generating unique identifiers.
 - **Web Vitals**: Library for measuring real user performance on your website.
-
-### Development Tools
-
-- **Craco**: Create React App Configuration Override tool.
-- **Less**: CSS pre-processor.
-- **eslintConfig**: ESLint configuration for linting JavaScript code.
-- **babel-eslint**: A parser for JavaScript used by ESLint.
 
 ## Getting Started
 
