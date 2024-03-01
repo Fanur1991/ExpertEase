@@ -7,21 +7,21 @@ Skillzometer is a platform designed for developers to easily evaluate their tech
 ### Frontend Technologies
 
 ![JavaScript](https://img.shields.io/badge/-JavaScript-yellow) ![React](https://img.shields.io/badge/-React-blue) ![Redux](https://img.shields.io/badge/-Redux-purple) 
-- **React**: A JavaScript library for building user interfaces. ![React](https://img.shields.io/badge/-React-blue)
-- **Redux Toolkit**: A package for efficient Redux development. ![Redux](https://img.shields.io/badge/-Redux-purple)
+- **React**: A JavaScript library for building user interfaces.
+- **Redux Toolkit**: A package for efficient Redux development.
 - **Ant Design**: A React UI library with a set of high-quality components.
-- **axios**: Promise-based HTTP client for the browser and Node.js. ![JavaScript](https://img.shields.io/badge/-JavaScript-yellow)
-- **i18next**: Internationalization framework for JavaScript. ![JavaScript](https://img.shields.io/badge/-JavaScript-yellow)
-- **React Icons**: A library of icons for React. ![React](https://img.shields.io/badge/-React-blue)
-- **UUID**: A package for generating unique identifiers. ![JavaScript](https://img.shields.io/badge/-JavaScript-yellow)
+- **axios**: Promise-based HTTP client for the browser and Node.js.
+- **i18next**: Internationalization framework for JavaScript.
+- **React Icons**: A library of icons for React.
+- **UUID**: A package for generating unique identifiers.
 - **Web Vitals**: Library for measuring real user performance on your website.
 
 ### Development Tools
 
-- **Craco**: Create React App Configuration Override tool. ![React](https://img.shields.io/badge/-React-blue)
+- **Craco**: Create React App Configuration Override tool.
 - **Less**: CSS pre-processor.
-- **eslintConfig**: ESLint configuration for linting JavaScript code. ![JavaScript](https://img.shields.io/badge/-JavaScript-yellow)
-- **babel-eslint**: A parser for JavaScript used by ESLint. ![JavaScript](https://img.shields.io/badge/-JavaScript-yellow)
+- **eslintConfig**: ESLint configuration for linting JavaScript code.
+- **babel-eslint**: A parser for JavaScript used by ESLint.
 
 ## Getting Started
 
