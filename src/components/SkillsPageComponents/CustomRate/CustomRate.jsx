@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Flex, Tag, Rate, Typography, ConfigProvider, Tooltip } from 'antd';
+import { Flex, Rate, Typography, ConfigProvider, Tooltip } from 'antd';
 import { useTranslation } from 'react-i18next';
 import './CustomRate.less';
 
 const { Text } = Typography;
 
-const CustomRate = () => {
+const CustomRate = ({ onRateChange }) => {
   const [value, setValue] = useState(0);
   const { t } = useTranslation();
 
@@ -19,6 +19,7 @@ const CustomRate = () => {
 
   const handleChange = (value) => {
     setValue(value);
+    onRateChange(value);
   };
 
   return (

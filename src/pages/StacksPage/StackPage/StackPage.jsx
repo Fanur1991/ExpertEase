@@ -1,29 +1,34 @@
-import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   List,
   Progress,
   Form,
   Typography,
-  Skeleton,
   Collapse,
   Flex,
   Tooltip,
   Button,
   Layout,
 } from 'antd';
-import { StarFilled, DownOutlined } from '@ant-design/icons';
+import {
+  QuestionCircleOutlined,
+  PrinterOutlined,
+  ShareAltOutlined,
+} from '@ant-design/icons';
 import { selectStacks } from '../../../redux/slices/stacksSlice';
 import { selectCategories } from '../../../redux/slices/categoriesSlice';
 import { selectSkills } from '../../../redux/slices/skillsSlice';
 import { useTranslation } from 'react-i18next';
-import StacksDownMenu from '../../../components/SkillsPageComponents/StacksDownMenu/StacksDownMenu';
-import ScrollToTop from '../../../components/ScrollToTop/ScrollToTop';
 import { selectUserData } from '../../../redux/slices/userDataSlice';
 import { Container } from '../../../components/Container/Container';
 import CustomRate from '../../../components/SkillsPageComponents/CustomRate/CustomRate';
+import CustomButton from '../../../components/CustomButton/CustomButton';
+import { BsBookmark } from 'react-icons/bs';
+import { getMe } from '../../../redux/slices/authSlice';
+import ModalWindowToLogIn from '../../../components/ModalWindowToLogIn/ModalWindowToLogIn';
+import CustomFloatButton from '../../../components/CustomFloatButton/CustomFloatButton';
 
 import './StackPage.less';
 
@@ -38,9 +43,25 @@ const StackPage = () => {
   const [currentStack, setCurrentStack] = useState(null);
   const [currentCategories, setCurrentCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [percent, setPercent] = useState(5);
+  const [percent, setPercent] = useState(100);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [skillRating, setSkillRating] = useState(0);
+  const [categorySkillSums, setCategorySkillSums] = useState({});
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  console.log(percent);
+  console.log(skillRating);
+  console.log(categorySkillSums);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const twoColors = {
     '0%': '#04bbec',
@@ -78,6 +99,34 @@ const StackPage = () => {
     return originalElement;
   };
 
+  const saveStackHandle = () => {
+    const token = window.localStorage.getItem('token');
+    if (token) {
+      dispatch(getMe());
+    } else {
+      showModal();
+    }
+  };
+
+  // const calculateCategorySkillSums = () => {
+  //   const sums = {};
+  //   currentCategories.forEach((category) => {
+  //     const categorySkills = skills.data.filter((skill) =>
+  //       category.skills.includes(skill._id)
+  //     );
+  //     const sum = categorySkills.reduce((acc, skill) => {
+  //       return acc + (skillRating[skill._id] || 0);
+  //     }, 0);
+  //     sums[category._id] = sum;
+  //   });
+  //   setCategorySkillSums(sums);
+  //   setPercent()
+  // };
+
+  // useEffect(() => {
+  //   calculateCategorySkillSums();
+  // }, [skills.data, skillRating]);
+
   return (
     <Layout className="stackPage">
       <Container>
@@ -95,12 +144,19 @@ const StackPage = () => {
               >
                 {t('buttonBack')}
               </Button>
-              <Title className="stackpage__title">
-                {currentStack ? currentStack.title : 'Загрузка...'}
-              </Title>
+              <Flex align="center" justify="center" gap="small">
+                <Title className="stackpage__title">
+                  {currentStack ? currentStack.title : 'Загрузка...'}
+                </Title>
+                <Tooltip
+                  title={currentStack ? currentStack.desc : 'Загрузка...'}
+                >
+                  <QuestionCircleOutlined style={{ color: '#04bbec' }} />
+                </Tooltip>
+              </Flex>
             </Flex>
             <Text className="stackpage__subtitle" type="secondary">
-              {currentStack ? currentStack.desc : 'Загрузка...'}
+              Some instructions
             </Text>
           </Form.Item>
 
@@ -121,15 +177,39 @@ const StackPage = () => {
                 onChange: (page) => {},
               }}
               header={
-                <Flex justify="space-between" align="center">
-                  <Tooltip
-                    mouseEnterDelay={0.5}
-                    color="#04bbec"
-                    title={t('buttonAddSkill')}
-                  >
-                    <Button className="stackpage__list-button">Add</Button>
-                  </Tooltip>
-                  <StacksDownMenu />
+                <Flex justify="flex-end" align="center">
+                  <Button.Group>
+                    <Tooltip
+                      mouseEnterDelay={0.5}
+                      color="#04bbec"
+                      title={t('buttonAddSkill')}
+                    >
+                      <CustomButton
+                        onClick={saveStackHandle}
+                        type="primary"
+                        children={
+                          <Flex align="center" gap="small">
+                            <BsBookmark style={{ width: 16, height: 16 }} />
+                            <span>{t('buttonSaveSkill')}</span>
+                          </Flex>
+                        }
+                      />
+                    </Tooltip>
+                    <Tooltip
+                      mouseEnterDelay={0.5}
+                      color="#04bbec"
+                      title={t('buttonPrint')}
+                    >
+                      <Button icon={<PrinterOutlined />} />
+                    </Tooltip>
+                    <Tooltip
+                      mouseEnterDelay={0.5}
+                      color="#04bbec"
+                      title={t('buttonShare')}
+                    >
+                      <Button icon={<ShareAltOutlined />} />
+                    </Tooltip>
+                  </Button.Group>
                 </Flex>
               }
               renderItem={(category) => {
@@ -142,48 +222,31 @@ const StackPage = () => {
                       <Collapse.Panel
                         collapsible="header"
                         header={
-                          loading ? (
-                            <Skeleton
-                              style={{ marginTop: 5 }}
-                              title={{ width: '40%' }}
-                              paragraph={{ rows: 0 }}
-                              loading={loading}
-                              active
-                            />
-                          ) : (
-                            <Flex>
-                              <Tooltip
-                                mouseEnterDelay={0.5}
-                                color="#04bbec"
-                                title={category.desc}
-                                placement="topLeft"
-                              >
-                                <Title level={5}>{category.title}</Title>
-                              </Tooltip>
-                            </Flex>
-                          )
+                          <Tooltip
+                            mouseEnterDelay={0.5}
+                            color="#04bbec"
+                            title={category.desc}
+                            placement="topLeft"
+                          >
+                            <Title level={5}>{category.title}</Title>
+                          </Tooltip>
                         }
                         extra={
-                          loading ? (
-                            <Skeleton.Input
-                              size="small"
-                              style={{ height: 17, marginTop: 5 }}
-                              loading={loading}
-                              active
+                          <Tooltip
+                            mouseEnterDelay={0.5}
+                            color="#04bbec"
+                            title="Skillzometer"
+                            placement="rightTop"
+                          >
+                            <Progress
+                              strokeColor={twoColors}
+                              size={[90, 10]}
+                              status={percent === 100 ? 'success' : 'active'}
+                              percent={percent}
+                              format={(percent) => `${percent} sm`}
+                              // steps={4}
                             />
-                          ) : (
-                            <Flex align="center" justify="start" gap="middle">
-                              {/* <StarFilled className="yellow-star" />
-                              <Text>0</Text> */}
-                              <Progress
-                                strokeColor={twoColors}
-                                // size={45}
-                                size={[90, 10]}
-                                // type="dashboard"
-                                percent={percent}
-                              />
-                            </Flex>
-                          )
+                          </Tooltip>
                         }
                         key={category._id}
                       >
@@ -196,34 +259,15 @@ const StackPage = () => {
                               <List.Item.Meta
                                 title={
                                   <Flex align="center" justify="space-between">
-                                    {loading ? (
-                                      <Skeleton
-                                        title={{ width: '40%' }}
-                                        paragraph={{ rows: 0 }}
-                                        loading={loading}
-                                        active
-                                      />
-                                    ) : (
-                                      <Text style={{ fontWeight: 500 }}>
-                                        {skill.title}
-                                      </Text>
-                                    )}
-                                    <Flex
-                                      align="flex-start"
-                                      justify="center"
-                                      gap="middle"
-                                    >
-                                      {loading ? (
-                                        <Skeleton.Input
-                                          title={{ width: '40%' }}
-                                          paragraph={{ rows: 0 }}
-                                          loading={loading}
-                                          active
-                                        />
-                                      ) : (
-                                        <CustomRate />
-                                      )}
-                                    </Flex>
+                                    <Text style={{ fontWeight: 500 }}>
+                                      {skill.title}
+                                    </Text>
+                                    <CustomRate
+                                      key={skill._id}
+                                      skillId={skill._id}
+                                      initialValue={skillRating[skill._id] || 0}
+                                      onRateChange={setSkillRating}
+                                    />
                                   </Flex>
                                 }
                                 description={
@@ -245,7 +289,8 @@ const StackPage = () => {
             />
           </Form.Item>
         </Form>
-        <ScrollToTop />
+        <ModalWindowToLogIn open={isModalOpen} onCancel={closeModal} />
+        <CustomFloatButton />
       </Container>
     </Layout>
   );

@@ -113,7 +113,7 @@ export const changePassword = createAsyncThunk(
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      return response.data;
+      return response.data.user;
     } catch (error) {
       console.error('Ошибка при изменении пароля:', error);
 
@@ -296,6 +296,9 @@ const userDataSlice = createSlice({
     setUserData: (state, action) => {
       state.user = action.payload;
     },
+    // setUserStack: (state, action) => {
+    //   state.user =
+    // }
   },
   extraReducers: (builder) => {
     // --------------------------------------------------------------------------------------------

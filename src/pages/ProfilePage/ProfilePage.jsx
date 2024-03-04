@@ -37,6 +37,9 @@ const ProfilePage = () => {
   const [form] = Form.useForm();
   const { t } = useTranslation();
 
+  console.log(userAuth);
+  console.log(userData);
+
   useEffect(() => {
     form.setFieldsValue({
       email: userAuth.user.email,

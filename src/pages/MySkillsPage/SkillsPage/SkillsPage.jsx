@@ -23,12 +23,12 @@ import { selectCategories } from '../../../redux/slices/categoriesSlice';
 import { selectSkills } from '../../../redux/slices/skillsSlice';
 import { useTranslation } from 'react-i18next';
 import StacksDownMenu from '../../../components/SkillsPageComponents/StacksDownMenu/StacksDownMenu';
-import ScrollToTop from '../../../components/ScrollToTop/ScrollToTop';
 import userDataSlice, {
   selectUserData,
 } from '../../../redux/slices/userDataSlice';
 
 import './SkillsPage.less';
+import CustomFloatButton from '../../../components/CustomFloatButton/CustomFloatButton';
 
 const { Title, Text } = Typography;
 
@@ -327,7 +327,7 @@ const SkillsPage = () => {
           />
         </Form.Item>
       </Form>
-      <ScrollToTop />
+      <CustomFloatButton />
     </div>
   );
 };

@@ -6,10 +6,10 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { checkIsAuth, registerUser } from '../../redux/slices/authSlice';
 import { useTranslation } from 'react-i18next';
 import { openNotification } from '../../utils/openNotification';
+import { openMessage } from '../../utils/openMessage';
 // import { selectAuth } from '../../redux/slices/authSlice';
 
 import './RegisterPage.less';
-import { openMessage } from '../../utils/openMessage';
 
 const { Title, Text } = Typography;
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -8,7 +8,6 @@ import {
   Flex,
   List,
   Spin,
-  Button,
   Tooltip,
   Modal,
   Input,
@@ -19,11 +18,11 @@ import { useTranslation } from 'react-i18next';
 import { selectStacks } from '../../redux/slices/stacksSlice';
 import { selectCategories } from '../../redux/slices/categoriesSlice';
 import { selectSkills } from '../../redux/slices/skillsSlice';
-import ScrollToTop from '../../components/ScrollToTop/ScrollToTop';
 import { addUserStack } from '../../redux/slices/userDataSlice';
 
 import './MySkillsPage.less';
 import CustomButton from '../../components/CustomButton/CustomButton';
+import CustomFloatButton from '../../components/CustomFloatButton/CustomFloatButton';
 
 const { Title, Text } = Typography;
 
@@ -177,7 +176,7 @@ const MySkillsPage = () => {
           </ConfigProvider>
         </Form.Item>
       </Form>
-      <ScrollToTop />
+      <CustomFloatButton />
     </div>
   );
 };
