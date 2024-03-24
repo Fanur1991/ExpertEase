@@ -24,15 +24,15 @@ Skillzometer is a platform designed for developers to easily evaluate their tech
 
 1. Clone the repository: `git clone <repository-url>`
 2. Navigate to the client directory: `cd client`
-3. Install dependencies: `npm install`
-4. Start the development server: `npm start`
+3. Install dependencies: `yarn`
+4. Start the development server: `yarn start`
 
 ## Available Scripts
 
-- `npm start`: Runs the app in development mode.
-- `npm run build`: Builds the app for production.
-- `npm test`: Launches the test runner in interactive watch mode.
-- `npm run eject`: Removes the single build dependency from your project.
+- `yarn start`: Runs the app in development mode.
+- `yarn run build`: Builds the app for production.
+- `yarn test`: Launches the test runner in interactive watch mode.
+- `yarn run eject`: Removes the single build dependency from your project.
 
 ## Browser Support
 
